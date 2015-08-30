@@ -1,0 +1,32 @@
+{
+  "name": "beacon.io",
+  "version": "0.0.1",
+  "description": "Ticket CRM",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Auzarius/Ticket.node-CRM.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "git",
+    "angular",
+    "css",
+    "html",
+    "passport",
+    "bcrypt",
+    "crm",
+    "ticket",
+    "cms"
+  ],
+  "author": "Anthony Gillespie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Auzarius/Ticket.node-CRM/issues"
+  },
+  "homepage": "https://github.com/Auzarius/Ticket.node-CRM#readme"
+}
