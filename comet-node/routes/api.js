@@ -1,3 +1,4 @@
+
 //var User	= require('../models/user'),
 var	jwt		= require('jsonwebtoken'),
 	config  = require('../../config');
@@ -21,80 +22,77 @@ module.exports = function (app, express, mySql) {
 	apiRouter.route('/authenticate')
 		.get(function (req, res) {
 			res.json({
-				title  : 'Welcome to the authentication api',
+				title  : 'Welcome to the authentication section of the api',
 				message: 'Please post the :username and :password to get a token'
 			});
 		})
 		
 		.post(function (req, res) {
-		
-			console.log(req.body.username);
-			var User = {
-				username : req.body.username,
-				password : req.body.password
-			};
 			
-			mySql.users.hashLogin(User, function (err, hash) {
-				if (err) {
-					res.send(err);
-				} else {
-					User.password = hash.pass;
-				}
-			});
-			
-			mySql.users.findOne({
-				username: User.username
-			}, function (err, user) {
-				if (err) {
-					//mySql.handleError(err);
-					res.send(err);
-				}
+			if ( req.body.username && req.body.password ) {
+				var User = {
+					username : req.body.username,
+					password : req.body.password
+				};
 				
-				else if (!user) {
-					res.json({
-						success: false,
-						message: 'Authentication failed. That username was not found.'
-					});
-				}
-				else if (user) {
-					var validPassword = mySql.bcrypt.compare(User.password, user.password, function (err, result) {
-						if (err) 
-							res.send(err);
-						
-						if (!result) {
-							res.json({
-								success: false,
-								message: 'Authentication failed. Incorrect password.',
-								passa  : User.password,
-								passb  : user.password
-							});
-						} else {
-							var token = jwt.sign(
-		                    	{ 
-		                    		username: user.username,
-		                    		id: user.id
-		                    	},
-		                    	secret, {
-		                    		expiresInMinutes: 720
-		                    	}
-		                    );
-		                    
-		                    res.json({
-		                    	success: true,
-		                    	message: 'Enjoy your token!',
-		                    	token  : token
-		                    });
-						}
-					});
-				} else {
-					res.send({
-						success: false,
-						message: 'Something happened while trying to authenticate.'
-					});
-				}
-			});
+				mySql.users.findLogin({
+					username: User.username
+				}, function (err, user) {
+					if (err) {
+						//mySql.handleError(err);
+						res.send(err);
+					}
+					else if (!user) {
+						res.json({
+							success: false,
+							message: 'Authentication failed. That username was not found.'
+						});
+					}
+					else if (user) {
+						var validPassword = mySql.bcrypt.compare(User.password, user.password, function (err, result) {
+							if (err) {
+								res.send(err);
+							}
+							else if (!result) {
+								res.json({
+									success: false,
+									message: 'Authentication failed. Incorrect password.',
+								});
+							} else {
+								var token = jwt.sign(
+			                    	{
+			                    		name		: user.firstName,
+			                    		username	: user.username,
+			                    		id 			: user.id,
+			                    		group   	: user.group,
+			                    	},
+			                    	secret, {
+			                    		expiresInMinutes: 1700
+			                    	}
+			                    );
+			                    
+			                    res.json({
+			                    	success: true,
+			                    	message: 'Enjoy your token!',
+			                    	token  : token
+			                    });
+							}
+						});
+					} else {
+						res.send({
+							success: false,
+							message: 'Something happened while trying to authenticate.'
+						});
+					}
+				});
+			} else {
+				res.status(401).send({
+					success: false,
+					message: 'A username and password are required for authentication.'
+				});
+			}
 		});
-	/* Leaving this commented for now to prevent requiring auth
+	
 	apiRouter.use(function (req, res, next) {
 		// do logging
 		console.log('Somebody just came to our app!');
@@ -107,7 +105,7 @@ module.exports = function (app, express, mySql) {
 			// verifies secret and checks expiration
 			jwt.verify(token, secret, function (err, decoded) {
 				if (err) {
-					return res.json({
+					return res.status(403).send({
 						success: false,
 						message: 'Failed to authenticate token.'
 					});
@@ -121,7 +119,7 @@ module.exports = function (app, express, mySql) {
 		} else {
 			// if there is no token
 			// return an HTTP response of 403 (access forbidden) and an error message
-			return res.status(403).send({
+			return res.status(401).send({
 				success: false,
 				message: 'No token was provided.'
 			});
@@ -129,55 +127,50 @@ module.exports = function (app, express, mySql) {
 		
 		//next() used to be here
 	});
-	*/
+	
 	apiRouter.route('/users')
 		.post(function (req, res) {
 			// create a new instance of the User model
-			var User = {
-				name 	 : req.body.name,
-				username : req.body.username,
-				password : req.body.password,
-				email	 : req.body.email,
-				created_by: req.body.username
-			}
-			
-			// set the users information (comes from the request)
-			mySql.users.hashPassword(User.password, function (err, hash) {
+			var User = mySql.users.setUser('create', req, function (err, User) {
 				if (err) {
 					res.send(err);
 				}
-				
-				if ( hash.pass && hash.salt ) {
-					User.password = hash.pass;
-					User.salt = hash.salt;
-				
-					mySql.users.create(User, function (err, response) {
-						if (err) {
-							res.send(err);
-						} else {
-							res.json({
-								success: true,
-								message: 'The user was created successfully!'
-							});
-						}						
-					});
+				else if (User.password && User.password !== req.body.password ) {
+					console.log(User);
+					if (User.email && User.firstName && User.lastName && User.username) {
+						mySql.users.create(User, function (err, response) {
+							if (err) {
+								res.send(err);
+							} else {
+								res.status(201).json({
+									success: true,
+									message: 'The user was created successfully!'
+								});
+							}						
+						});
+					} else {
+						res.json({
+							success: false,
+							message: 'Please fill in all of the required fields.'
+						});
+					}	
 				} else {
 					res.json({
 						success: false,
-						message: 'An error occured while creating the user.'
+						message: 'The password field cannot be left blank.'
 					});
 				}
-				
 			});
-			
 		})
 		
 		.get(function (req, res) {
 			mySql.users.all(function (err, users) {
-				if (err) 
+				if (err) {
 					res.send(err);
-				//return the users
-				res.json(users);
+				} else {
+					console.log(users[1].firstName);
+					res.json(users);
+				}
 			});
 		});
 		
@@ -198,49 +191,46 @@ module.exports = function (app, express, mySql) {
 		})
 		
 		.put(function (req,res) {
-			// use our user model to find the user we want
-			mySql.users.findOne({id: req.params.user_id}, function (err,user) {
-				if (err)
+			
+			mySql.users.setUser('save', req, function (err, User) {
+				
+				if (err) {
 					res.send(err);
-				//update the users info only if its new
-				
-				if(req.body.name)
-					user.name = req.body.name;
-				
-				if(req.body.username)
-					user.username = req.body.username;
-				
-				if(req.body.password) {
-					mySql.users.hashPassword(req.body.password, function (err, hash) {
+				} else if (User && req.params.user_id) {
+					mySql.users.findOne({id: User.id}, function (err, user) {
 						if (err) {
 							res.send(err);
+						} else if ( user ) {
+							// save the user
+							mySql.users.save(User, function (err, result) {
+								if (err) {
+									res.json(err);
+								} else {
+									res.json(result);
+								}
+							});
 						} else {
-							user.password = hash.pass;
-							user.salt 	  = hash.salt;
+							res.json({
+								success: false,
+								message: 'An error occured while updating the user.'
+							});
 						}
+						
+					});
+				} else {
+					res.json({
+						success: false,
+						message: 'An error occured while checking the user database.'
 					});
 				}
-				
-				// save the user
-				mySql.users.save(user, function (err) {
-					if (err) {
-						res.send(err);
-					} else {
-						res.json({ 
-							success: true,
-							message: 'User updated!'
-						});
-					}
-				});
 			});
 		})
 		
 		.delete(function (req, res) {
-			User.remove({
-				id: req.params.user_id
-			}, function (err, user) {
+			mySql.users.remove(req.params.user_id, function (err, user) {
 				if (err)
 					return res.send(err);
+				
 				res.json({
 					success: true,
 					message: 'User successfully deleted!'
@@ -254,43 +244,34 @@ module.exports = function (app, express, mySql) {
 	
 	apiRouter.route('/tickets')
 		.post(function (req, res) {
-			var Ticket = {
-				status			: 'Pending',
-				user_id			: req.decoded.id,
-				companyname		: req.body.companyname,
-				street			: req.body.street,
-				city 			: req.body.city,
-				state 			: req.body.state,
-				zipcode			: req.body.zipcode,
-				indicator_tag	: req.body.indicator_tag,
-				indicator_manu	: req.body.indicator_manu,
-				indicator_model	: req.body.indicator_model,
-				indicator_serial: req.body.indicator_serial,
-				scale_manu		: req.body.scale_manu,
-				scale_model		: req.body.scale_model,
-				scale_serial	: req.body.scale_serial,
-				scale_capacity	: req.body.scale_capacity,
-				scale_divisions	: req.body.scale_divisions,
-				units			: req.body.units
-			}
+			var Ticket = mySql.tickets.setTicket('create', req);
 			
-			mySql.tickets.create(Ticket, function (err, result) {
-				if (err)
-					res.send(err);
-				
+			if ( Ticket ) {
+				mySql.tickets.create(Ticket, function (err, result) {
+					if (err)
+						res.send(err);
+					
+					res.json({
+						success: true,
+						message: 'The ticket was successfully created!'
+					});
+				});		
+			} else {
 				res.json({
-					success: true,
-					message: 'The ticket was successfully created!'
+					success: false,
+					message: 'Please fill in all of the required fields.'
 				});
-			});			
+			}
+				
 		})
 		
 		.get(function (req, res) {
 			mySql.tickets.active(function (err, result) {
-				if (err)
+				if (err) {
 					res.send(err);
-				
-				res.json(result);
+				} else {
+					res.json(result);
+				}
 			});
 		});
 		
@@ -315,9 +296,19 @@ module.exports = function (app, express, mySql) {
 		})
 		
 		.put(function (req, res) {
-			res.json({
-				success: false,
-				message: 'this is not yet implemented'
+			var Ticket = mySql.tickets.setTicket('save', req);
+			
+			mySql.tickets.save(Ticket, function (err, result) {
+				if (err) {
+					res.send(err);
+				} else if (result) {
+					res.json(result);
+				} else {
+					res.json({
+						success: false,
+						message: 'An error occured while updating the ticket, please try again.'
+					});
+				}
 			});
 		});
 	

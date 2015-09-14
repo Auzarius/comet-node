@@ -1,0 +1,54 @@
+<div class="page-header">
+	<h1>
+		Users 
+		<a href="/users/create" class="btn btn-default">
+			<span class="glyphicon glyphicon-plus"></span> 
+			New User
+		</a>
+	</h1>
+
+</div>
+
+<div class="jumbotron text-center" ng-show="user.processing">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<p>Loading Users...</p>
+</div>
+
+<table id="users" class="table table-bordered table-striped" ng-show="user.users">
+	<thead>
+		<tr>
+			<th>id</th>
+			<th>Username</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th class="col-xs-1"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="person in user.users">
+			<td>{{ person.id }}</td>
+			<td>{{ person.username }}</td>
+			<td>{{ person.firstName + ' ' + person.lastName }}</td>
+			<td>{{ person.email }}</td>
+			<td class="col-xs-1">
+				<div class="dropdown">
+					<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+						<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Manage
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<li>
+							<a href="#" ng-href="/users/{{ person.id }}">
+								<i class="glyphicon glyphicon-pencil"></i> Edit
+							</a>
+						</li>
+						<li>
+							<a href="#" ng-click="user.deleteUser(person.id)">
+								<i class="glyphicon glyphicon-trash"></i> Delete
+							</a>
+						</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>

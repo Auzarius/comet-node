@@ -1,0 +1,143 @@
+
+/*body { padding-top: 50px; }*/
+.node-header {
+	color: #0CBE9B;
+	color: rgb(12,190,155);
+}
+
+.node-comet, .node-header {
+	text-shadow: 2px 0px 2px #333;
+	text-shadow: 2px 0px 2px rgb(40,40,40);
+}
+
+.node-comet {
+	color: #5D42FC;
+	color: rgb(93,66,252);
+}
+
+.navbar-nav li {
+	font-size: 1.2em;
+	-webkit-font-smoothing: antialiased;
+	text-shadow: rgba(0,0,0,.01) 0 0 1px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+nav, .navbar-nav, .navbar { 
+	width: auto;
+}
+
+
+/*
+.navbar-brand {
+	color: #f35626!important;
+	background-color: #2196f3!important;
+    *background-image: -webkit-linear-gradient(92deg,#f35626,#feab3a);
+    background-image: -webkit-linear-gradient(92deg,#07B9F9,#AC33F7);
+    *background-image: -webkit-linear-gradient(92deg,#2196f3,#feab3a);
+    -webkit-background-clip: text;
+    *-webkit-text-fill-color: transparent;
+    -webkit-animation: hue 60s infinite linear;
+}	*/
+
+main {
+	padding-top: 30px;
+}
+
+header .navbar {
+	border-radius: 0;
+}
+
+.spinner {
+	animation: spin 1s infinite;
+	-webkit-animation: spin 1s infinite;
+	-moz-animation: spin 1s infinite;
+}
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+@-webkit-keyframes spin {
+	from { -webkit-transform: rotate(0deg); }
+	to { -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes spin {
+	from { -moz-transform: rotate(0deg); }
+	to { -moz-transform: rotate(360deg); }
+}
+
+.ng-hide-remove {
+	-webkit-animation: rubberBand 0.7s both ease;
+	-moz-animation: rubberBand 0.7s both ease;
+	animation: rubberBand 0.7s both ease;
+}
+
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+  }
+
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 767px) {
+	.navbar-brand {
+		padding-top: 24px;
+	}
+	
+	table#users tbody tr td:nth-child(2), table#users thead tr th:nth-child(2) {
+		display: none;
+	}
+	
+	.container {
+		overflow: auto;
+	}
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {
+	.navbar-brand {
+		padding-top: 23px;
+	}
+	
+	table#users tbody tr td:nth-child(2), table#users thead tr th:nth-child(2) {
+		display: table-cell;
+	}
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {
+
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {
+
+}
+
+.gi-1x {
+	font-size: 1em;
+}
+
+.gi-2x {
+	font-size: 2em;
+}
+
+.gi-3x {
+	font-size: 3em;
+}
+
+.gi-4x {
+	font-size: 4em;
+}
+
+.gi-5x {
+	font-size: 5em;
+}

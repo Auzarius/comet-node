@@ -1,4 +1,3 @@
-
 var node_mysql 		= require('mysql'),
 	bcrypt  		= require('bcrypt-nodejs'),
 	Connection;
@@ -81,15 +80,15 @@ module.exports = function(config) {
 				if (!connection || err) {
 					mySql.handleError(err);
 				} 	
-				
-				console.log('[mySql] Connected to the database on thread #' + connection.threadId);
+			
 				connection.query('CALL getActiveTickets()', function (err, rows) {
+					
 					connection.release();
 					if (err) {
 						cb(err);
 					}
 					
-					console.log('[MYSQL] getActiveTickets query successful!');
+					//console.log('[MYSQL] getActiveTickets query successful!');
 					
 					if ( mySql.verifyResult(rows[0]) ) {
 						cb(null, rows[0]);
@@ -122,15 +121,14 @@ module.exports = function(config) {
 					mySql.handleError(err);
 				}
 					
-				console.log('[mySql] Connected to the database on thread #' + connection.threadId);
 				connection.query('CALL getTickets()', function (err, rows) {
-					connection.release();
 					
+					connection.release();
 					if (err) {
 						cb(err);
 					}
 
-					console.log('[mySql] getAllTickets query successful!');
+					//console.log('[mySql] getAllTickets query successful!');
 					if ( mySql.verifyResult(rows[0]) ) {
 						cb(null, rows[0]);
 					} else {
@@ -163,14 +161,13 @@ module.exports = function(config) {
 					mySql.handleError(err);
 				} 	
 				
-				console.log('[mySql] Connected to the database on thread #' + connection.threadId);
 				connection.query('SELECT * FROM tickets WHERE ?', options, function (err, rows) {
 					connection.release();
 					if (err) {
 						cb(err);
 					}
 					
-					console.log('[MYSQL] getTicketById query successful with options : ' + options);
+					//console.log('[MYSQL] getTicketById query successful with options : ' + options);
 					
 					if ( /[A-Za-z0-9]+/.test(rows[0]) && rows[0] !== undefined ) {
 						cb(null, rows[0]);
@@ -182,18 +179,6 @@ module.exports = function(config) {
 						});
 					}
 				});
-				
-				// sql procedure
-				/**
-				* CREATE DEFINER=`root`@`localhost` 
-				* PROCEDURE `getTicket`(IN `in_id` INT) 
-				* DETERMINISTIC 
-				* READS SQL DATA 
-				* SQL SECURITY DEFINER 
-				* SELECT * FROM scales 
-				* WHERE id = in_id 
-				* ORDER BY id ASC, date ASC, companyname ASC
-				**/
 			});
 		},
 		
@@ -202,9 +187,10 @@ module.exports = function(config) {
 				if (!connection || err) {
 					mySql.handleError(err);
 				} 	
-				
-				console.log('[mySql] Connected to the database on thread #' + connection.threadId);
-				connection.query('INSERT INTO tickets VALUES ?', ticket, function (err, result) {
+			
+				connection.query('INSERT INTO tickets SET ?', ticket, function (err, result) {
+					
+					connection.release();
 					if (err) {
 						cb(err);
 					} else { 
@@ -212,26 +198,147 @@ module.exports = function(config) {
 					}
 				});
 			});
-		}
-	}
-	
-	mySql.users = {
-		all : function (cb) {
-			
+		},
+		
+		save : function (ticket, cb) {
 			Connection.getConnection(function (err, connection) {
 				if (!connection || err) {
 					mySql.handleError(err);
 				} 	
 				
-				console.log('[mySql] Connected to the database on thread #' + connection.threadId);
+				connection.query('SELECT id FROM tickets WHERE ?', { id: ticket.id }, function (err, exists) {
+					if (err) {
+						connection.release();
+						cb(err);
+					} else if (exists && exists !== undefined) {
+						connection.query('UPDATE tickets SET ?', ticket, function (err, result) {
+							
+							connection.release();
+							if (err) {
+								cb(err);
+							} else {
+								cb(null, {
+									success: true,
+									message: 'The ticket was successfully updated!'
+								});
+							}
+						});
+					} else {
+						connection.release();
+						cb(null, exists);
+					}
+				});
+			});
+		},
+		
+		setTicket : function (method, req) {
+			var Ticket = {};
+			
+			Ticket.status = req.body.status ? req.body.status : 'Pending';
+			
+			if ( req.body.companyname )
+				Ticket.companyname = req.body.companyname;
+			
+			if ( req.body.street ) 
+				Ticket.street = req.body.street;
+			
+			if ( req.body.city ) 
+				Ticket.city = req.body.city;
+			
+			if ( req.body.state ) 
+				Ticket.state = req.body.state;
+			
+			if ( req.body.zipcode )
+				Ticket.zipcode = req.body.zipcode;
+			
+			if ( req.body.indicator_tag ) 
+				Ticket.indicator_tag = req.body.indicator_tag;
+			
+			if ( req.body.indicator_manu ) 
+				Ticket.indicator_manu = req.body.indicator_manu;
+			
+			if ( req.body.indicator_model )
+				Ticket.indicator_model = req.body.indicator_model;
+			
+			if ( req.body.indicator_serial ) 
+				Ticket.indicator_serial = req.body.indicator_serial;
+			
+			if ( req.body.scale_manu ) 
+				Ticket.scale_manu = req.body.scale_manu;
+			
+			if ( req.body.scale_model )
+				Ticket.scale_model = req.body.scale_model;
+			
+			if ( req.body.scale_serial )
+				Ticket.scale_serial = req.body.scale_serial;
+			
+			if ( req.body.scale_capacity ) 
+				Ticket.scale_capacity = req.body.scale_capacity;
+			
+			if ( req.body.scale_divisions ) 
+				Ticket.scale_divisions = req.body.scale_divisions;
+			
+			if ( req.body.units && /^(lb|kg|g|oz)$/m.test(req.body.units) ) {
+				Ticket.units = req.body.units;
+			} else {
+				Ticket.units = 'lb';
+			}
+			
+			if ( method == 'create' )
+				Ticket.created_by = req.decoded.id;
+			
+			if ( method == 'save' )
+				Ticket.updated_by = req.decoded.id;
+			/*
+				status			: 'Pending',
+				companyname		: req.body.companyname ? req.body.companyname
+				street			: req.body.street,
+				city 			: req.body.city,
+				state 			: req.body.state,
+				zipcode			: req.body.zipcode,
+				indicator_tag	: req.body.indicator_tag,
+				indicator_manu	: req.body.indicator_manu,
+				indicator_model	: req.body.indicator_model,
+				indicator_serial: req.body.indicator_serial,
+				scale_manu		: req.body.scale_manu,
+				scale_model		: req.body.scale_model,
+				scale_serial	: req.body.scale_serial,
+				scale_capacity	: req.body.scale_capacity,
+				scale_divisions	: req.body.scale_divisions,
+				units			: req.body.units,
+				created_by		: 4
+			*/
+			
+			if ( method === 'create' &&
+		 	 (!Ticket.companyname || !Ticket.street ||
+		 	  !Ticket.city || !Ticket.state || 
+		 	  !Ticket.indicator_tag || !Ticket.indicator_model ||
+		 	  !Ticket.indicator_manu || !Ticket.indicator_serial || 
+		 	  !Ticket.scale_capacity || !Ticket.scale_divisions) 
+		 	 ) {
+				console.log(Ticket);
+				return false;
+			} else {
+				return Ticket;
+			}
+		}
+	}
+	
+	mySql.users = {
+		all : function (next) {
+			
+			Connection.getConnection(function (err, connection) {
+				if (!connection || err) {
+					mySql.handleError(err);
+				} 	
+			
 				connection.query('CALL getUsers()', function (err, rows) {
 					connection.release();
 					if (err) {
-						cb(err);
+						next(err);
+					} else {
+						next(null, rows[0]);
 					}
-					
-					console.log('[MYSQL] getAllUsers query successful!');
-					cb(null, rows[0]);
 				});
 				
 				// sql procedure
@@ -241,7 +348,7 @@ module.exports = function(config) {
 				* DETERMINISTIC 
 				* READS SQL DATA 
 				* SQL SECURITY DEFINER 
-				* SELECT id, username, name, email 
+				* SELECT id, username, firstName, lastName, email 
 				* FROM users 
 				* ORDER BY username ASC, name ASC
 				**/
@@ -254,144 +361,151 @@ module.exports = function(config) {
 					mySql.handleError(err);
 				} 	
 				
-				console.log('[mySql] Connected to the database on thread #' + connection.threadId);
-				connection.query('SELECT id, username, password, salt, name, email FROM users WHERE ?', options, function (err, rows) {
+				connection.query('SELECT id, username, firstName, lastName, email, role FROM users WHERE ?', options, function (err, rows) {
 					connection.release();
 					if (err) {
 						cb(err);
 					}
-					
-					console.log('[MYSQL] findOne query successful!');
-					
-					if ( rows[0] !== undefined ) {
-						console.log(rows[0]);
+					else if ( rows[0] !== undefined ) {
 						cb(null, rows[0]);
 					} else {
-						console.log('failed');
 						cb({
 							success  : false,
 							message  : 'No users were found that matched your query'
 						});
 					}
 				});
-				
-				// sql procedure
-				/**
-				* CREATE DEFINER=`root`@`localhost` 
-				* PROCEDURE `getUserByUsername`(IN `_username` VARCHAR(30)) 
-				* NOT DETERMINISTIC 
-				* READS SQL DATA 
-				* SQL SECURITY DEFINER 
-				* SELECT id, username, name, email 
-				* FROM users 
-				* WHERE username = _username
-				**/
 			});
 		},
 		
-		create : function (user, cb) {
+		findLogin : function (options, next) {
 			Connection.getConnection(function (err, connection) {
 				if (!connection || err) {
 					mySql.handleError(err);
 				} 	
 				
-
-				data = [];
-				data.push("'" + user.name + "'");
-				data.push("'" + user.username + "'");
-				data.push("'" + user.password + "'");
-				data.push("'" + user.salt + "'");
-				data.push("'" + user.email + "'");
-				data.push("'" + user.created_by + "'");
-
-				console.log('[mySql] Connected to the database on thread #' + connection.threadId);
-				connection.query('INSERT INTO users (name, username, password, salt, email, created_by) VALUES ( ' + data.join(', ') + ' )', function (err, rows) {
+				connection.query('SELECT id, username, password, firstName, lastName, role FROM users WHERE ?', options, function (err, rows) {
+					connection.release();
+					if (err) {
+						next(err);
+					}
+					else if ( rows[0] !== undefined ) {
+						next(null, rows[0]);
+					} else {
+						next({
+							success  : false,
+							message  : 'No users were found that matched your query'
+						});
+					}
+				});
+			});
+		},
+		
+		create : function (user, next) {
+			Connection.getConnection(function (err, connection) {
+				if (!connection || err) {
+					mySql.handleError(err);
+				} 	
+				
+				connection.query('INSERT INTO users SET ?', user, function (err, result) {   
 				    
 				    connection.release();
 				    if (err) {
-				    	cb(err);
-				    } else {
-				    	cb(null, {
+				    	next(err);
+				    } else if ( result.insertId ) {
+				    	next(null, {
 				    		success: true,
 				    		message: 'The user was successfully created!'
+				    	});
+				    } else {
+				    	next(null, {
+				    		success: false,
+				    		message: 'That user already exists, please try a different username.'
 				    	});
 				    }
                 });
 			});
 		},
 		
-		save : function (user, cb) {
+		save : function (user, next) {
 			Connection.getConnection(function (err, connection) {
 				if (!connection || err) {
 					mySql.handleError(err);
-				} 	
-				/* 'username = ' + user.username + ', ' +
-				                 'password = ' + user.password + ', ' +
-				                 'name = '     + user.name + ', ' +
-				                 'email = '	   + user.email	   + ', ' +
-				                 'WHERE id = ' + user.id + ' )' */
-				console.log(user);
-				console.log('[mySql] Connected to the database on thread #' + connection.threadId);
-				connection.query('UPDATE users SET ?', user, function (err, result) {
-				                 
+				}
+			
+				connection.query('UPDATE users SET ? WHERE id = ?', [user, user.id], function (err, result) {
+				    
+				    connection.release();
 				    if (err) {
-				    	cb(err);
-				    } else {
-				    	cb(null, {
+				    	next(err);
+				    } else if ( result.changedRows ) {
+				    	next(null, {
 				    		success: true,
 				    		message: 'The user was successfully updated!'
 				    	});
+				    } else {
+				    	next(null, {
+				    		success: true,
+				    		message: 'No changes were made to the user.'
+				    	});
 				    }
-				    
-				    
                 });
 			});	
 		},
 		
-		remove : function (userId, cb) {
+		remove : function (userId, next) {
 			
-			if ( typeof userId === int ) {
+			if ( userId ) {
 				Connection.getConnection(function (err, connection) {
 					if (!connection || err) {
 						mySql.handleError(err);
 					} 	
 					
-					console.log('[mySql] Connected to the database on thread #' + connection.threadId);
 					connection.query('DELETE FROM users WHERE id = ?', userId, function (err, result) {
-						if (err) {
-							cb(err);
-						}
 						
-						cb(null);
+						connection.release();
+						if (err) {
+							next(err);
+						} else if ( result.affectedRows ) {
+							next(null, {
+								success: true,
+								message: 'The user was deleted successfully!'
+							});
+						} else {
+							next(null, {
+								success: false,
+								message: 'An error occured while deleting the user, please try again.'
+							});
+						}
 					});
 				});
 			} else {
-				cb({
+				next({
 					success: false,
-					message: 'Expecting type int but received something else',
-					type   : typeof userId,
-					value  : userId
+					message: 'No user was passed as an argument for deletion',
+					value  : userId,
+					note   : 'If you received this in error, please notify the admin.'
 				});
 			}
 		},
 		
-		hashPassword : function (password, cb) {
-			bcrypt.genSalt(12, function (err, salt) {
+		hashPassword : function (password, next) {
+			bcrypt.genSalt(10, function (err, salt) {
 				if (err) 
-					cb(err);
+					next(err);
 				
 				if (salt) {
 					bcrypt.hash(password, salt, null, function (err, result) {
 						if (err)
-							cb(err);
+							next(err);
 						
 						if (result) {
-							cb(null, {
+							next(null, {
 								salt: salt,
-								pass: result
+								password: result
 							});
 						} else {
-							cb(null, {
+							next(null, {
 								success: false,
 								message: 'Something went wrong when generating the final hash.',
 								result : result
@@ -399,47 +513,66 @@ module.exports = function(config) {
 						}
 					});
 				} else {
-					cb(null, {
+					next(null, {
 						success: false,
 						message: 'Something went wrong when creating the salt.',
-						result : salt
 					});
 				}			
 			});
 		},
 		
-		hashLogin : function ( User, cb) {
-			mySql.users.findOne({ username: User.username }, function (err, user) {
-				if (err) {
-					cb(err);
+		setUser : function (method, req, next) {
+			var User = {};
+			console.log(req.body);
+			if ( req.params.user_id )
+				User.id = req.params.user_id;
+ 			
+			if ( req.body.firstName ) {
+				User.firstName = req.body.firstName;
+			}
+			
+			if ( req.body.lastName ) {
+				User.lastName = req.body.lastName;
+			}
+			
+			if ( req.body.username ) {
+				User.username = req.body.username;
+			}
+			
+			if ( req.body.password ) {
+				var salt = bcrypt.genSaltSync(10);
+				var pass = bcrypt.hashSync(req.body.password, salt);
+				User.password = pass;
+			}
+				
+				
+			if ( req.body.email ) {
+				User.email = req.body.email;
+			}
+			
+			if ( method === 'create' ) {
+				User.created_by = req.decoded.id;
+				
+				if ( User.firstName && User.lastName && User.username && User.password && User.email ) {
+					next(null, User);
 				} else {
-					
-					if (!user) {
-						cb({
-							success: false,
-							message: 'Getting the user information failed during password comparison'
-						});
-					} else {
-						bcrypt.hash(User.password, user.salt, function (err, result) {
-							if (err)
-								cb(err);
-							
-							if (result) {
-								cb(null, {
-									salt: salt,
-									pass: result
-								});
-							} else {
-								cb(null, {
-									success: false,
-									message: 'Something went wrong when generating the final hash.',
-									result : result
-								});
-							}
-						});
-					}
+					next({
+						success: false,
+						message: 'You must fill out all of the fields.',
+						require: 'Firstname, Lastname, Username, Password and Email'
+					});
 				}
-			});
+			}
+			
+			else if ( method === 'save' ) {
+				User.updated_by = req.decoded.id;
+				next(null, User);
+			} else {
+				next({
+					success: false,
+					message: 'You must define the method: create / save'
+				});
+			}
 		}
 	}
 	
