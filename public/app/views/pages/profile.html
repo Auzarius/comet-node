@@ -1,0 +1,63 @@
+<div class="page-header">
+	<h1>User Profile</h1>
+</div>
+
+<form class="form-horizontal" ng-submit="user.saveUser()" name='userform' novalidate>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">First Name</label>
+		<div class="col-sm-6">
+			<input type="text" name='firstName' class="form-control" ng-model="user.userData.firstName" required pattern='^[A-Z][A-Za-z]+'>
+			<p ng-show="userform.firstName.$invalid && !userForm.firstName.$pristine" class="help-block alert alert-info">Enter a valid name using only letters and proper capitalization.</p>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Last Name</label>
+		<div class="col-sm-6">
+			<input type="text" name='lastName' class="form-control" ng-model="user.userData.lastName" required pattern='[A-Za-z]+'>
+			<p ng-show="userform.lastName.$invalid && !userForm.lastName.$pristine" class="help-block alert alert-info">Enter a valid name using only letters and proper capitalization.</p>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Username</label>
+		<div class="col-sm-6">
+			<input type="text" name='username' class="form-control" ng-model="user.userData.username" required pattern='^[A-Za-z][A-Za-z0-9]+'>
+			<p ng-show="userform.username.$invalid && !userForm.username.$pristine" class="help-block alert alert-info">Enter a valid username that begins with a letter and contains only letters and numbers.</p>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Email</label>
+		<div class="col-sm-6">
+			<input type="email" name='email' class="form-control" ng-model="user.userData.email" required pattern='^[A-Za-z][A-Za-z0-9.\-_]+@[A-Za-z0-9]+\.[A-Za-z]{2,4}'>
+			<p ng-show="userform.email.$invalid && !userForm.email.$pristine" class="help-block alert alert-info">Please enter a valid email address.</p>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Password</label>
+		<div class="col-sm-6">
+			<input type="password" name='password' class="form-control" ng-model="user.userData.password" min='6'>
+			<p ng-show="userform.password.$invalid && !userForm.password.$pristine" class="help-block alert alert-info">Please enter a password that is at least six characters long.</p>
+		</div>
+	</div>
+	
+	<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-6">
+		<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='userform.$invalid'>Update Profile</button>
+	</div>
+	</div>
+
+</form>
+
+<div class="row show-hide-message" ng-show="user.message">
+	<div class="col-sm-6 col-sm-offset-2">
+		
+		<div class="alert alert-info">
+			{{ user.message }}
+		</div>
+
+	</div>
+</div>

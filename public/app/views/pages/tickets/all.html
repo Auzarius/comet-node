@@ -9,14 +9,19 @@
 
 </div>
 
-<div class="jumbotron text-center" ng-show="user.processing">
+<div class="jumbotron text-center" ng-show="user.processing && !ticket.tickets">
 	<span class="glyphicon glyphicon-repeat spinner"></span>
 	<p>Loading Tickets...</p>
 </div>
 
-<table id="tickets" class="table table-bordered table-striped" ng-show="ticket.tickets">
+<div class="jumbotron text-center" ng-show="!user.processing && !ticket.tickets">
+	<p>No active tickets available at this time.</p>
+</div>
+
+<table ng-cloak id="tickets" class="table table-bordered tbody-striped" ng-show="ticket.tickets">
 	<thead>
 		<tr>
+			<th></th>
 			<th>Company</th>
 			<th>Status</th>
 			<th>Tag #</th>	
@@ -24,53 +29,63 @@
 			<th>Model</th>
 		</tr>
 	</thead>
-	<tbody>
-		<tr ng-repeat="ticket in ticket.tickets" onclick="document.location = '/tickets'" style='cursor:pointer;'>
-			<td>{{ ticket.companyname }}</td>
-			<td>{{ ticket.status }}</td>
-			<td>{{ ticket.indicator_tag }}</td>
-			<td>{{ ticket.indicator_manu }}</td>
-			<td>{{ ticket.indicator_model }}</td>
-		</tr>
+	<tbody ng-repeat="ticket in ticket.tickets">
+			<tr>
+				<td><a class='btn btn-primary' ng-href='/tickets/{{ ticket.id }}'>View Ticket</a></td>
+				<td>{{ ticket.companyname }}</td>
+				<td>{{ ticket.status }}</td>
+				<td>{{ ticket.indicator_tag }}</td>
+				<td>{{ ticket.indicator_manu }}</td>
+				<td>{{ ticket.indicator_model }}</td>
+			</tr>
+			<tr>
+				<td colspan="3"><i am-calendar="ticket.created_at" title="{{ticket.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Created: {{ ticket.created_at | amTimeAgo }} by {{ ticket.created_by }}</i></td>
+				<td colspan="3"><i ng-if="ticket.updated_at && ticket.updated_by" title="{{ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Updated: {{ ticket.updated_at | amCalendar }} by {{ ticket.updated_by }}</i></td>
+			</tr>
 	</tbody>
 </table>
 
+<!--
 <div id="ticket-list" class='container'>
 	<div class='row'>
-		<div class='col-xs-2 col-xs-offset-1'>
-		 	<span><strong>Company</strong></span>
-		</div>
-		<div class='col-xs-2'>
-		 	<span><strong>Status</strong></span>
-		</div>
-		<div class='col-xs-2'>
-		 	<span><strong>Tag #</strong></span>
-		</div>
-		<div class='col-xs-2'>
-		 	<span><strong>Manufacturer</strong></span>
-		</div>
-		<div class='col-xs-2'>
-		 	<span><strong>Model</strong></span>
-		</div>
+		<dl>
+			<dt class='col-xs-3'>
+			 	<span>Company</span>
+			</dt>
+			<dt class='col-xs-2'>
+			 	<span>Status</span>
+			</dt>	
+			<dt class='col-xs-2'>	
+			 	<span>Tag #</span>
+			</dt>	
+			<dt class='col-xs-3'>	
+			 	<span>Manufacturer</span>
+			</dt>	
+			<dt class='col-xs-2'>	
+			 	<span>Model</span>
+			</dt>	
+		</dl>
 	</div>
 	<div class='row' ng-repeat="ticket in ticket.tickets">
-		<div class='col-xs-2 col-xs-offset-1 table-cell'>
-		 	<span>{{ ticket.companyname }}</span>
-		</div>
-		<div class='col-xs-2 table-cell'>
-		 	<span>{{ ticket.status }}</span>
-		</div>
-		<div class='col-xs-2 table-cell'>
-		 	<span>{{ ticket.indicator_tag }}</span>
-		</div>
-		<div class='col-xs-2 table-cell'>
-		 	<span>{{ ticket.indicator_manu }}</span>
-		</div>
-		<div class='col-xs-2 table-cell'>
-		 	<span>{{ ticket.indicator_model }}</span>
-		</div>
+		<dl>
+			<dt class='col-xs-3'>
+			 	<span>{{ ticket.companyname }}</span>
+			</dt>
+			<dd class='col-xs-2'>
+			 	<span>{{ ticket.status }}</span>
+			</dd>	
+			<dd class='col-xs-2'>	
+			 	<span>{{ ticket.indicator_tag }}</span>
+			</dd>	
+			<dd class='col-xs-3'>	
+			 	<span>{{ ticket.indicator_manu }}</span>
+			</dd>	
+			<dd class='col-xs-2'>	
+			 	<span>{{ ticket.indicator_model }}</span>
+			</dd>	
+		</dl>
 	</div>
-</div>
+</div>-->
 	
 		 
 			

@@ -61,10 +61,12 @@ module.exports = function (app, express, mySql) {
 							} else {
 								var token = jwt.sign(
 			                    	{
-			                    		name		: user.firstName,
+			                    		firstName	: user.firstName,
+			                    		lastName	: user.lastName,
 			                    		username	: user.username,
 			                    		id 			: user.id,
-			                    		group   	: user.group,
+			                    		email		: user.email,
+			                    		role   		: user.role
 			                    	},
 			                    	secret, {
 			                    		expiresInMinutes: 1700
@@ -112,7 +114,6 @@ module.exports = function (app, express, mySql) {
 				} else {
 					// if everything is good, save to request for use in other routes
 					req.decoded = decoded;
-					
 					next();
 				}
 			});
@@ -206,6 +207,17 @@ module.exports = function (app, express, mySql) {
 								if (err) {
 									res.json(err);
 								} else {
+									result.token = jwt.sign(
+				                    	{
+				                    		firstName	: user.firstName,
+				                    		id 			: user.id,
+				                    		role   		: user.role
+				                    	},
+				                    	secret, {
+				                    		expiresInMinutes: 1700
+				                    	}
+				                    );
+				                    
 									res.json(result);
 								}
 							});

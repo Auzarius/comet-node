@@ -1,4 +1,4 @@
-angular.module('mainCtrl', [])
+angular.module('mainCtrl', ['angularMoment'])
 
 .controller('mainController', function($rootScope, $location, Auth) {
 
@@ -37,10 +37,9 @@ angular.module('mainCtrl', [])
 				
 				vm.user = vm.loginData.username;
 				
-				console.log('User is: ' + vm.user);
 				// if a user successfully logs in, redirect to users page
 				if (data.success)			
-					$location.path('/users');
+					$location.path('/tickets');
 				else 
 					vm.error = data.message;
 				

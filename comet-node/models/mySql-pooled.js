@@ -75,23 +75,22 @@ module.exports = function(config) {
 	
 	mySql.tickets = {
 		active : function (cb) {
-	
+			console.log('active query');
 			Connection.getConnection(function (err, connection) {
 				if (!connection || err) {
 					mySql.handleError(err);
 				} 	
 			
-				connection.query('CALL getActiveTickets()', function (err, rows) {
+				connection.query('SELECT t.id, t.status, t.companyname, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
+				                 '( SELECT firstName FROM users WHERE id = t.created_by ) AS created_by, ' +
+				                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM tickets t', function (err, rows) {
 					
 					connection.release();
 					if (err) {
 						cb(err);
 					}
-					
-					//console.log('[MYSQL] getActiveTickets query successful!');
-					
-					if ( mySql.verifyResult(rows[0]) ) {
-						cb(null, rows[0]);
+					else if ( mySql.verifyResult(rows) ) {
+						cb(null, rows);
 					} else {
 						cb(null, {
 							success: false,
@@ -384,7 +383,7 @@ module.exports = function(config) {
 					mySql.handleError(err);
 				} 	
 				
-				connection.query('SELECT id, username, password, firstName, lastName, role FROM users WHERE ?', options, function (err, rows) {
+				connection.query('SELECT id, username, password, firstName, lastName, role, email FROM users WHERE ?', options, function (err, rows) {
 					connection.release();
 					if (err) {
 						next(err);
@@ -436,8 +435,16 @@ module.exports = function(config) {
 				connection.query('UPDATE users SET ? WHERE id = ?', [user, user.id], function (err, result) {
 				    
 				    connection.release();
+				    console.log(err);
 				    if (err) {
-				    	next(err);
+				    	if (err.errno == 1062) {
+				    		next(null, {
+				    			success: false,
+				    			message: 'That username is already in use.  Your changes have not been saved.'
+				    		});
+				    	} else {
+				    		next(err);
+				    	}
 				    } else if ( result.changedRows ) {
 				    	next(null, {
 				    		success: true,

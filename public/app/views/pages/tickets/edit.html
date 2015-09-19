@@ -1,0 +1,149 @@
+<div class="page-header">
+	<h1>Edit Ticket</h1>
+</div>
+
+<form class="form-horizontal" ng-submit="ticket.saveTicket()" name='ticketform' novalidate>
+	<!-- Customer section -->
+	<div>
+		<h4>Customer Information</h4>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Company</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.companyname" required>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Street</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.street" required>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">City</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.city" required>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">State</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.state" required>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Zipcode</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.zipcode" required>
+		</div>
+	</div>
+	
+	<!-- Indicator Section -->
+	<div>
+		<br/>
+		<h4>Indicator Information</h4>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Tag</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_tag" required>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Manufacturer</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_manu" required>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Model</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_model" required>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Serial</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" required>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Capacity</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_capacity" required>
+		</div>
+	</div>	
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Divisions</label>
+		<div class="col-sm-6">
+			<input type="text" name='divisions' class="form-control" ng-model="ticket.ticketData.scale_divisions" required>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Units</label>
+		<div class="col-sm-6">
+			<select class="form-control" ng-model="ticket.ticketData.units" required>
+				<option value='g'>Grams (g)</option>
+				<option value='kg'>Kilograms (kg)</option>
+				<option value='oz'>Ounces (oz)</option>
+				<option value='lb' selected>Pounds (lb)</option>
+			</select>
+		</div>
+	</div>
+	
+	<!-- Scale Base Section -->
+	<div>
+		<br/>
+		<h4>Scale Base Information (Optional)</h4>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Manufacturer</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_manu">
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Model</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_model">
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Serial</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_serial">
+		</div>
+	</div>
+	
+	<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-6">
+		<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='ticketform.$invalid'>Edit Ticket</button>
+	</div>
+	</div>
+
+</form>
+
+<div class="row show-hide-message" ng-show="ticket.message">
+	<div class="col-sm-6 col-sm-offset-2">
+		
+		<div class="alert alert-info">
+			{{ ticket.message }}
+		</div>
+
+	</div>
+</div>

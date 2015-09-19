@@ -10,52 +10,64 @@ angular.module('app.routes', ['ngRoute'])
 			
 			// route for the about page
 			.when('/login', {
-				templateUrl: 'app/views/pages/login.html',
-				controller: 'mainController',
+				templateUrl : 'app/views/pages/login.html',
+				controller  : 'mainController',
 				controllerAs: 'login'
 			})
 			
 			// show all users
 			.when('/users', {
-				templateUrl: 'app/views/pages/users/all.html',
-				controller: 'userController',
+				templateUrl : 'app/views/pages/users/all.html',
+				controller  : 'userController',
 				controllerAs: 'user'
 			})
 
 			// form to create a new user
 			// same view as edit page
 			.when('/users/create', {
-				templateUrl: 'app/views/pages/users/create.html',
-				controller: 'userCreateController',
+				templateUrl : 'app/views/pages/users/create.html',
+				controller  : 'userCreateController',
 				controllerAs: 'user'
 			})
 
 			// page to edit a ticket
 			.when('/users/:user_id', {
-				templateUrl: 'app/views/pages/users/edit.html',
-				controller: 'userEditController',
+				templateUrl : 'app/views/pages/users/edit.html',
+				controller  : 'userEditController',
+				controllerAs: 'user'
+			})
+			
+			.when('/profile', {
+				templateUrl : 'app/views/pages/profile.html',
+				controller  : 'userProfileController',
 				controllerAs: 'user'
 			})
 			
 			// show all tickets
 			.when('/tickets', {
-				templateUrl: 'app/views/pages/tickets/all.html',
-				controller: 'ticketController',
+				templateUrl : 'app/views/pages/tickets/all.html',
+				controller  : 'ticketController',
 				controllerAs: 'ticket'
 			})
 
 			// form to create a new ticket
 			// same view as edit page
 			.when('/tickets/create', {
-				templateUrl: 'app/views/pages/tickets/create.html',
-				controller: 'ticketCreateController',
+				templateUrl : 'app/views/pages/tickets/create.html',
+				controller  : 'ticketCreateController',
 				controllerAs: 'ticket'
 			})
 
 			// page to edit a ticket
+			.when('/tickets/:ticket_id/edit', {
+				templateUrl : 'app/views/pages/tickets/edit.html',
+				controller  : 'ticketEditController',
+				controllerAs: 'ticket'
+			})
+			
 			.when('/tickets/:ticket_id', {
-				templateUrl: 'app/views/pages/tickets/edit.html',
-				controller: 'ticketEditController',
+				templateUrl : 'app/views/pages/tickets/single.html',
+				controller  : 'ticketController',
 				controllerAs: 'ticket'
 			})
 			
