@@ -1,0 +1,210 @@
+<div class="page-header">
+	<h1 ng-cloak>
+		Ticket #{{ ticket.ticket.id }}
+		<a href="/tickets/{{ ticket.ticket.id }}/edit" class="btn btn-default">
+			<span class="glyphicon glyphicon-plus"></span> 
+			Edit Ticket
+		</a>
+	</h1>
+
+</div>
+
+<div class="jumbotron text-center" ng-show="ticket.processing && !ticket.tickets">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<p>Loading Ticket...</p>
+</div>
+
+<div ng-cloak class="row show-hide-message" ng-show="ticket.message">
+	<div class="col-sm-12">
+		<div class="alert alert-info alert-dismissable">
+			{{ ticket.message }}
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+</div>
+
+<div class="jumbotron text-center" ng-show="!ticket.processing && !ticket.ticket">
+	<p>No active tickets available at this time.</p>
+</div>
+
+<div class='col-xs-12 col-md-6' ng-show="ticket.ticket">
+	<h4>Customer Information</h4>
+	<table ng-cloak id="ticket" class="table table-bordered table-striped">
+		<tbody>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Customer</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.companyname }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Street</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.street }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>City</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.city }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>State</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.state }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Zipcode</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.zipcode }}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h4>Indicator Information</h4>
+	<table ng-cloak id="ticket" class="table table-bordered table-striped">
+		<tbody>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Manufacturer</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_manu }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Model</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_model }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Serial</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_serial }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Capacity</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_capacity }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Divisions</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_divisions }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Units</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.units }}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h4 ng-if="ticket.ticket.scale_manu">Scale Information</h4>
+	<table ng-cloak id="ticket" class="table table-bordered table-striped" ng-show="ticket.ticket.scale_manu">
+		<tbody>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Manufacturer</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_manu }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Model</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_model }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Serial</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_serial }}</td>
+			</tr>
+		</tbody>
+	</table>	
+	
+	<form class="form-horizontal no-print" ng-submit="ticket.addEvent()" id='eventform' name='eventform' novalidate>
+	
+		<h4>Add Comment</h4>
+		
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Status</label>
+			<div class="col-sm-9">
+				<select class="form-control" ng-model="ticket.eventData.status" name="status" required>
+					<option value='Additional Notes'>Additional Notes</option>
+					<option value='Complete'>Complete</option>
+					<option value='Delivered'>Delivered</option>
+					<option value='Diagnosed' selected>Diagnosed</option>
+					<option value='Non-repairable'>Non-repairable</option>
+					<option value='Repaired'>Repaired</option>
+					<option value='Replaced'>Replaced</option>
+					<option value='Waiting for Customer'>Waiting for Customer</option>
+					<option value='Waiting for Parts'>Waiting for Parts</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-sm-3 control-label" title="Time spent in minutes">Time Spent</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" ng-model="ticket.eventData.time" name="time" required />
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Comments</label>
+			<div class="col-sm-9">
+				<textarea class="form-control" ng-model="ticket.eventData.comment" name="comment" required></textarea>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-9">
+				<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='eventform.$invalid'>Add Comment</button>
+			</div>
+		</div>
+	</form>	
+</div>
+
+<div class='col-xs-12 col-md-6'>
+	<h4>Comments</h4>
+	<table ng-cloak id="events" class="table table-bordered">
+		<tbody>
+			<tr>
+				<th class='col-md-3'>Kevin Rutledge</th>
+				<td>Repaired</td>
+				<td>
+					<div class="dropdown">
+						<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+							<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
+						</a>
+						<ul class="dropdown-menu" style="width: 100%;">
+							<li>
+								<a href="#" ng-href="">
+									<i class="glyphicon glyphicon-pencil"></i> Edit
+								</a>
+							</li>
+							<li>
+								<a href="#" ng-click="">
+									<i class="glyphicon glyphicon-trash"></i> Delete
+								</a>
+							</li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class='col-md-3'>5 days ago</td>
+				<td rowspan="2" colspan="2">Here are my comments for the scale repair.  Hopefully these are long enough to get a gauge for the box size and view. The scale was initially not powering on, but after further testing it appears that the power cord just came disconnected from the mainboard.  Reconnected it and the scale is now powering on and testing OK.</td>
+			</tr>
+			<tr>
+				<td class='col-md-3'>31 minutes</td>
+			</td>
+		</tbody>
+		<tbody>
+			<tr>
+				<th>Kevin Rutledge</th>
+				<td>Waiting for Customer</td>
+				<td>31</td>
+			</tr>
+			<tr>
+				<td>5 days ago</td>
+				<td rowspan="2" colspan="2">Here are my comments for the scale repair.  Hopefully these are long enough to get a gauge for the box size and view. The scale was initially not powering on, but after further testing it appears that the power cord just came disconnected from the mainboard.  Reconnected it and the scale is now powering on and testing OK.</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<th>Kevin Rutledge</th>
+				<td>Repaired</td>
+				<td>31</td>
+			</tr>
+			<tr>
+				<td>5 days ago</td>
+				<td rowspan="2" colspan="2">Here are my comments for the scale repair.  Hopefully these are long enough to get a gauge for the box size and view. The scale was initially not powering on, but after further testing it appears that the power cord just came disconnected from the mainboard.  Reconnected it and the scale is now powering on and testing OK.</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+		

@@ -102,12 +102,14 @@ angular.module('ticketCtrl', ['ticketService'])
 .controller('ticketViewController', function($routeParams, Ticket) {
 
 	var vm = this;
-
+	vm.processing = true;
+	
 	// get the ticket data for the ticket you want to view
 	// $routeParams is the way we grab data from the URL
 	Ticket.get($routeParams.ticket_id)
 		.success(function(data) {
-			vm.ticketData = data;
+			vm.ticket = data;
+			vm.processing = false;
 		});
 		
 	// function to delete a ticket
@@ -123,7 +125,7 @@ angular.module('ticketCtrl', ['ticketService'])
 				Ticket.all()
 					.success(function(data) {
 						vm.processing = false;
-						vm.tickets = data;
+						vm.ticket = {};
 						
 						vm.message = 'The ticket was successfully deleted!'
 					});

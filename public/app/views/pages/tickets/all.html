@@ -42,7 +42,7 @@
 	</thead>
 	<tbody ng-repeat="_ticket in ticket.tickets">
 			<tr>
-				<td><a class='btn btn-primary btn-block' ng-href='/tickets/{{ ticket.id }}'>View Ticket</a></td>
+				<td><a class='btn btn-primary btn-block' ng-href='/tickets/{{ _ticket.id }}'>View Ticket</a></td>
 				<td>{{ _ticket.companyname }}</td>
 				<td>{{ _ticket.status }}</td>
 				<td>{{ _ticket.indicator_tag }}</td>
@@ -69,8 +69,8 @@
 						</ul>
 					</div>
 				</td>
-				<td colspan="2"><i ng-if="_ticket.updated_at && _ticket.updated_by" title="{{_ticket.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Created: {{ _ticket.created_at | amTimeAgo }} by {{ _ticket.created_by }}</i></td>
-				<td colspan="3"><i ng-if="_ticket.updated_at && _ticket.updated_by" title="{{_ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Updated: {{ _ticket.updated_at | amTimeAgo }} by {{ _ticket.updated_by }}</i></td>
+				<td colspan="2"><i ng-if="_ticket.created_at" title="{{_ticket.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Created: {{ _ticket.created_at | amTimeAgo }} by <span ng-if="_ticket.created_by">{{ _ticket.created_by }}</span><span ng-if="!_ticket.created_by">Unknown</</i></td>
+				<td colspan="3"><i ng-if="_ticket.updated_at" title="{{_ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Updated: {{ _ticket.updated_at | amTimeAgo }} by <span ng-if="_ticket.updated_by">{{ _ticket.updated_by }}</span><span ng-if="!_ticket.updated_by">Unknown</span></i></td>
 			</tr>
 	</tbody>
 </table>

@@ -369,12 +369,17 @@ module.exports = function(config) {
 					mySql.handleError(err);
 				} 	
 			
-				connection.query('CALL getUsers()', function (err, rows) {
+				connection.query('SELECT id, username, firstName, lastName, email, role FROM users', function (err, rows) {
 					connection.release();
 					if (err) {
 						next(err);
+					} else if ( rows[0] !== undefined ) {
+						next(null, rows);
 					} else {
-						next(null, rows[0]);
+						next({
+							success  : false,
+							message  : 'No users were found.'
+						});
 					}
 				});
 				
@@ -594,6 +599,9 @@ module.exports = function(config) {
 			if ( req.body.email ) {
 				User.email = req.body.email;
 			}
+			
+			if ( req.body.role ) 
+				User.role = req.body.role;
 			
 			if ( method === 'create' ) {
 				User.created_by = req.decoded.id;

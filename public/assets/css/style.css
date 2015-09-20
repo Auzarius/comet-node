@@ -39,6 +39,11 @@ nav, .navbar-nav, .navbar {
 	background-color: rgb(255,255,255);
 }
 
+.table-striped tbody tr:nth-child(even) td {
+	background-color: #FFF;
+	background-color: rgb(255,255,255);
+}
+
 table#tickets tr td:first-child {
 	width: 20rem;
 }
@@ -75,11 +80,20 @@ table#tickets tbody tr:first-child td {
 }
 
 thead tr th {
+	background-color: #333;
 	background-color: rgb(40,40,40);
 	color: white;
 	font-weight: bolder;
 	border-color: rgb(40,40,40) !important;
 	border-top: 2px solid !important;
+}
+
+table#ticket tbody tr td {
+	text-transform: uppercase;
+}
+
+table#events tbody tr:nth-child(2) td:nth-child(2) {
+	background-color: #eee;
 }
 
 [ng\:cloak], [ng-cloak], .ng-cloak {
@@ -90,6 +104,29 @@ label {
 	font-weight: bold;
 	-webkit-font-smoothing: antialiased;
 	text-shadow: rgba(0,0,0,.2) 2px 2px 2px;
+}
+
+@media only print {
+	* {
+		font-size: 92% !important;
+	}
+	
+	td, th {
+		padding: 2px !important;
+	}
+	
+	body, html, main, * {
+		padding-top: 0px !important;
+		margin-top: 0px !important;
+	}
+	
+	.no-print {
+		display: none;
+	}
+	
+	.btn {
+		display: none;
+	}
 }
 /*
 .navbar-inverse {
@@ -218,7 +255,22 @@ main .ng-leave {
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width : 992px) {
-
+	table#tickets tbody tr td {
+		-o-transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
+		-ms-transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
+		-moz-transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
+		-webkit-transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
+		transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
+	}
+	
+	table#tickets tbody:hover tr td {
+		background-color: #444;
+		background-color: rgb(60,60,60);
+		color: white;
+		border-color: #555;
+		border-color: rgb(80,80,80);
+	}
+	
 }
 
 /* Large Devices, Wide Screens */

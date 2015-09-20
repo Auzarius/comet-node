@@ -36,6 +36,17 @@
 			<p ng-show="userform.email.$invalid && !userForm.email.$pristine" class="help-block alert alert-info">Please enter a valid email address.</p>
 		</div>
 	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Role</label>
+		<div class="col-sm-6">
+			<select name='role' class="form-control" ng-model="user.userData.role">
+				<option value='user'>User</option>
+				<option value='mod'>Moderator</option>
+				<option value='admin'>Admin</option>
+			</select>
+		</div>
+	</div>
 
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Password</label>
