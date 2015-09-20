@@ -255,7 +255,7 @@ main .ng-leave {
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width : 992px) {
-	table#tickets tbody tr td {
+	table#tickets tbody tr td, table#users tr td {
 		-o-transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
 		-ms-transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
 		-moz-transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
@@ -263,7 +263,7 @@ main .ng-leave {
 		transition:color .2s ease-out, background .5s ease-in, border .3s ease-in;
 	}
 	
-	table#tickets tbody:hover tr td {
+	table#tickets tbody:hover tr td, table#users tr:hover td {
 		background-color: #444;
 		background-color: rgb(60,60,60);
 		color: white;
