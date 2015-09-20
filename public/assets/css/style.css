@@ -68,9 +68,39 @@ thead tr {
 	background-color: #fff;
 }
 
+table#tickets tbody tr:first-child td {
+	font-size: 1.1em;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+thead tr th {
+	background-color: rgb(40,40,40);
+	color: white;
+	font-weight: bolder;
+	border-color: rgb(40,40,40) !important;
+	border-top: 2px solid !important;
+}
+
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
+
+label {
+	font-weight: bold;
+	-webkit-font-smoothing: antialiased;
+	text-shadow: rgba(0,0,0,.2) 2px 2px 2px;
+}
+/*
+.navbar-inverse {
+	background: rgba(10,10,10,0.9);
+}
+
+.btn-orange {
+	background-color: #EA6A33;
+	color: white;
+	font-weight: bold;
+}*/
 
 /*
 dt, dd {
@@ -134,16 +164,16 @@ header .navbar {
 }
 
 main .ng-enter {
-	-webkit-animation: flipInX 0.7s both ease;
-	-moz-animation: flipInX 0.7s both ease;
-	animation: flipInX 0.7s both ease;
+	-webkit-animation: fadeInRight 1s both ease;
+	-moz-animation: fadeInRight 1s both ease;
+	animation: fadeInRight 1s both ease;
 }
 
 main .ng-leave {
 	position: absolute;
-	-webkit-animation: flipOutY 0.7s both ease;
-	-moz-animation: flipOutY 0.7s both ease;
-	animation: flipOutY 0.7s both ease;
+	-webkit-animation: fadeOutLeft 0.7s both ease;
+	-moz-animation: fadeOutLeft 0.7s both ease;
+	animation: fadeOutLeft 0.7s both ease;
 }
 
 @-webkit-keyframes hue {

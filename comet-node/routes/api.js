@@ -137,13 +137,14 @@ module.exports = function (app, express, mySql) {
 					res.send(err);
 				}
 				else if (User.password && User.password !== req.body.password ) {
-					console.log(User);
+
 					if (User.email && User.firstName && User.lastName && User.username) {
 						mySql.users.create(User, function (err, response) {
 							if (err) {
 								res.send(err);
 							} else {
-								res.status(201).json({
+								console.log('success');
+								res.json({
 									success: true,
 									message: 'The user was created successfully!'
 								});
@@ -169,7 +170,6 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.send(err);
 				} else {
-					console.log(users[1].firstName);
 					res.json(users);
 				}
 			});
@@ -290,20 +290,23 @@ module.exports = function (app, express, mySql) {
 	apiRouter.route('/tickets/all')
 		.get(function (req, res) {
 			mySql.tickets.all(function (err, result) {
-				if (err)
+				if (err) {
 					res.send(err);
-				
-				res.json(result);
+				} else {
+					res.json(result);
+				}
 			});
 		});
 		
 	apiRouter.route('/tickets/:id')
 		.get(function (req, res) {
 			mySql.tickets.findOne({ id: req.params.id }, function (err, ticket) {
-				if (err)
+				if (err) {
 					res.send(err);
-				
-				res.send(ticket);
+				} else {
+					console.log(ticket);
+					res.send(ticket);
+				}
 			});
 		})
 		
@@ -319,6 +322,22 @@ module.exports = function (app, express, mySql) {
 					res.json({
 						success: false,
 						message: 'An error occured while updating the ticket, please try again.'
+					});
+				}
+			});
+		})
+		
+		.delete(function (req, res) {
+			mySql.tickets.remove(req.params.id, function (err, user) {
+				if (err) {
+					return res.json({
+						success: false,
+						message: err.message
+					});
+				} else {
+					res.json({
+						success: true,
+						message: 'Ticket successfully deleted!'
 					});
 				}
 			});

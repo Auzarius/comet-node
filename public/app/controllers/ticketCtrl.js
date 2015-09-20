@@ -21,7 +21,7 @@ angular.module('ticketCtrl', ['ticketService'])
 	// function to delete a ticket
 	vm.deleteTicket = function(id) {
 		vm.processing = true;
-
+		
 		Ticket.delete(id)
 			.success(function(data) {
 
@@ -32,6 +32,8 @@ angular.module('ticketCtrl', ['ticketService'])
 					.success(function(data) {
 						vm.processing = false;
 						vm.tickets = data;
+						
+						vm.message = 'The ticket was successfully deleted!'
 					});
 
 			});
@@ -40,9 +42,10 @@ angular.module('ticketCtrl', ['ticketService'])
 })
 
 // controller applied to ticket creation page
-.controller('ticketCreateController', function(Ticket) {
+.controller('ticketCreateController', function($scope, Ticket) {
 	
 	var vm = this;
+	$scope.ticketform = {};
 
 	// function to create a ticket
 	vm.saveTicket = function() {
@@ -53,7 +56,9 @@ angular.module('ticketCtrl', ['ticketService'])
 		Ticket.create(vm.ticketData)
 			.success(function(data) {
 				vm.processing = false;
-				//vm.ticketData = {};
+				vm.ticketData = {};
+				$scope.ticketform.$setPristine();
+
 				vm.message = data.message;
 			});
 			
@@ -68,6 +73,7 @@ angular.module('ticketCtrl', ['ticketService'])
 
 	// get the ticket data for the ticket you want to edit
 	// $routeParams is the way we grab data from the URL
+	console.log($routeParams.ticket_id);
 	Ticket.get($routeParams.ticket_id)
 		.success(function(data) {
 			vm.ticketData = data;
@@ -84,11 +90,44 @@ angular.module('ticketCtrl', ['ticketService'])
 				vm.processing = false;
 
 				// clear the form
-				vm.ticketData = {};
+				// vm.ticketData = {};
 
 				// bind the message from our API to vm.message
 				vm.message = data.message;
 			});
 	};
 
+})
+
+.controller('ticketViewController', function($routeParams, Ticket) {
+
+	var vm = this;
+
+	// get the ticket data for the ticket you want to view
+	// $routeParams is the way we grab data from the URL
+	Ticket.get($routeParams.ticket_id)
+		.success(function(data) {
+			vm.ticketData = data;
+		});
+		
+	// function to delete a ticket
+	vm.deleteTicket = function(id) {
+		vm.processing = true;
+
+		Ticket.delete(id)
+			.success(function(data) {
+
+				// get all active tickets to update the table
+				// you can also set up your api 
+				// to return the list of tickets with the delete call
+				Ticket.all()
+					.success(function(data) {
+						vm.processing = false;
+						vm.tickets = data;
+						
+						vm.message = 'The ticket was successfully deleted!'
+					});
+
+			});
+	};
 });

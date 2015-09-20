@@ -2,44 +2,47 @@
 	<h1>Edit Ticket</h1>
 </div>
 
-<form class="form-horizontal" ng-submit="ticket.saveTicket()" name='ticketform' novalidate>
+<form class="form-horizontal" ng-submit="ticket.saveTicket()" id='ticketform' name='ticketform' novalidate>
 	<!-- Customer section -->
 	<div>
 		<h4>Customer Information</h4>
 	</div>
 	
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Company</label>
+	<div class="form-group has-feedback" ng-class="[ ticketform.company.$invalid && !ticketform.company.$pristine ? 'has-error' : '', ticketform.company.$valid && !ticketform.company.$pristine ? 'has-success' : '' ]">
+		<label class="col-sm-2 control-label" for="companyInput">Company</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.companyname" required>
+			<input type="text" name="company" class="form-control" ng-model="ticket.ticketData.companyname" required>
+			<span ng-show="ticketform.company.$invalid && !ticketform.company.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.company.$invalid && !ticketform.company.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid company name using only letters and proper capitalization.</p>
+			<span ng-show="!ticketform.company.$invalid && !ticketform.company.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Street</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.street" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.street" name="street" required />
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-2 control-label">City</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.city" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.city" name="city" required />
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">State</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.state" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.state" name="state" required />
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Zipcode</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.zipcode" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.zipcode" name="zipcode" required />
 		</div>
 	</div>
 	
@@ -52,49 +55,49 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Tag</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_tag" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_tag" name="indicator_tag" required>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Manufacturer</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_manu" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_manu" name="indicator_manu" required>
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Model</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_model" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_model" name="indicator_model" required>
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Serial</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" name="indicator_serial" required>
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Capacity</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_capacity" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_capacity" name="scale_capacity" required>
 		</div>
 	</div>	
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Divisions</label>
 		<div class="col-sm-6">
-			<input type="text" name='divisions' class="form-control" ng-model="ticket.ticketData.scale_divisions" required>
+			<input type="text" name='divisions' class="form-control" ng-model="ticket.ticketData.scale_divisions" name="scale_divisions" required>
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Units</label>
 		<div class="col-sm-6">
-			<select class="form-control" ng-model="ticket.ticketData.units" required>
+			<select class="form-control" ng-model="ticket.ticketData.units" name="units" required>
 				<option value='g'>Grams (g)</option>
 				<option value='kg'>Kilograms (kg)</option>
 				<option value='oz'>Ounces (oz)</option>
@@ -112,28 +115,28 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Manufacturer</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_manu">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_manu" name="scale_manu">
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Model</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_model">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_model" name="scale_model">
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Serial</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_serial">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_serial" name="scale_serial">
 		</div>
 	</div>
 	
 	<div class="form-group">
-	<div class="col-sm-offset-2 col-sm-6">
-		<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='ticketform.$invalid'>Edit Ticket</button>
-	</div>
+		<div class="col-sm-offset-2 col-sm-6">
+			<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='ticketform.$invalid'>Edit Ticket</button>
+		</div>
 	</div>
 
 </form>
@@ -147,3 +150,92 @@
 
 	</div>
 </div>
+<script>
+	$(document).ready(function() {
+	    $('.form-horizontal').formValidation({
+	        framework: 'bootstrap',
+	        icon: {
+	            valid: 'glyphicon glyphicon-ok',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh'
+	        },
+	        row: {
+			    valid: 'has-success',
+			    invalid: 'has-error'
+			},
+	        fields: {
+	            company: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'The company name is required'
+	                    },
+	                    stringLength: {
+	                        min: 3,
+	                        max: 30,
+	                        message: 'The company name must be more than 3 and less than 30 characters long.'
+	                    },
+	                    regexp: {
+	                        regexp: /^[a-zA-Z0-9\,]+$/,
+	                        message: 'The company name can only contain letters, numbers, and/or a comma.'
+	                    }
+	                }
+	            },
+				street: {
+					validators: {
+						notEmpty: {
+							message: 'The street is required'
+						}
+					}
+				},  
+				city: {
+					validators: {
+						notEmpty: {
+							message: 'The city is required'
+						},
+						stringLength: {
+							min: 3,
+							max: 40,
+							message: 'The city must be at least 3 characters long.'
+						},
+						regexp: {
+							regexp: /^[A-Za-z]+$/,
+							message: 'The city must contain only uppercase and lowercase letters.'
+						}
+					}
+				},  
+				state: {
+					validators: {
+						notEmpty: {
+							message: 'The state is required'
+						},
+						stringLength: {
+							min: 2,
+							max: 2,
+							message: 'The state must be two characters long and capitalized.'
+						},
+						regexp: {
+							regexp: /^[A-Z]+$/,
+							message: 'Please use only uppercase characters for the state.'
+						}
+					}
+				},  
+				zipcode: {
+					validators: {
+						notEmpty: {
+							message: 'The zipcode is required'
+						},
+						stringLength: {
+							min: 5,
+							max: 5,
+							message: 'The zipcode must be 5 digits long.'
+						},
+						regexp: {
+							regexp: /^[0-9]+$/,
+							message: 'Please use only numerical values for the zipcode.'
+						}
+					}
+				}  
+			}
+	    });
+	});
+</script>

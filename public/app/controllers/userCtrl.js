@@ -32,6 +32,8 @@ angular.module('userCtrl', ['userService'])
 					.success(function(data) {
 						vm.processing = false;
 						vm.users = data;
+						
+						vm.message = 'The user was successfully deleted!'
 					});
 
 			});
@@ -40,9 +42,11 @@ angular.module('userCtrl', ['userService'])
 })
 
 // controller applied to user creation page
-.controller('userCreateController', function(User) {
+.controller('userCreateController', function($scope, User) {
 	
 	var vm = this;
+	vm.type = 'create';
+	$scope.userform = {};
 
 	// function to create a user
 	vm.saveUser = function() {
@@ -54,6 +58,8 @@ angular.module('userCtrl', ['userService'])
 			.success(function(data) {
 				vm.processing = false;
 				vm.userData = {};
+				$scope.userform.$setPristine();
+				
 				vm.message = data.message;
 			});
 			
@@ -65,7 +71,8 @@ angular.module('userCtrl', ['userService'])
 .controller('userEditController', function($routeParams, User) {
 
 	var vm = this;
-
+	vm.type = 'edit';
+	
 	// get the user data for the user you want to edit
 	// $routeParams is the way we grab data from the URL
 	User.get($routeParams.user_id)

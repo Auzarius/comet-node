@@ -67,7 +67,7 @@ angular.module('app.routes', ['ngRoute'])
 			
 			.when('/tickets/:ticket_id', {
 				templateUrl : 'app/views/pages/tickets/single.html',
-				controller  : 'ticketController',
+				controller  : 'ticketViewController',
 				controllerAs: 'ticket'
 			})
 			

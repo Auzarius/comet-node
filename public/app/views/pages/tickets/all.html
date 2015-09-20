@@ -9,12 +9,23 @@
 
 </div>
 
-<div class="jumbotron text-center" ng-show="user.processing && !ticket.tickets">
+<div class="jumbotron text-center" ng-show="ticket.processing && !ticket.tickets">
 	<span class="glyphicon glyphicon-repeat spinner"></span>
 	<p>Loading Tickets...</p>
 </div>
 
-<div class="jumbotron text-center" ng-show="!user.processing && !ticket.tickets">
+<div class="row show-hide-message" ng-show="ticket.message">
+	<div class="col-sm-12">
+		<div class="alert alert-info alert-dismissable">
+			{{ ticket.message }}
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+</div>
+
+<div class="jumbotron text-center" ng-show="!ticket.processing && !ticket.tickets">
 	<p>No active tickets available at this time.</p>
 </div>
 
@@ -29,63 +40,37 @@
 			<th>Model</th>
 		</tr>
 	</thead>
-	<tbody ng-repeat="ticket in ticket.tickets">
+	<tbody ng-repeat="_ticket in ticket.tickets">
 			<tr>
-				<td><a class='btn btn-primary' ng-href='/tickets/{{ ticket.id }}'>View Ticket</a></td>
-				<td>{{ ticket.companyname }}</td>
-				<td>{{ ticket.status }}</td>
-				<td>{{ ticket.indicator_tag }}</td>
-				<td>{{ ticket.indicator_manu }}</td>
-				<td>{{ ticket.indicator_model }}</td>
+				<td><a class='btn btn-primary btn-block' ng-href='/tickets/{{ ticket.id }}'>View Ticket</a></td>
+				<td>{{ _ticket.companyname }}</td>
+				<td>{{ _ticket.status }}</td>
+				<td>{{ _ticket.indicator_tag }}</td>
+				<td>{{ _ticket.indicator_manu }}</td>
+				<td>{{ _ticket.indicator_model }}</td>
 			</tr>
 			<tr>
-				<td colspan="3"><i am-calendar="ticket.created_at" title="{{ticket.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Created: {{ ticket.created_at | amTimeAgo }} by {{ ticket.created_by }}</i></td>
-				<td colspan="3"><i ng-if="ticket.updated_at && ticket.updated_by" title="{{ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Updated: {{ ticket.updated_at | amCalendar }} by {{ ticket.updated_by }}</i></td>
+				<td>
+					<div class="dropdown">
+						<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+							<i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;Manage
+						</a>
+						<ul class="dropdown-menu" style="width: 100%;">
+							<li>
+								<a href="#" ng-href="/tickets/{{ _ticket.id }}/edit">
+									<i class="glyphicon glyphicon-pencil"></i> Edit
+								</a>
+							</li>
+							<li>
+								<a href="#" ng-click="ticket.deleteTicket(_ticket.id)">
+									<i class="glyphicon glyphicon-trash"></i> Delete
+								</a>
+							</li>
+						</ul>
+					</div>
+				</td>
+				<td colspan="2"><i ng-if="_ticket.updated_at && _ticket.updated_by" title="{{_ticket.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Created: {{ _ticket.created_at | amTimeAgo }} by {{ _ticket.created_by }}</i></td>
+				<td colspan="3"><i ng-if="_ticket.updated_at && _ticket.updated_by" title="{{_ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Updated: {{ _ticket.updated_at | amTimeAgo }} by {{ _ticket.updated_by }}</i></td>
 			</tr>
 	</tbody>
 </table>
-
-<!--
-<div id="ticket-list" class='container'>
-	<div class='row'>
-		<dl>
-			<dt class='col-xs-3'>
-			 	<span>Company</span>
-			</dt>
-			<dt class='col-xs-2'>
-			 	<span>Status</span>
-			</dt>	
-			<dt class='col-xs-2'>	
-			 	<span>Tag #</span>
-			</dt>	
-			<dt class='col-xs-3'>	
-			 	<span>Manufacturer</span>
-			</dt>	
-			<dt class='col-xs-2'>	
-			 	<span>Model</span>
-			</dt>	
-		</dl>
-	</div>
-	<div class='row' ng-repeat="ticket in ticket.tickets">
-		<dl>
-			<dt class='col-xs-3'>
-			 	<span>{{ ticket.companyname }}</span>
-			</dt>
-			<dd class='col-xs-2'>
-			 	<span>{{ ticket.status }}</span>
-			</dd>	
-			<dd class='col-xs-2'>	
-			 	<span>{{ ticket.indicator_tag }}</span>
-			</dd>	
-			<dd class='col-xs-3'>	
-			 	<span>{{ ticket.indicator_manu }}</span>
-			</dd>	
-			<dd class='col-xs-2'>	
-			 	<span>{{ ticket.indicator_model }}</span>
-			</dd>	
-		</dl>
-	</div>
-</div>-->
-	
-		 
-			

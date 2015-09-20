@@ -83,7 +83,9 @@ module.exports = function(config) {
 			
 				connection.query('SELECT t.id, t.status, t.companyname, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
 				                 '( SELECT firstName FROM users WHERE id = t.created_by ) AS created_by, ' +
-				                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM tickets t', function (err, rows) {
+				                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM ' + mySql.config.tickets_table + ' t ' +
+				                 'WHERE t.status = \'Pending\' OR t.status = \'Diagnosed\' OR t.status = \'Repaired\' ' +
+				                 'ORDER BY t.companyname ASC, t.status ASC, t.indicator_tag ASC ', function (err, rows) {
 					
 					connection.release();
 					if (err) {
@@ -160,7 +162,7 @@ module.exports = function(config) {
 					mySql.handleError(err);
 				} 	
 				
-				connection.query('SELECT * FROM tickets WHERE ?', options, function (err, rows) {
+				connection.query('SELECT * FROM ' + mySql.config.tickets_table + ' WHERE ?', options, function (err, rows) {
 					connection.release();
 					if (err) {
 						cb(err);
@@ -187,7 +189,7 @@ module.exports = function(config) {
 					mySql.handleError(err);
 				} 	
 			
-				connection.query('INSERT INTO tickets SET ?', ticket, function (err, result) {
+				connection.query('INSERT INTO ' + mySql.config.tickets_table + ' SET ?', ticket, function (err, result) {
 					
 					connection.release();
 					if (err) {
@@ -205,7 +207,7 @@ module.exports = function(config) {
 					mySql.handleError(err);
 				} 	
 				
-				connection.query('SELECT id FROM tickets WHERE ?', { id: ticket.id }, function (err, exists) {
+				connection.query('SELECT id FROM ' + mySql.config.tickets_table + ' WHERE ?', { id: ticket.id }, function (err, exists) {
 					if (err) {
 						connection.release();
 						cb(err);
@@ -319,6 +321,42 @@ module.exports = function(config) {
 				return false;
 			} else {
 				return Ticket;
+			}
+		},
+		
+		remove : function (ticketId, next) {
+			
+			if ( ticketId ) {
+				Connection.getConnection(function (err, connection) {
+					if (!connection || err) {
+						mySql.handleError(err);
+					} 	
+					
+					connection.query('DELETE FROM ' + mySql.config.tickets_table + ' WHERE id = ?', ticketId, function (err, result) {
+						
+						connection.release();
+						if (err) {
+							next(err);
+						} else if ( result.affectedRows ) {
+							next(null, {
+								success: true,
+								message: 'The ticket was deleted successfully!'
+							});
+						} else {
+							next(null, {
+								success: false,
+								message: 'An error occured while deleting the ticket, please try again.'
+							});
+						}
+					});
+				});
+			} else {
+				next({
+					success: false,
+					message: 'No ticket was passed as an argument for deletion',
+					value  : ticketId,
+					note   : 'If you received this in error, please notify the admin.'
+				});
 			}
 		}
 	}

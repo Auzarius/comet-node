@@ -12,7 +12,10 @@ module.exports = {
 		host     		: 'localhost',
 		user     		: 'root',
 		password 		: '',
-		database 		: 'comet_dev'
+		database 		: 'comet_dev',
+		user_table		: 'users',
+		tickets_table	: 'tickets_import',
+		events_table	: 'events'
 	},
 	
 	secret		: '2ynIfxH9z3r0c00l'

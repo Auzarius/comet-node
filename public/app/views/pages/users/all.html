@@ -14,28 +14,42 @@
 	<p>Loading Users...</p>
 </div>
 
+<div class="row show-hide-message" ng-show="user.message">
+	<div class="col-sm-12">
+		
+		<div class="alert alert-info alert-dismissable">
+			{{ user.message }}
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+
+	</div>
+</div>
+
+<div class="jumbotron text-center" ng-show="!user.processing && !user.users">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<p>There are no users at this time.</p>
+</div>
+
 <table ng-cloak id="users" class="table table-bordered table-striped" ng-show="user.users">
 	<thead>
 		<tr>
+			<th class="col-xs-1"></th>
 			<th>id</th>
 			<th>Username</th>
 			<th>Name</th>
 			<th>Email</th>
-			<th class="col-xs-1"></th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr ng-repeat="person in user.users">
-			<td>{{ person.id }}</td>
-			<td>{{ person.username }}</td>
-			<td>{{ person.firstName + ' ' + person.lastName }}</td>
-			<td>{{ person.email }}</td>
 			<td class="col-xs-1">
 				<div class="dropdown">
 					<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" role="button">
 						<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Manage
 					</a>
-					<ul class="dropdown-menu pull-right">
+					<ul class="dropdown-menu">
 						<li>
 							<a href="#" ng-href="/users/{{ person.id }}">
 								<i class="glyphicon glyphicon-pencil"></i> Edit
@@ -49,6 +63,11 @@
 					</ul>
 				</div>
 			</td>
+			<td>{{ person.id }}</td>
+			<td>{{ person.username }}</td>
+			<td>{{ person.firstName + ' ' + person.lastName }}</td>
+			<td>{{ person.email }}</td>
 		</tr>
 	</tbody>
 </table>
+
