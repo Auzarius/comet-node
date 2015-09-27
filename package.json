@@ -31,10 +31,10 @@
   "homepage": "https://github.com/Auzarius/Ticket.node-CRM#readme",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.13.3",
-    "express": "^4.13.3",
-    "jsonwebtoken": "^5.0.5",
-    "morgan": "^1.6.1",
-    "mysql": "^2.9.0"
+    "body-parser": "~1.13.3",
+    "express": "~4.13.3",
+    "jsonwebtoken": "~5.0.5",
+    "morgan": "~1.6.1",
+    "mysql": "~2.9.0"
   }
 }

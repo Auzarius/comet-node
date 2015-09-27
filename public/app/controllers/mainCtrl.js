@@ -18,7 +18,7 @@ angular.module('mainCtrl', ['angularMoment'])
 				vm.user = data.data;
 			});	
 		} else {
-			$location.path('/login');
+			//$location.path('/login');
 		}
 		// get user information on page load
 		

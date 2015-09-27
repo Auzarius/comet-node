@@ -100,18 +100,6 @@ module.exports = function(config) {
 						});
 					}
 				});
-				
-				// sql procedure
-				/** 
-				* CREATE DEFINER=`root`@`localhost` 
-				* PROCEDURE `getTickets`() 
-				* DETERMINISTIC 
-				* READS SQL DATA 
-				* SQL SECURITY DEFINER 
-				* SELECT id, status, date, updated, companyname, indicator_tag, indicator_model, indicator_serial 
-				* FROM scales 
-				* ORDER BY id ASC, date ASC, companyname ASC
-				**/
 			});
 		},
 		
@@ -201,32 +189,42 @@ module.exports = function(config) {
 			});
 		},
 		
-		save : function (ticket, cb) {
+		save : function (ticket, next) {
 			Connection.getConnection(function (err, connection) {
 				if (!connection || err) {
 					mySql.handleError(err);
 				} 	
 				
 				connection.query('SELECT id FROM ' + mySql.config.tickets_table + ' WHERE ?', { id: ticket.id }, function (err, exists) {
+					
+					for(var key in ticket) {
+						console.log('KEY: ' + key + ' - VALUE: ' + ticket[key] );
+					}
 					if (err) {
 						connection.release();
-						cb(err);
+						next(err);
 					} else if (exists && exists !== undefined) {
-						connection.query('UPDATE tickets SET ?', ticket, function (err, result) {
+						connection.query('UPDATE ' + mySql.config.tickets_table + ' SET ? WHERE id = ?', [ ticket, ticket.id ],function (err, result) {
 							
+							console.log('Error :: ' + err + "\nResult :: " + result.changedRows);
 							connection.release();
 							if (err) {
-								cb(err);
-							} else {
-								cb(null, {
+								next(err);
+							} else if ( result.changedRows ) {
+								next(null, {
 									success: true,
 									message: 'The ticket was successfully updated!'
+								});
+							} else {
+								next(null, {
+									success: false,
+									message: 'No changes were made to the ticket.'
 								});
 							}
 						});
 					} else {
 						connection.release();
-						cb(null, exists);
+						next(exists);
 					}
 				});
 			});
@@ -234,6 +232,11 @@ module.exports = function(config) {
 		
 		setTicket : function (method, req) {
 			var Ticket = {};
+			
+			console.log(req.body);
+			
+			if ( req.params.id )
+				Ticket.id = req.params.id;
 			
 			Ticket.status = req.body.status ? req.body.status : 'Pending';
 			
@@ -279,7 +282,7 @@ module.exports = function(config) {
 			if ( req.body.scale_divisions ) 
 				Ticket.scale_divisions = req.body.scale_divisions;
 			
-			if ( req.body.units && /^(lb|kg|g|oz)$/m.test(req.body.units) ) {
+			if ( req.body.units && /^(lb|kg|g|oz|mg)$/m.test(req.body.units) ) {
 				Ticket.units = req.body.units;
 			} else {
 				Ticket.units = 'lb';
@@ -573,7 +576,7 @@ module.exports = function(config) {
 		
 		setUser : function (method, req, next) {
 			var User = {};
-			console.log(req.body);
+
 			if ( req.params.user_id )
 				User.id = req.params.user_id;
  			

@@ -11,11 +11,13 @@ angular.module('ticketCtrl', ['ticketService'])
 	Ticket.all()
 		.success(function(data) {
 
-			// when all the tickets come back, remove the processing variable
+			if ( data.success === false ) {
+				vm.tickets = null;
+			} else {
+				vm.tickets = data;
+			}
+			
 			vm.processing = false;
-
-			// bind the tickets that come back to vm.tickets
-			vm.tickets = data;
 		});
 
 	// function to delete a ticket
