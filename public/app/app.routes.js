@@ -49,6 +49,12 @@ angular.module('app.routes', ['ngRoute'])
 				controller  : 'ticketController',
 				controllerAs: 'ticket'
 			})
+			
+			.when('/tickets/all', {
+				templateUrl : 'app/views/pages/tickets/all.html',
+				controller  : 'ticketAllController',
+				controllerAs: 'ticket'
+			})
 
 			// form to create a new ticket
 			// same view as edit page

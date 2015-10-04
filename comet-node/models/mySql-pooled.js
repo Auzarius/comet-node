@@ -69,165 +69,216 @@ module.exports = function(config) {
 	}
 	
 	mySql.verifyResult = function(result) {
-		return ( result !== null && result !== undefined && /[A-Za-z0-9]+/.test(result) );
+		return ( result !== null && result !== undefined);
+		// && /[A-Za-z0-9]+/.test(result) 
+	}
+	
+	mySql.query = function(query, vars, next) {	
+		if ( query ) {
+			Connection.getConnection(function (err, connection) {
+				if (!connection || err) {
+					mySql.handleError(err);
+				} else {
+					if ( vars === null ) {
+						connection.query(query, function (err, result) {
+							connection.release;
+							//queryHandler(err, rows, function (err, result) {
+								next(err, result);
+							//});
+						});
+					} else {
+						connection.query(query, vars, function (err, result) {
+							//queryHandler(err, rows, function (err, result) {
+								connection.release;
+								next(err, result);
+							//});
+						});
+					}
+				}
+			});
+		} else {
+			throw new Error('A query must be passed as the first parameter for this function\n' +
+			                '@params query (string), vars [optional] (array), callback (function)');
+		}
 	}
 	
 	
 	mySql.tickets = {
-		active : function (cb) {
-			console.log('active query');
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				} 	
+		active : function (next) {
+			console.log('\x1b[33mticket.active query\x1b[0m');
+			var query = 'SELECT t.id, t.status, t.companyname, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
+		                 '( SELECT firstName FROM users WHERE id = t.created_by ) AS created_by, ' +
+		                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM ' + mySql.config.tickets_table + ' t ' +
+		                 'WHERE t.status = \'Pending\' OR t.status = \'Diagnosed\' OR t.status = \'Repaired\' ' +
+		                 'ORDER BY t.companyname ASC, t.status ASC, t.indicator_tag ASC';
 			
-				connection.query('SELECT t.id, t.status, t.companyname, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
-				                 '( SELECT firstName FROM users WHERE id = t.created_by ) AS created_by, ' +
-				                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM ' + mySql.config.tickets_table + ' t ' +
-				                 'WHERE t.status = \'Pending\' OR t.status = \'Diagnosed\' OR t.status = \'Repaired\' ' +
-				                 'ORDER BY t.companyname ASC, t.status ASC, t.indicator_tag ASC ', function (err, rows) {
-					
-					connection.release();
-					if (err) {
-						cb(err);
-					}
-					else if ( mySql.verifyResult(rows) ) {
-						cb(null, rows);
-					} else {
-						cb(null, {
-							success: false,
-							message: 'No tickets were found that matched your query'
-						});
-					}
-				});
-			});
-		},
-		
-		all : function (cb) {
-	
-			Connection.getConnection(function (err, connection) {
-				if ( !connection || err) {
-					mySql.handleError(err);
+			mySql.query(query, null, function (err, result) {
+				if (err) {
+					throw new SQL_Error(err);
+					next(err);
+				} else if ( mySql.verifyResult(result)) {
+					next(null, {
+						success : true,
+						data 	: result,
+						status	: 200
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'No tickets were found that matched your query',
+						status 	: 404
+					});
 				}
-					
-				connection.query('CALL getTickets()', function (err, rows) {
-					
-					connection.release();
-					if (err) {
-						cb(err);
-					}
-
-					//console.log('[mySql] getAllTickets query successful!');
-					if ( mySql.verifyResult(rows[0]) ) {
-						cb(null, rows[0]);
-					} else {
-						cb(null, {
-							success: false,
-							message: 'No tickets were found that matched your query'
-						});
-					}
-				});
-				
-				// getTickets() sql procedure
-				/**
-				* CREATE DEFINER=`root`@`localhost` 
-				* PROCEDURE `getActiveTickets`() 
-				* DETERMINISTIC 
-				* READS SQL DATA 
-				* SQL SECURITY DEFINER 
-				* SELECT id, status, date, updated, companyname, indicator_tag, indicator_model, indicator_serial 
-				* FROM scales 
-				* WHERE status = 'Pending' OR status = 'Diagnosed' OR status = 'Repaired' OR status = 'Waiting for Parts' OR status = 'Waiting for Customer' 
-				* ORDER BY id ASC, date ASC, companyname ASC
-				**/
 			});
 		},
 		
-		findOne : function (options, cb) {
-	
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				} 	
-				
-				connection.query('SELECT * FROM ' + mySql.config.tickets_table + ' WHERE ?', options, function (err, rows) {
-					connection.release();
-					if (err) {
-						cb(err);
-					}
-					
-					//console.log('[MYSQL] getTicketById query successful with options : ' + options);
-					
-					if ( /[A-Za-z0-9]+/.test(rows[0]) && rows[0] !== undefined ) {
-						cb(null, rows[0]);
-					} else {
-						cb(null, {
-							success  : false,
-							options	 : options,
-							message  : 'No tickets were found that matched your query'
-						});
-					}
-				});
-			});
-		},
-		
-		create : function (ticket, cb) {
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				} 	
+		all : function (next) {
+			console.log('\x1b[33mticket.all query\x1b[0m');
+			var query = 'SELECT t.id, t.status, t.companyname, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
+		                 '( SELECT firstName FROM users WHERE id = t.created_by ) AS created_by, ' +
+		                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM ' + mySql.config.tickets_table + ' t ' +
+		                 'ORDER BY t.companyname ASC, t.status ASC, t.indicator_tag ASC';
 			
-				connection.query('INSERT INTO ' + mySql.config.tickets_table + ' SET ?', ticket, function (err, result) {
-					
-					connection.release();
-					if (err) {
-						cb(err);
-					} else { 
-						cb(null, result);
-					}
-				});
+			mySql.query(query, null, function (err, result) {
+				if (err) {
+					throw new SQL_Error(err);
+					next(err);
+				} else if (mySql.verifyResult(result)) {
+					next(null, {
+						success : true,
+						data 	: result,
+						status	: 200
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'No tickets were found that matched your query',
+						status	: 404
+					});
+				}
+			});
+		},
+		
+		findOne : function (options, next) {
+			console.log('\x1b[33mticket.findOne query\x1b[0m');
+			var query = 'SELECT * FROM ' + mySql.config.tickets_table + ' WHERE ??';
+			
+			mySql.query(query, options, function (err, result) {			
+				if (err) {
+					throw new SQL_Error(err);
+					next(err);
+				} else if ( mySql.verifyResult(result[0]) ) {
+					next(null, {
+						success : true,
+						data 	: result[0],
+						status	: 200
+					});
+				}
+				else {
+					next(null, {
+						success : false,
+						message : 'The ticket you are looking for does not exist',
+						status	: 404
+					});
+				}
+			});
+		},
+		
+		create : function (ticket, next) {
+			console.log('\x1b[33mticket.create query\x1b[0m');
+			var query = 'INSERT INTO ' + mySql.config.tickets_table + ' SET ??';
+			
+			mySql.query(query, ticket, function (err, result) {
+				if (err) {
+					throw new SQL_Error(err);
+					next(err);
+				} else if ( result.affectedRows > 0 ) {
+					next(null, {
+						success : true,
+						message	: 'The ticket was created successfully!',
+						rows 	: result.affectedRows,
+						status	: 200
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'An error occured while creating the ticket.',
+						status	: 500
+					});
+				}
 			});
 		},
 		
 		save : function (ticket, next) {
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				} 	
+			console.log('\x1b[33mticket.save query\x1b[0m');
+			var query  = 'SELECT id FROM ' + mySql.config.tickets_table + ' WHERE ??';
+			
+			mySql.query(query, { id: ticket.id }, function (err, result) {
+				if ( result[0] ) {
+					query = 'UPDATE ' + mySql.config.tickets_table + ' SET ?? WHERE id = ?';
+					mySql.query(query, [ticket, ticket.id], function (err, result) {
+						if (err) {
+							throw new SQL_Error(err);
+							next(err);
+						} else if ( result.changedRows > 0 ) {
+							next(null, {
+								success : true,
+								message : 'The ticket was successfully updated!',
+								status	: 200
+							});
+						} else {
+							next(null, {
+								success : false,
+								message : 'No changes were made to the ticket.',
+								status  : 304
+							});
+						}
+					})
+				} else {
+					next(null, {
+						success : false,
+						message : 'The ticket you are trying to update does not exist.',
+						status	: 404
+					});
+				}
+			});
+		
+			
+		},
+		
+		remove : function (ticketId, next) {
+			
+			if ( ticketId ) {
+				console.log('\x1b[33mticket.remove query\x1b[0m');
+				var query = 'DELETE FROM ' + mySql.config.tickets_table + ' WHERE id = ?';
 				
-				connection.query('SELECT id FROM ' + mySql.config.tickets_table + ' WHERE ?', { id: ticket.id }, function (err, exists) {
-					
-					for(var key in ticket) {
-						console.log('KEY: ' + key + ' - VALUE: ' + ticket[key] );
-					}
+				mySql.query(query, ticketId, function (err, result) {
 					if (err) {
-						connection.release();
+						throw new SQL_Error(err);
 						next(err);
-					} else if (exists && exists !== undefined) {
-						connection.query('UPDATE ' + mySql.config.tickets_table + ' SET ? WHERE id = ?', [ ticket, ticket.id ],function (err, result) {
-							
-							console.log('Error :: ' + err + "\nResult :: " + result.changedRows);
-							connection.release();
-							if (err) {
-								next(err);
-							} else if ( result.changedRows ) {
-								next(null, {
-									success: true,
-									message: 'The ticket was successfully updated!'
-								});
-							} else {
-								next(null, {
-									success: false,
-									message: 'No changes were made to the ticket.'
-								});
-							}
+					} else if ( result.affectedRows > 0 ) {
+						next(null, {
+							success : true,
+							message : 'The ticket was deleted successfully!',
+							status	: 200
 						});
 					} else {
-						connection.release();
-						next(exists);
+						next(true, {
+							success : false,
+							message : 'An error occured while deleting the ticket, please try again if you feel this was in error.',
+							status	: 304
+						});
 					}
 				});
-			});
+			} else {
+				throw new Error('No value was passed for @param ticketId (int)');
+				next({
+					success: false,
+					message: 'No ticket was passed as an argument for deletion',
+					value  : ticketId,
+					note   : 'If you received this in error, please notify the admin.'
+				});
+			}
 		},
 		
 		setTicket : function (method, req) {
@@ -293,25 +344,6 @@ module.exports = function(config) {
 			
 			if ( method == 'save' )
 				Ticket.updated_by = req.decoded.id;
-			/*
-				status			: 'Pending',
-				companyname		: req.body.companyname ? req.body.companyname
-				street			: req.body.street,
-				city 			: req.body.city,
-				state 			: req.body.state,
-				zipcode			: req.body.zipcode,
-				indicator_tag	: req.body.indicator_tag,
-				indicator_manu	: req.body.indicator_manu,
-				indicator_model	: req.body.indicator_model,
-				indicator_serial: req.body.indicator_serial,
-				scale_manu		: req.body.scale_manu,
-				scale_model		: req.body.scale_model,
-				scale_serial	: req.body.scale_serial,
-				scale_capacity	: req.body.scale_capacity,
-				scale_divisions	: req.body.scale_divisions,
-				units			: req.body.units,
-				created_by		: 4
-			*/
 			
 			if ( method === 'create' &&
 		 	 (!Ticket.companyname || !Ticket.street ||
@@ -325,47 +357,12 @@ module.exports = function(config) {
 			} else {
 				return Ticket;
 			}
-		},
-		
-		remove : function (ticketId, next) {
-			
-			if ( ticketId ) {
-				Connection.getConnection(function (err, connection) {
-					if (!connection || err) {
-						mySql.handleError(err);
-					} 	
-					
-					connection.query('DELETE FROM ' + mySql.config.tickets_table + ' WHERE id = ?', ticketId, function (err, result) {
-						
-						connection.release();
-						if (err) {
-							next(err);
-						} else if ( result.affectedRows ) {
-							next(null, {
-								success: true,
-								message: 'The ticket was deleted successfully!'
-							});
-						} else {
-							next(null, {
-								success: false,
-								message: 'An error occured while deleting the ticket, please try again.'
-							});
-						}
-					});
-				});
-			} else {
-				next({
-					success: false,
-					message: 'No ticket was passed as an argument for deletion',
-					value  : ticketId,
-					note   : 'If you received this in error, please notify the admin.'
-				});
-			}
 		}
 	}
 	
 	mySql.users = {
 		all : function (next) {
+			console.log('\x1b[33musers.all query\x1b[0m');
 			
 			Connection.getConnection(function (err, connection) {
 				if (!connection || err) {

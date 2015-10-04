@@ -8,13 +8,13 @@ angular.module('ticketCtrl', ['ticketService'])
 	vm.processing = true;
 
 	// grab all the active tickets at page load
-	Ticket.all()
-		.success(function(data) {
+	Ticket.active()
+		.success(function(node) {
 
-			if ( data.success === false ) {
+			if ( node.success === false || node.data === null ) {
 				vm.tickets = null;
 			} else {
-				vm.tickets = data;
+				vm.tickets = node.data;
 			}
 			
 			vm.processing = false;
@@ -26,21 +26,59 @@ angular.module('ticketCtrl', ['ticketService'])
 		
 		Ticket.delete(id)
 			.success(function(data) {
-
-				// get all active tickets to update the table
-				// you can also set up your api 
-				// to return the list of tickets with the delete call
-				Ticket.all()
-					.success(function(data) {
-						vm.processing = false;
-						vm.tickets = data;
-						
-						vm.message = 'The ticket was successfully deleted!'
-					});
-
+				
+				if ( data.success) {
+					Ticket.active()
+						.success(function(node) {
+							vm.tickets = node.data;
+						});
+				}
+				
+				vm.processing = false;
+				vm.message = data.message;
 			});
 	};
+})
 
+
+.controller('ticketAllController', function(Ticket) {
+
+	var vm = this;
+
+	// set a processing variable to show loading things
+	vm.processing = true;
+
+	// grab all the active tickets at page load
+	Ticket.all()
+		.success(function(node) {
+
+			if ( node.success === false ) {
+				vm.tickets = null;
+			} else {
+				vm.tickets = node.data;
+			}
+			
+			vm.processing = false;
+		});
+
+	// function to delete a ticket
+	vm.deleteTicket = function(id) {
+		vm.processing = true;
+		
+		Ticket.delete(id)
+			.success(function(data) {
+				
+				if ( data.success) {
+					Ticket.active()
+						.success(function(node) {
+							vm.tickets = node.data;
+						});
+				}
+				
+				vm.processing = false;
+				vm.message = data.message;
+			});
+	};
 })
 
 // controller applied to ticket creation page
@@ -124,7 +162,7 @@ angular.module('ticketCtrl', ['ticketService'])
 				// get all active tickets to update the table
 				// you can also set up your api 
 				// to return the list of tickets with the delete call
-				Ticket.all()
+				Ticket.active()
 					.success(function(data) {
 						vm.processing = false;
 						vm.ticket = {};

@@ -11,8 +11,12 @@ angular.module('ticketService', [])
 	};
 
 	// get all ticket
-	ticketFactory.all = function() {
+	ticketFactory.active = function() {
 		return $http.get('/api/tickets');
+	};
+	
+	ticketFactory.all = function() {
+		return $http.get('/api/tickets/all');
 	};
 
 	// create a ticket

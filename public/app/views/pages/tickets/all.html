@@ -18,18 +18,18 @@
 	<div class="col-sm-12">
 		<div class="alert alert-info alert-dismissable">
 			{{ ticket.message }}
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<button type="button" class="close" ng-click="ticket.message = ''" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 		</div>
 	</div>
 </div>
 
-<div class="jumbotron text-center" ng-show="!ticket.processing && !ticket.tickets">
-	<p>No active tickets are available at this time.</p>
+<div class="jumbotron text-center" ng-show="!ticket.processing && ticket.tickets.length <= 0">
+	<p>No tickets are available at this time.</p>
 </div>
 
-<table ng-cloak id="tickets" class="table table-bordered tbody-striped" ng-show="ticket.tickets">
+<table ng-cloak id="tickets" class="table table-bordered tbody-striped" ng-show="ticket.tickets && ticket.tickets.length > 0">
 	<thead>
 		<tr>
 			<th></th>

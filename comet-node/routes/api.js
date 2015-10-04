@@ -159,7 +159,7 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					res.status(200).json(result);
+					res.status(result.status).json(result);
 				}
 			});
 		});
@@ -170,7 +170,7 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					res.status(200).json(result);
+					res.status(result.status).json(result);
 				}
 			});
 		});
@@ -212,17 +212,11 @@ module.exports = function (app, express, mySql) {
 		})
 		
 		.delete(function (req, res) {
-			mySql.tickets.remove(req.params.id, function (err, user) {
-				if (err) {
-					return res.json({
-						success: false,
-						message: err.message
-					});
+			mySql.tickets.remove(req.params.id, function (err, result) {
+				if (err && err !== true) {
+					res.json(err);
 				} else {
-					res.json({
-						success: true,
-						message: 'Ticket successfully deleted!'
-					});
+					res.json(result);
 				}
 			});
 		});

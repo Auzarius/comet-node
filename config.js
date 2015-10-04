@@ -2,9 +2,9 @@ module.exports = {
 	'port'		: process.env.PORT || 1337,
 	'c'			: {
 		green	: '\x1b[32m',
-		red	: '\x1b[31m',
-		yellow: '\x1b[33m',
-		reset : '\x1b[00m'
+		red		: '\x1b[31m',
+		yellow	: '\x1b[33m',
+		reset 	: '\x1b[00m'
 	},
 	
 	db 			: {
