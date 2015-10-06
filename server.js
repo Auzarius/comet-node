@@ -29,10 +29,12 @@ mySql.init();
 app.use(express.static(__dirname + '/public'));
 
 // route all requests to the angular index.html file
-var apiRoutes = require('./comet-node/routes/api')(app, express, mySql);
-var apiUsers  = require('./comet-node/routes/users')(app, express, mySql);
+var apiRoutes  = require('./comet-node/routes/api')(app, express, mySql);
+var apiUsers   = require('./comet-node/routes/users')(app, express, mySql);
+var apiTickets = require('./comet-node/routes/tickets')(app, express, mySql);
 app.use('/api', apiRoutes);
 app.use('/api/users', apiUsers);
+app.use('/api/tickets', apiTickets);
 
 app.get('*', function (req, res) {
 	res.sendFile(path.join(__dirname + '/public/app/views/index.html'));

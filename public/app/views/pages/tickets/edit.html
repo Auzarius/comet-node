@@ -1,5 +1,12 @@
 <div class="page-header">
-	<h1>Edit Ticket</h1>
+	<h1>
+		Edit Ticket
+		<a ng-href="/tickets/{{ticket.ticketData.id}}" class="btn btn-default">
+			<span class="glyphicon glyphicon-edit"></span> 
+			View Ticket
+		</a>
+	</h1>
+	
 </div>
 
 <form class="form-horizontal" ng-submit="ticket.saveTicket()" id='ticketform' name='ticketform' novalidate>

@@ -51,7 +51,13 @@ module.exports = function (app, express, mySql) {
 		
 	apiUsers.route('/username/:username')
 		.get(function (req, res) {
-			
+			var username = req.params.username;
+			mySql.users.findOne({ username: username }, function (err, user) {
+				if (err)
+					res.send(err);
+				//return the user
+				res.json(user);
+			});
 		})
 	
 	apiUsers.route('/:user_id')	

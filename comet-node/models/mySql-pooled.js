@@ -81,17 +81,13 @@ module.exports = function(config) {
 				} else {
 					if ( vars === null ) {
 						connection.query(query, function (err, result) {
-							connection.release;
-							//queryHandler(err, rows, function (err, result) {
-								next(err, result);
-							//});
+							connection.release();
+							next(err, result);
 						});
 					} else {
 						connection.query(query, vars, function (err, result) {
-							//queryHandler(err, rows, function (err, result) {
-								connection.release;
-								next(err, result);
-							//});
+							connection.release();
+							next(err, result);
 						});
 					}
 				}
@@ -161,7 +157,7 @@ module.exports = function(config) {
 		
 		findOne : function (options, next) {
 			console.log('\x1b[33mticket.findOne query\x1b[0m');
-			var query = 'SELECT * FROM ' + mySql.config.tickets_table + ' WHERE ??';
+			var query = 'SELECT * FROM ' + mySql.config.tickets_table + ' WHERE ?';
 			
 			mySql.query(query, options, function (err, result) {			
 				if (err) {
@@ -186,7 +182,7 @@ module.exports = function(config) {
 		
 		create : function (ticket, next) {
 			console.log('\x1b[33mticket.create query\x1b[0m');
-			var query = 'INSERT INTO ' + mySql.config.tickets_table + ' SET ??';
+			var query = 'INSERT INTO ' + mySql.config.tickets_table + ' SET ?';
 			
 			mySql.query(query, ticket, function (err, result) {
 				if (err) {
@@ -211,11 +207,11 @@ module.exports = function(config) {
 		
 		save : function (ticket, next) {
 			console.log('\x1b[33mticket.save query\x1b[0m');
-			var query  = 'SELECT id FROM ' + mySql.config.tickets_table + ' WHERE ??';
+			var query  = 'SELECT id FROM ' + mySql.config.tickets_table + ' WHERE ?';
 			
 			mySql.query(query, { id: ticket.id }, function (err, result) {
 				if ( result[0] ) {
-					query = 'UPDATE ' + mySql.config.tickets_table + ' SET ?? WHERE id = ?';
+					query = 'UPDATE ' + mySql.config.tickets_table + ' SET ? WHERE id = ?';
 					mySql.query(query, [ticket, ticket.id], function (err, result) {
 						if (err) {
 							throw new SQL_Error(err);

@@ -38,7 +38,7 @@ module.exports = function (app, express, mySql) {
 				}, function (err, user) {
 					if (err) {
 						//mySql.handleError(err);
-						res.send(err);
+						res.status(500).send(err);
 					}
 					else if (!user) {
 						res.json({
@@ -71,7 +71,7 @@ module.exports = function (app, express, mySql) {
 			                    	}
 			                    );
 			                    
-			                    res.json({
+			                    res.status(200).json({
 			                    	success: true,
 			                    	message: 'Enjoy your token!',
 			                    	token  : token
@@ -105,7 +105,7 @@ module.exports = function (app, express, mySql) {
 			// verifies secret and checks expiration
 			jwt.verify(token, secret, function (err, decoded) {
 				if (err) {
-					return res.status(403).send({
+					return res.status(401).send({
 						success: false,
 						message: 'Failed to authenticate token.'
 					});
@@ -130,96 +130,6 @@ module.exports = function (app, express, mySql) {
 	apiRouter.get('/me', function (req, res) {
 		res.send(req.decoded);
 	});
-	
-	apiRouter.route('/tickets')
-		.post(function (req, res) {
-			var Ticket = mySql.tickets.setTicket('create', req);
-			
-			if ( Ticket ) {
-				mySql.tickets.create(Ticket, function (err, result) {
-					if (err)
-						res.send(err);
-					
-					res.json({
-						success: true,
-						message: 'The ticket was successfully created!'
-					});
-				});		
-			} else {
-				res.json({
-					success: false,
-					message: 'Please fill in all of the required fields.'
-				});
-			}
-				
-		})
-		
-		.get(function (req, res) {
-			mySql.tickets.active(function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.status(result.status).json(result);
-				}
-			});
-		});
-		
-	apiRouter.route('/tickets/all')
-		.get(function (req, res) {
-			mySql.tickets.all(function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.status(result.status).json(result);
-				}
-			});
-		});
-		
-	apiRouter.route('/tickets/:id')
-		.get(function (req, res) {
-			mySql.tickets.findOne({ id: req.params.id }, function (err, ticket) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.status(200).send(ticket);
-				}
-			});
-		})
-		
-		.put(function (req, res) {
-			var Ticket = mySql.tickets.setTicket('save', req);
-			
-			if ( Ticket ) {
-				mySql.tickets.save(Ticket, function (err, result) {
-					if (err) {
-						res.status(500).send(err);
-					} else if (result) {
-						res.status(200).json(result);
-					} else {
-						res.status(500).json({
-							success: false,
-							message: 'An error occured while updating the ticket, please try again.'
-						});
-					}
-				});
-			} else {
-				return res.status(422).json({
-					success: false,
-					message: 'An error occured, please make sure you have all required fields filled out.'
-				});
-			}
-			
-		})
-		
-		.delete(function (req, res) {
-			mySql.tickets.remove(req.params.id, function (err, result) {
-				if (err && err !== true) {
-					res.json(err);
-				} else {
-					res.json(result);
-				}
-			});
-		});
 	
 	return apiRouter;
 }

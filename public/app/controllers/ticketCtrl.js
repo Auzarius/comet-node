@@ -94,12 +94,12 @@ angular.module('ticketCtrl', ['ticketService'])
 
 		// use the create function in the ticketService
 		Ticket.create(vm.ticketData)
-			.success(function(data) {
+			.success(function(node) {
 				vm.processing = false;
 				vm.ticketData = {};
 				$scope.ticketform.$setPristine();
 
-				vm.message = data.message;
+				vm.message = node.message;
 			});
 			
 	};	
@@ -115,8 +115,8 @@ angular.module('ticketCtrl', ['ticketService'])
 	// $routeParams is the way we grab data from the URL
 	console.log($routeParams.ticket_id);
 	Ticket.get($routeParams.ticket_id)
-		.success(function(data) {
-			vm.ticketData = data;
+		.success(function(node) {
+			vm.ticketData = node.data;
 		});
 
 	// function to save the ticket
@@ -147,8 +147,8 @@ angular.module('ticketCtrl', ['ticketService'])
 	// get the ticket data for the ticket you want to view
 	// $routeParams is the way we grab data from the URL
 	Ticket.get($routeParams.ticket_id)
-		.success(function(data) {
-			vm.ticket = data;
+		.success(function(node) {
+			vm.ticket = node.data;
 			vm.processing = false;
 		});
 		

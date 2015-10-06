@@ -106,6 +106,31 @@ label {
 	text-shadow: rgba(0,0,0,.2) 2px 2px 2px;
 }
 
+.comment-container {
+	margin: 1.4rem;
+}
+.comment-container .row {
+	margin-top: -1px;
+	border: 1px solid #ddd;
+	border: 1px solid rgb(221,221,221);
+	padding: 1rem .5rem;
+}
+
+.comment-container .comment-header {
+	vertical-align: text-middle;
+
+}
+
+.comment-container .comment-remarks {
+	background-color: #F9F9F9;
+	background-color: rgb(249,249,249);
+}
+
+.comment-container .comment-footer {
+	font-size: .9em;
+	font-color: #ccc;
+}
+
 @media only print {
 	* {
 		font-size: 92% !important;
