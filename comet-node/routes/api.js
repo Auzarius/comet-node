@@ -5,7 +5,9 @@ var	jwt		= require('jsonwebtoken'),
 	secret  = config.secret;
 
 module.exports = function (app, express, mySql) {
-	var apiRouter = express.Router();
+	var apiRouter = express.Router(),
+		apiUsers   = require('./users')(app, express, mySql),
+		apiTickets = require('./tickets')(app, express, mySql);
 	
 	// test route to make sure everything is working
 	// accessed at GET http://localhost:8080/api
@@ -130,6 +132,9 @@ module.exports = function (app, express, mySql) {
 	apiRouter.get('/me', function (req, res) {
 		res.send(req.decoded);
 	});
+	
+	app.use('/api/users', apiUsers);
+	app.use('/api/tickets', apiTickets);
 	
 	return apiRouter;
 }
