@@ -1,3 +1,12 @@
+<div class="show-hide-message fixed" ng-show="user.message">
+	<div class="row alert alert-info alert-dismissable">
+		<div class='col-xs-11'>{{ user.message }}</div>
+		<button type="button" class="close" ng-click="user.message = ''" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
 <div class="page-header">
 	<h1 ng-if="user.type == 'edit'">Edit User</h1>
 	<h1 ng-if="user.type == 'create'">Create User</h1>
@@ -8,7 +17,7 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">First Name</label>
 		<div class="col-sm-6">
-			<input type="text" name='firstName' class="form-control" ng-model="user.userData.firstName" required pattern='^[A-Z][A-Za-z]+'>
+			<input type="text" name='firstName' class="form-control" ng-class="[ userform.firstName.$invalid && !userform.firstName.$pristine ? 'has-error' : '', userform.firstName.$valid && !userform.firstName.$pristine ? 'has-success' : '' ]" ng-model="user.userData.firstName" required pattern='^[A-Z][A-Za-z]+'>
 			<p ng-show="userform.firstName.$invalid && !userForm.firstName.$pristine" class="help-block alert alert-info">Enter a valid name using only letters and proper capitalization.</p>
 		</div>
 	</div>
@@ -16,7 +25,7 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Last Name</label>
 		<div class="col-sm-6">
-			<input type="text" name='lastName' class="form-control" ng-model="user.userData.lastName" required pattern='[A-Za-z]+'>
+			<input type="text" name='lastName' class="form-control" ng-class="[ userform.lastName.$invalid && !userform.lastName.$pristine ? 'has-error' : '', userform.lastName.$valid && !userform.lastName.$pristine ? 'has-success' : '' ]" ng-model="user.userData.lastName" required pattern='[A-Za-z]+'>
 			<p ng-show="userform.lastName.$invalid && !userForm.lastName.$pristine" class="help-block alert alert-info">Enter a valid name using only letters and proper capitalization.</p>
 		</div>
 	</div>
@@ -24,7 +33,7 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Username</label>
 		<div class="col-sm-6">
-			<input type="text" name='username' class="form-control" ng-model="user.userData.username" required pattern='^[A-Za-z][A-Za-z0-9]+'>
+			<input type="text" name='username' class="form-control" ng-class="[ userform.username.$invalid && !userform.username.$pristine ? 'has-error' : '', userform.username.$valid && !userform.username.$pristine ? 'has-success' : '' ]" ng-model="user.userData.username" required pattern='^[A-Za-z][A-Za-z0-9]+'>
 			<p ng-show="userform.username.$invalid && !userForm.username.$pristine" class="help-block alert alert-info">Enter a valid username that begins with a letter and contains only letters and numbers.</p>
 		</div>
 	</div>
@@ -32,7 +41,7 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Email</label>
 		<div class="col-sm-6">
-			<input type="email" name='email' class="form-control" ng-model="user.userData.email" required pattern='^[A-Za-z][A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,4}'>
+			<input type="email" name='email' class="form-control" ng-class="[ userform.email.$invalid && !userform.email.$pristine ? 'has-error' : '', userform.email.$valid && !userform.email.$pristine ? 'has-success' : '' ]" ng-model="user.userData.email" required pattern='^[A-Za-z][A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,4}'>
 			<p ng-show="userform.email.$invalid && !userForm.email.$pristine" class="help-block alert alert-info">Please enter a valid email address.</p>
 		</div>
 	</div>
@@ -40,7 +49,7 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Role</label>
 		<div class="col-sm-6">
-			<select name='role' class="form-control" ng-model="user.userData.role">
+			<select name='role' class="form-control" ng-model="user.userData.role" required>
 				<option value='user'>User</option>
 				<option value='mod'>Moderator</option>
 				<option value='admin'>Admin</option>
@@ -64,7 +73,7 @@
 	</div>
 
 </form>
-
+<!--
 <div class="row show-hide-message" ng-show="user.message">
 	<div class="col-sm-6 col-sm-offset-2">
 		
@@ -74,3 +83,4 @@
 
 	</div>
 </div>
+-->

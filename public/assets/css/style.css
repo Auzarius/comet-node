@@ -230,13 +230,13 @@ main .ng-enter {
 	-moz-animation: fadeInRight 1s both ease;
 	animation: fadeInRight 1s both ease;
 }
-
+/*
 main .ng-leave {
 	position: absolute;
 	-webkit-animation: fadeOutLeft 0.7s both ease;
 	-moz-animation: fadeOutLeft 0.7s both ease;
 	animation: fadeOutLeft 0.7s both ease;
-}
+}*/
 
 @-webkit-keyframes hue {
   from {
@@ -265,6 +265,14 @@ main .ng-leave {
 	#tickets tbody tr td:first-child {
 		width: 10rem;
 	}
+	
+	.fixed {
+		padding: 0px !important;
+		min-width: 96%;
+		width: 96%;
+		overflow: none !important;
+		top: 0.5rem;
+	}
 }
 
 /* Small Devices, Tablets */
@@ -275,6 +283,12 @@ main .ng-leave {
 	
 	table#users tbody tr td:nth-child(2), table#users thead tr th:nth-child(2) {
 		display: table-cell;
+	}
+	
+	.fixed {
+		min-width: 750px;
+		width: 750px;
+		top: 6rem;
 	}
 }
 
@@ -296,11 +310,29 @@ main .ng-leave {
 		border-color: rgb(80,80,80);
 	}
 	
+	.fixed {
+		min-width: 970px;
+		width: 970px;
+		top: 6rem !important;
+	}
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {
+	.fixed {
+		min-width: 1170px;
+		width: 1170px;
+	}
+}
 
+.fixed {
+	padding: 15px;
+	position: fixed !important;
+	z-index: 1 !important;
+}
+
+.close {
+	margin-right: 0.4rem;
 }
 
 .gi-1x {

@@ -9,13 +9,13 @@ angular.module('userCtrl', ['userService'])
 
 	// grab all the users at page load
 	User.all()
-		.success(function(data) {
+		.success(function (node) {
 
 			// when all the users come back, remove the processing variable
 			vm.processing = false;
 
 			// bind the users that come back to vm.users
-			vm.users = data;
+			vm.users = node.data;
 		});
 
 	// function to delete a user
@@ -29,9 +29,9 @@ angular.module('userCtrl', ['userService'])
 				// you can also set up your api 
 				// to return the list of users with the delete call
 				User.all()
-					.success(function(data) {
+					.success(function (node) {
 						vm.processing = false;
-						vm.users = data;
+						vm.users = node.data;
 						
 						vm.message = 'The user was successfully deleted!'
 					});
@@ -55,12 +55,14 @@ angular.module('userCtrl', ['userService'])
 
 		// use the create function in the userService
 		User.create(vm.userData)
-			.success(function(data) {
-				vm.processing = false;
-				vm.userData = {};
-				$scope.userform.$setPristine();
-				
+			.success(function (data) {
+				vm.processing = false;				
 				vm.message = data.message;
+				
+				if (data.success) {
+					vm.userData = {};
+					$scope.userform.$setPristine();
+				}
 			});
 			
 	};	
@@ -76,8 +78,8 @@ angular.module('userCtrl', ['userService'])
 	// get the user data for the user you want to edit
 	// $routeParams is the way we grab data from the URL
 	User.get($routeParams.user_id)
-		.success(function (data) {
-			vm.userData = data;
+		.success(function (node) {
+			vm.userData = node.data;
 		});
 
 	// function to save the user
@@ -87,7 +89,7 @@ angular.module('userCtrl', ['userService'])
 
 		// call the userService function to update 
 		User.update($routeParams.user_id, vm.userData)
-			.success(function(data) {
+			.success(function (data) {
 				vm.processing = false;
 
 				// clear the form
@@ -110,8 +112,8 @@ angular.module('userCtrl', ['userService'])
 	User.self()
 		.success(function (user) {
 			User.get(user.id)
-				.success(function (data) {
-					vm.userData = data;
+				.success(function (node) {
+					vm.userData = node.data;
 				});
 		});
 
@@ -122,7 +124,7 @@ angular.module('userCtrl', ['userService'])
 
 		// call the userService function to update 
 		User.update(vm.userData.id, vm.userData)
-			.success(function(data) {
+			.success(function (data) {
 				vm.processing = false;
 
 				// clear the form

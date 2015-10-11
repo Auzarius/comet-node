@@ -1,3 +1,12 @@
+<div class="show-hide-message fixed" ng-show="ticket.message">
+	<div class="row alert alert-info alert-dismissable">
+		<div class='col-xs-11'>{{ ticket.message }}</div>
+		<button type="button" class="close" ng-click="ticket.message = ''" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
 <div class="page-header">
 	<h1 ng-cloak>
 		Ticket #{{ ticket.ticket.id }}
@@ -149,109 +158,11 @@
 
 <div class='col-xs-12 col-md-6'>
 	<h4>Comments</h4>
-	<table ng-cloak id="events" class="table table-bordered">
-		<tbody>
-			<tr>
-				<th class='col-md-3'>Kevin Rutledge</th>
-				<td>Repaired</td>
-				<td>
-					<div class="dropdown">
-						<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-							<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
-						</a>
-						<ul class="dropdown-menu" style="width: 100%;">
-							<li>
-								<a href="#" ng-href="">
-									<i class="glyphicon glyphicon-pencil"></i> Edit
-								</a>
-							</li>
-							<li>
-								<a href="#" ng-click="">
-									<i class="glyphicon glyphicon-trash"></i> Delete
-								</a>
-							</li>
-						</ul>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td class='col-md-3'>5 days ago</td>
-				<td rowspan="2" colspan="2">Here are my comments for the scale repair.  Hopefully these are long enough to get a gauge for the box size and view. The scale was initially not powering on, but after further testing it appears that the power cord just came disconnected from the mainboard.  Reconnected it and the scale is now powering on and testing OK.</td>
-			</tr>
-			<tr>
-				<td class='col-md-3'>31 minutes</td>
-			</td>
-		</tbody>
-		<tbody>
-			<tr>
-				<th class='col-md-3'>Kevin Rutledge</th>
-				<td>Repaired</td>
-				<td>
-					<div class="dropdown">
-						<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-							<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
-						</a>
-						<ul class="dropdown-menu" style="width: 100%;">
-							<li>
-								<a href="#" ng-href="">
-									<i class="glyphicon glyphicon-pencil"></i> Edit
-								</a>
-							</li>
-							<li>
-								<a href="#" ng-click="">
-									<i class="glyphicon glyphicon-trash"></i> Delete
-								</a>
-							</li>
-						</ul>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td class='col-md-3'>5 days ago</td>
-				<td rowspan="2" colspan="2">Here are my comments for the scale repair.  Hopefully these are long enough to get a gauge for the box size and view. The scale was initially not powering on, but after further testing it appears that the power cord just came disconnected from the mainboard.  Reconnected it and the scale is now powering on and testing OK.</td>
-			</tr>
-			<tr>
-				<td class='col-md-3'>31 minutes</td>
-			</td>
-		</tbody>
-		<tbody>
-			<tr>
-				<th class='col-md-3'>Kevin Rutledge</th>
-				<td>Repaired</td>
-				<td>
-					<div class="dropdown">
-						<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-							<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
-						</a>
-						<ul class="dropdown-menu" style="width: 100%;">
-							<li>
-								<a href="#" ng-href="">
-									<i class="glyphicon glyphicon-pencil"></i> Edit
-								</a>
-							</li>
-							<li>
-								<a href="#" ng-click="">
-									<i class="glyphicon glyphicon-trash"></i> Delete
-								</a>
-							</li>
-						</ul>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td class='col-md-3'>5 days ago</td>
-				<td rowspan="2" colspan="2">Here are my comments for the scale repair.  Hopefully these are long enough to get a gauge for the box size and view. The scale was initially not powering on, but after further testing it appears that the power cord just came disconnected from the mainboard.  Reconnected it and the scale is now powering on and testing OK.</td>
-			</tr>
-			<tr>
-				<td class='col-md-3'>31 minutes</td>
-			</td>
-		</tbody>
-	</table>
 	<div class='comment-container'>
 		<div class='row comment-header'>
-			<div class='col-xs-4'><strong>Kevin Rutledge</strong></div>
-			<div class='col-xs-3'>Repaired</div>
-			<div class='col-xs-5 dropdown'>
+			<div class='col-xs-3 col-md-4'><strong>Kevin Rutledge</strong></div>
+			<div class='col-xs-3 col-md-4'>Repaired</div>
+			<div class='col-xs-6 col-md-4 dropdown'>
 				<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
 					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
 				</a>
@@ -285,9 +196,9 @@
 	</div>
 	<div class='comment-container'>
 		<div class='row comment-header'>
-			<div class='col-xs-4'><strong>Kevin Rutledge</strong></div>
-			<div class='col-xs-3'>Repaired</div>
-			<div class='col-xs-5 dropdown'>
+			<div class='col-xs-3 col-md-4'><strong>Kevin Rutledge</strong></div>
+			<div class='col-xs-3 col-md-4'>Repaired</div>
+			<div class='col-xs-6 col-md-4 dropdown'>
 				<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
 					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
 				</a>

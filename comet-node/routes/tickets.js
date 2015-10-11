@@ -11,10 +11,8 @@ module.exports = function (app, express, mySql) {
 					if (err) {
 						res.status(500).send(err);
 					} else {
-						res.status(result.status).json(result);
+						res.json(result);
 					}
-					
-					
 				});		
 			} else {
 				res.status(422).json({
@@ -22,7 +20,6 @@ module.exports = function (app, express, mySql) {
 					message: 'Please fill in all of the required fields.'
 				});
 			}
-				
 		})
 		
 		.get(function (req, res) {
@@ -30,7 +27,7 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					res.status(result.status).json(result);
+					res.json(result);
 				}
 			});
 		});
@@ -41,7 +38,7 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					res.status(result.status).json(result);
+					res.json(result);
 				}
 			});
 		});
@@ -52,7 +49,7 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					res.status(result.status).json(result);
+					res.json(result);
 				}
 			});
 		})
@@ -65,7 +62,7 @@ module.exports = function (app, express, mySql) {
 					if (err) {
 						res.status(500).send(err);
 					} else {
-						res.status(result.status).json(result);
+						res.json(result);
 					}
 				});
 			} else {
@@ -82,7 +79,7 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					res.status(result.status).json(result);
+					res.json(result);
 				}
 			});
 		});

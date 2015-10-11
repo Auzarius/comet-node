@@ -1,3 +1,12 @@
+<div class="show-hide-message fixed" ng-show="ticket.message">
+	<div class="row alert alert-info alert-dismissable">
+		<div class='col-xs-11'>{{ ticket.message }}</div>
+		<button type="button" class="close" ng-click="ticket.message = ''" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
 <div class="page-header">
 	<h1>
 		Edit Ticket
@@ -49,7 +58,7 @@
 	<div class="form-group">
 		<label class="col-sm-2 control-label">Zipcode</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.zipcode" name="zipcode" required />
+			<input type="text" class="form-control" ng-model="ticket.ticketData.zipcode" name="zipcode" />
 		</div>
 	</div>
 	
@@ -148,6 +157,7 @@
 
 </form>
 
+<!--
 <div class="row show-hide-message" ng-show="ticket.message">
 	<div class="col-sm-6 col-sm-offset-2">
 		
@@ -157,92 +167,4 @@
 
 	</div>
 </div>
-<script>
-	$(document).ready(function() {
-	    $('.form-horizontal').formValidation({
-	        framework: 'bootstrap',
-	        icon: {
-	            valid: 'glyphicon glyphicon-ok',
-	            invalid: 'glyphicon glyphicon-remove',
-	            validating: 'glyphicon glyphicon-refresh'
-	        },
-	        row: {
-			    valid: 'has-success',
-			    invalid: 'has-error'
-			},
-	        fields: {
-	            company: {
-	                validators: {
-	                    notEmpty: {
-	                        message: 'The company name is required'
-	                    },
-	                    stringLength: {
-	                        min: 3,
-	                        max: 30,
-	                        message: 'The company name must be more than 3 and less than 30 characters long.'
-	                    },
-	                    regexp: {
-	                        regexp: /^[a-zA-Z0-9\,]+$/,
-	                        message: 'The company name can only contain letters, numbers, and/or a comma.'
-	                    }
-	                }
-	            },
-				street: {
-					validators: {
-						notEmpty: {
-							message: 'The street is required'
-						}
-					}
-				},  
-				city: {
-					validators: {
-						notEmpty: {
-							message: 'The city is required'
-						},
-						stringLength: {
-							min: 3,
-							max: 40,
-							message: 'The city must be at least 3 characters long.'
-						},
-						regexp: {
-							regexp: /^[A-Za-z]+$/,
-							message: 'The city must contain only uppercase and lowercase letters.'
-						}
-					}
-				},  
-				state: {
-					validators: {
-						notEmpty: {
-							message: 'The state is required'
-						},
-						stringLength: {
-							min: 2,
-							max: 2,
-							message: 'The state must be two characters long and capitalized.'
-						},
-						regexp: {
-							regexp: /^[A-Z]+$/,
-							message: 'Please use only uppercase characters for the state.'
-						}
-					}
-				},  
-				zipcode: {
-					validators: {
-						notEmpty: {
-							message: 'The zipcode is required'
-						},
-						stringLength: {
-							min: 5,
-							max: 5,
-							message: 'The zipcode must be 5 digits long.'
-						},
-						regexp: {
-							regexp: /^[0-9]+$/,
-							message: 'Please use only numerical values for the zipcode.'
-						}
-					}
-				}  
-			}
-	    });
-	});
-</script>
+-->

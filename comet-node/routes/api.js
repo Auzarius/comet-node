@@ -35,38 +35,34 @@ module.exports = function (app, express, mySql) {
 					password : req.body.password
 				};
 				
-				mySql.users.findLogin({
-					username: User.username
-				}, function (err, user) {
+				mySql.users.findLogin({username: User.username}, function (err, user) {
 					if (err) {
-						//mySql.handleError(err);
+						console.log(err);
 						res.status(500).send(err);
-					}
-					else if (!user) {
-						res.json({
+					} else if ( !user.success ) {
+						res.status(user.status).json({
 							success: false,
 							message: 'Authentication failed. That username was not found.'
 						});
-					}
-					else if (user) {
-						var validPassword = mySql.bcrypt.compare(User.password, user.password, function (err, result) {
+					} else if ( user.success ) {
+						var validPassword = mySql.bcrypt.compare(User.password, user.data.password, function (err, result) {
 							if (err) {
-								res.send(err);
+								res.status(500).send(err);
 							}
-							else if (!result) {
-								res.json({
+							else if ( !result ) {
+								res.status(200).json({
 									success: false,
 									message: 'Authentication failed. Incorrect password.',
 								});
 							} else {
 								var token = jwt.sign(
 			                    	{
-			                    		firstName	: user.firstName,
-			                    		lastName	: user.lastName,
-			                    		username	: user.username,
-			                    		id 			: user.id,
-			                    		email		: user.email,
-			                    		role   		: user.role
+			                    		firstName	: user.data.firstName,
+			                    		lastName	: user.data.lastName,
+			                    		username	: user.data.username,
+			                    		id 			: user.data.id,
+			                    		email		: user.data.email,
+			                    		role   		: user.data.role
 			                    	},
 			                    	secret, {
 			                    		expiresInMinutes: 1700
@@ -81,7 +77,8 @@ module.exports = function (app, express, mySql) {
 							}
 						});
 					} else {
-						res.send({
+						console.log('some error');
+						res.status(500).send({
 							success: false,
 							message: 'Something happened while trying to authenticate.'
 						});
@@ -97,7 +94,7 @@ module.exports = function (app, express, mySql) {
 	
 	apiRouter.use(function (req, res, next) {
 		// do logging
-		console.log('Somebody just came to our app!');
+		//console.log('Somebody just came to our app!');
 		
 		// check header or url parameters or post parameters for token
 		var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -107,7 +104,7 @@ module.exports = function (app, express, mySql) {
 			// verifies secret and checks expiration
 			jwt.verify(token, secret, function (err, decoded) {
 				if (err) {
-					return res.status(401).send({
+					res.status(401).send({
 						success: false,
 						message: 'Failed to authenticate token.'
 					});
@@ -133,8 +130,8 @@ module.exports = function (app, express, mySql) {
 		res.send(req.decoded);
 	});
 	
-	app.use('/api/users', apiUsers);
-	app.use('/api/tickets', apiTickets);
+	apiRouter.use('/users', apiUsers);
+	apiRouter.use('/tickets', apiTickets);
 	
 	return apiRouter;
 }

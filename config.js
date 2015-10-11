@@ -13,7 +13,7 @@ module.exports = {
 		user     		: 'root',
 		password 		: '',
 		database 		: 'comet_dev',
-		user_table		: 'users',
+		users_table		: 'users',
 		tickets_table	: 'tickets_import',
 		events_table	: 'events'
 	},

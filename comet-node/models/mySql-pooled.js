@@ -259,7 +259,7 @@ module.exports = function(config) {
 							status	: 200
 						});
 					} else {
-						next(true, {
+						next(null, {
 							success : false,
 							message : 'An error occured while deleting the ticket, please try again if you feel this was in error.',
 							status	: 304
@@ -359,176 +359,201 @@ module.exports = function(config) {
 	mySql.users = {
 		all : function (next) {
 			console.log('\x1b[33musers.all query\x1b[0m');
+			var query = 'SELECT id, username, firstName, lastName, email, role FROM ' + mySql.config.users_table;
 			
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				} 	
-			
-				connection.query('SELECT id, username, firstName, lastName, email, role FROM users', function (err, rows) {
-					connection.release();
-					if (err) {
-						next(err);
-					} else if ( rows[0] !== undefined ) {
-						next(null, rows);
-					} else {
-						next({
-							success  : false,
-							message  : 'No users were found.'
-						});
-					}
-				});
-				
-				// sql procedure
-				/**
-				* CREATE DEFINER=`root`@`localhost` 
-				* PROCEDURE `getUsers`() 
-				* DETERMINISTIC 
-				* READS SQL DATA 
-				* SQL SECURITY DEFINER 
-				* SELECT id, username, firstName, lastName, email 
-				* FROM users 
-				* ORDER BY username ASC, name ASC
-				**/
+			mySql.query(query, null, function (err, result) {
+				if (err) {
+					throw new SQL_Error(err);
+					next(err);
+				} else if ( mySql.verifyResult(result)) {
+					next(null, {
+						success : true,
+						data 	: result,
+						message : ''
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'There are no users available at this time.'
+					});
+				}
 			});
 		},
 		
-		findOne : function (options, cb) {
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				} 	
-				
-				connection.query('SELECT id, username, firstName, lastName, email, role FROM users WHERE ?', options, function (err, rows) {
-					connection.release();
+		findOne : function (options, next) {
+			console.log('\x1b[33musers.findOne query\x1b[0m');
+			var query = 'SELECT id, username, firstName, lastName, email, role FROM ' + mySql.config.users_table + ' WHERE ?';
+			
+			if ( options ) {
+				mySql.query(query, options, function (err, result) {
 					if (err) {
-						cb(err);
-					}
-					else if ( rows[0] !== undefined ) {
-						cb(null, rows[0]);
+						throw new SQL_Error(err);
+						next(err);
+					} else if ( mySql.verifyResult(result[0])) {
+						next(null, {
+							success : true,
+							data 	: result[0],
+							status 	: 200
+						});
 					} else {
-						cb({
-							success  : false,
-							message  : 'No users were found that matched your query'
+						next(null, {
+							success : false,
+							status 	: 304,
+							message : 'The user you were looking for could not be found.'
 						});
 					}
 				});
-			});
+			} else {
+				throw new Exception('No options were passed for the search query.');
+				next({
+					success : false,
+					message : 'No options were passed for the search query.',
+					value	: options,
+					note	: 'If you received this in error, please notify the admin.'
+				});
+			}
+			
 		},
 		
 		findLogin : function (options, next) {
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				} 	
-				
-				connection.query('SELECT id, username, password, firstName, lastName, role, email FROM users WHERE ?', options, function (err, rows) {
-					connection.release();
+			console.log('\x1b[33musers.findLogin query\x1b[0m');
+			var query = 'SELECT id, username, password, firstName, lastName, role, email FROM ' + mySql.config.users_table + ' WHERE ?';
+			
+			if ( options ) {
+				mySql.query(query, options, function (err, result) {
 					if (err) {
+						throw new SQL_Error(err);
 						next(err);
-					}
-					else if ( rows[0] !== undefined ) {
-						next(null, rows[0]);
+					} else if ( mySql.verifyResult(result[0])) {
+						next(null, {
+							success : true,
+							data 	: result[0],
+						});
 					} else {
-						next({
-							success  : false,
-							message  : 'No users were found that matched your query'
+						next(null, {
+							success : false,
+							message : 'No users were found that matched your query.'
 						});
 					}
 				});
-			});
+			} else {
+				throw new Exception('No options were passed for the search query.');
+				next({
+					success : false,
+					message : 'No options were passed for the search query.',
+					value	: options,
+					note	: 'If you received this in error, please notify the admin.'
+				});
+			}
+			
 		},
 		
 		create : function (user, next) {
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				} 	
-				
-				connection.query('INSERT INTO users SET ?', user, function (err, result) {   
-				    
-				    connection.release();
-				    if (err) {
-				    	next(err);
-				    } else if ( result.insertId ) {
-				    	next(null, {
-				    		success: true,
-				    		message: 'The user was successfully created!'
-				    	});
-				    } else {
-				    	next(null, {
-				    		success: false,
-				    		message: 'That user already exists, please try a different username.'
-				    	});
-				    }
-                });
-			});
+			console.log('\x1b[33musers.create query\x1b[0m');
+			var query = 'INSERT INTO ' + mySql.config.users_table + ' SET ?';
+			
+			if ( user ) {
+				mySql.query(query, user, function (err, result) {
+					if (err) {
+						if (err.errno === 1062) {
+							next(null, {
+								success : false,
+								message : 'That username is already in use.  Please try a different username.'
+							});
+						} else {
+							throw new SQL_Error(err);
+							next(err);
+						}
+					} else if ( result.affectedRows > 0 ) {
+						next(null, {
+							success : true,
+							message : 'The user was created successfully!'
+						});
+					} else {
+						next(null, {
+							success : false,
+							message	: 'An error occured while creating the user.'
+						});
+					}
+				});
+			} else {
+				throw new Exception('No user was passed as an argument for creation.');
+				next({
+					success : false,
+					message : 'No user was passed as an argument for creation.',
+					value	: user,
+					note	: 'If you received this in error, please notify the admin.'
+				});
+			}
+			
 		},
 		
 		save : function (user, next) {
-			Connection.getConnection(function (err, connection) {
-				if (!connection || err) {
-					mySql.handleError(err);
-				}
+			console.log('\x1b[33musers.save query\x1b[0m');
+			var query = 'UPDATE ' + mySql.config.users_table + ' SET ? WHERE id = ?';
 			
-				connection.query('UPDATE users SET ? WHERE id = ?', [user, user.id], function (err, result) {
-				    
-				    connection.release();
-				    console.log(err);
-				    if (err) {
-				    	if (err.errno == 1062) {
-				    		next(null, {
-				    			success: false,
-				    			message: 'That username is already in use.  Your changes have not been saved.'
-				    		});
-				    	} else {
-				    		next(err);
-				    	}
-				    } else if ( result.changedRows ) {
-				    	next(null, {
-				    		success: true,
-				    		message: 'The user was successfully updated!'
-				    	});
-				    } else {
-				    	next(null, {
-				    		success: true,
-				    		message: 'No changes were made to the user.'
-				    	});
-				    }
-                });
-			});	
+			if ( user ) {
+				mySql.query(query, [user, user.id], function (err, result) {
+					if (err) {
+						if (err.errno === 1062) {
+							next(null, {
+								success : false,
+								message : 'That username is already in use.  Your changes have not been saved.'
+							});
+						} else {
+							throw new SQL_Error(err);
+							next(err);
+						}
+					} else if ( result.changedRows > 0 ) {
+						next(null, {
+							success : true,
+							message : 'The user was updated successfully!'
+						});
+					} else {
+						next(null, {
+							success : false,
+							message : 'No changes were made, nothing to save.'
+						});
+					}
+				});
+			} else {
+				throw new Exception('No user was passed as an argument for updating.');
+				next({
+					success : false,
+					message : 'No user was passed as an argument for updating.',
+					value	: user,
+					note	: 'If you received this in error, please notify the admin.'
+				});
+			}
+			
 		},
 		
 		remove : function (userId, next) {
 			
+			console.log('\x1b[33musers.save query\x1b[0m');
+			
 			if ( userId ) {
-				Connection.getConnection(function (err, connection) {
-					if (!connection || err) {
-						mySql.handleError(err);
-					} 	
-					
-					connection.query('DELETE FROM users WHERE id = ?', userId, function (err, result) {
-						
-						connection.release();
-						if (err) {
-							next(err);
-						} else if ( result.affectedRows ) {
-							next(null, {
-								success: true,
-								message: 'The user was deleted successfully!'
-							});
-						} else {
-							next(null, {
-								success: false,
-								message: 'An error occured while deleting the user, please try again.'
-							});
-						}
-					});
+				var query = 'DELETE FROM ' + mySql.config.users_table + ' WHERE id = ?';
+				mySql.query(query, userId, function (err, result) {
+					if (err) {
+						throw new SQL_Error(err);
+					} else if ( result.affectedRows > 0 ) {
+						next(null, {
+							success : true,
+							message : 'The user was deleted successfully!'
+						});
+					} else {
+						next(null, {
+							success : false,
+							message : 'An error occured while deleting the user.'
+						});
+					}
 				});
 			} else {
+				throw new Exception('No user was passed as an argument for deletion!')
 				next({
 					success: false,
-					message: 'No user was passed as an argument for deletion',
+					message: 'No user was passed as an argument for deletion.',
 					value  : userId,
 					note   : 'If you received this in error, please notify the admin.'
 				});
@@ -567,7 +592,7 @@ module.exports = function(config) {
 			});
 		},
 		
-		setUser : function (method, req, next) {
+		setUser : function (method, req) {
 			var User = {};
 
 			if ( req.params.user_id )
@@ -601,26 +626,23 @@ module.exports = function(config) {
 			
 			if ( method === 'create' ) {
 				User.created_by = req.decoded.id;
-				
-				if ( User.firstName && User.lastName && User.username && User.password && User.email ) {
-					next(null, User);
-				} else {
-					next({
-						success: false,
-						message: 'You must fill out all of the fields.',
-						require: 'Firstname, Lastname, Username, Password and Email'
-					});
-				}
 			}
 			
-			else if ( method === 'save' ) {
+			if ( method === 'save' ) {
 				User.updated_by = req.decoded.id;
-				next(null, User);
+			}
+			
+			if ( method === 'create' && ( User.firstName && User.lastName && User.username && User.password && User.email )) {
+				return User;
+			} else if ( method === 'save' && ( User.firstName && User.lastName && User.username && User.email )) {
+				return User;
+			} else if ( !( User.firstName && User.lastName && User.username && User.email )) {
+				throw new Exception('You must fill out all of the fields.\n' +
+				                    'Required fields: Firstname, Lastname, Username, Password and Email');
+				return false;
 			} else {
-				next({
-					success: false,
-					message: 'You must define the method: create / save'
-				});
+				throw new Exception('You must define the method: create / save');
+				return false;
 			}
 		}
 	}

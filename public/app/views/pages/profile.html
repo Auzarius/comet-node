@@ -1,3 +1,12 @@
+<div class="show-hide-message fixed" ng-show="user.message">
+	<div class="row alert alert-info alert-dismissable">
+		<div class='col-xs-11'>{{ user.message }}</div>
+		<button type="button" class="close" ng-click="user.message = ''" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
 <div class="page-header">
 	<h1>User Profile</h1>
 </div>
@@ -52,6 +61,7 @@
 
 </form>
 
+<!--
 <div class="row show-hide-message" ng-show="user.message">
 	<div class="col-sm-6 col-sm-offset-2">
 		
@@ -61,3 +71,4 @@
 
 	</div>
 </div>
+-->
