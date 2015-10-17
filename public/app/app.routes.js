@@ -9,10 +9,18 @@ angular.module('app.routes', ['ngRoute'])
 			})
 			
 			// route for the about page
-			.when('/login', {
+			.when('/signin', {
 				templateUrl : 'app/views/pages/login.html',
 				controller  : 'mainController',
 				controllerAs: 'login'
+			})
+			
+			.when('/feedback', {
+				templateUrl : 'app/views/pages/feedback.html'
+			})
+			
+			.when('/forbidden', {
+				templateUrl : 'app/views/pages/401.html'
 			})
 			
 			// show all users

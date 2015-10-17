@@ -51,8 +51,8 @@
 		<div class="col-sm-6">
 			<select name='role' class="form-control" ng-model="user.userData.role" required>
 				<option value='user'>User</option>
-				<option value='mod'>Moderator</option>
-				<option value='admin'>Admin</option>
+				<option value='mod' ng-if="main.user.role === 'admin' || main.user.role === 'mod'">Moderator</option>
+				<option value='admin' ng-if="main.user.role === 'admin'">Admin</option>
 			</select>
 		</div>
 	</div>

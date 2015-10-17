@@ -54,7 +54,7 @@
 	<tbody ng-repeat="_ticket in ticket.tickets">
 			<tr>
 				<td><a class='btn btn-primary btn-block' ng-href='/tickets/{{ _ticket.id }}'>View Ticket</a></td>
-				<td>{{ _ticket.companyname }}</td>
+				<td>{{ _ticket.customer }}</td>
 				<td>{{ _ticket.status }}</td>
 				<td>{{ _ticket.indicator_tag }}</td>
 				<td>{{ _ticket.indicator_manu }}</td>
@@ -72,7 +72,7 @@
 									<i class="glyphicon glyphicon-pencil"></i> Edit
 								</a>
 							</li>
-							<li>
+							<li ng-if="main.user.role === 'admin'">
 								<a href="#" ng-click="ticket.deleteTicket(_ticket.id)">
 									<i class="glyphicon glyphicon-trash"></i> Delete
 								</a>

@@ -110,9 +110,11 @@ angular.module('authService', [])
 	interceptorFactory.responseError = function(response) {
 
 		// if our server returns a 403 forbidden response
-		if (response.status == 403 || response.status == 401) {
+		if (response.status == 401) {
 			AuthToken.setToken();
-			$location.path('/login');
+			$location.path('/signin');
+		} else if (response.status == 403) {
+			$location.path('/forbidden');
 		}
 
 		// return the errors from the server as a promise

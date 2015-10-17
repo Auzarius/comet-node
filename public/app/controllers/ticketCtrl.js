@@ -18,7 +18,15 @@ angular.module('ticketCtrl', ['ticketService'])
 			}
 			
 			vm.processing = false;
-		});
+		})
+		.error(function(node) {
+			if (node) {
+				vm.message = node;
+			}
+			
+			vm.tickets = null;
+			vm.processing = false;
+		})
 
 	// function to delete a ticket
 	vm.deleteTicket = function(id) {

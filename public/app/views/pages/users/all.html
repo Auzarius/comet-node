@@ -10,7 +10,7 @@
 <div class="page-header">
 	<h1>
 		Users 
-		<a href="/users/create" class="btn btn-default">
+		<a href="/users/create" class="btn btn-default" ng-if="main.user.role === 'admin' || main.user.role === 'mod'">
 			<span class="glyphicon glyphicon-plus"></span> 
 			New User
 		</a>
@@ -45,18 +45,18 @@
 <table ng-cloak id="users" class="table table-bordered table-striped" ng-show="user.users">
 	<thead>
 		<tr>
-			<th class="col-xs-1"></th>
-			<th>id</th>
-			<th>Username</th>
+			<th class="col-xs-1" ng-if="main.user.role === 'admin' || main.user.role === 'mod'"></th>
+			<th ng-if="main.user.role === 'admin' || main.user.role === 'mod'">id</th>
+			<th ng-if="main.user.role === 'admin' || main.user.role === 'mod'">Username</th>
 			<th>Name</th>
 			<th>Email</th>
-			<th>Role</th>
+			<th ng-if="main.user.role === 'admin' || main.user.role === 'mod'">Role</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr ng-repeat="person in user.users">
-			<td class="col-xs-1">
-				<div class="dropdown">
+			<td class="col-xs-1" ng-if="main.user.role === 'admin' || main.user.role === 'mod'">
+				<div class="dropdown" ng-if="person.username !== main.user.username">
 					<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" role="button">
 						<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Manage
 					</a>
@@ -66,7 +66,7 @@
 								<i class="glyphicon glyphicon-pencil"></i> Edit
 							</a>
 						</li>
-						<li>
+						<li ng-if="main.user.role === 'admin'">
 							<a href="#" ng-click="user.deleteUser(person.id)">
 								<i class="glyphicon glyphicon-trash"></i> Delete
 							</a>
@@ -74,11 +74,11 @@
 					</ul>
 				</div>
 			</td>
-			<td>{{ person.id }}</td>
-			<td>{{ person.username }}</td>
+			<td ng-if="main.user.role === 'admin' || main.user.role === 'mod'">{{ person.id }}</td>
+			<td ng-if="main.user.role === 'admin' || main.user.role === 'mod'">{{ person.username }}</td>
 			<td>{{ person.firstName + ' ' + person.lastName }}</td>
 			<td>{{ person.email }}</td>
-			<td>{{ person.role }}</td>
+			<td ng-if="main.user.role === 'admin' || main.user.role === 'mod'">{{ person.role }}</td>
 		</tr>
 	</tbody>
 </table>

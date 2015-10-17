@@ -102,15 +102,15 @@ module.exports = function(config) {
 	mySql.tickets = {
 		active : function (next) {
 			console.log('\x1b[33mticket.active query\x1b[0m');
-			var query = 'SELECT t.id, t.status, t.companyname, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
+			var query = 'SELECT t.id, t.status, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
 		                 '( SELECT firstName FROM users WHERE id = t.created_by ) AS created_by, ' +
 		                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM ' + mySql.config.tickets_table + ' t ' +
 		                 'WHERE t.status = \'Pending\' OR t.status = \'Diagnosed\' OR t.status = \'Repaired\' ' +
-		                 'ORDER BY t.companyname ASC, t.status ASC, t.indicator_tag ASC';
+		                 'ORDER BY t.customer ASC, t.status ASC, t.indicator_tag ASC';
 			
 			mySql.query(query, null, function (err, result) {
 				if (err) {
-					throw new SQL_Error(err);
+					throw new Error(err);
 					next(err);
 				} else if ( mySql.verifyResult(result)) {
 					next(null, {
@@ -130,14 +130,42 @@ module.exports = function(config) {
 		
 		all : function (next) {
 			console.log('\x1b[33mticket.all query\x1b[0m');
-			var query = 'SELECT t.id, t.status, t.companyname, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
+			var query = 'SELECT t.id, t.status, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
 		                 '( SELECT firstName FROM users WHERE id = t.created_by ) AS created_by, ' +
 		                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM ' + mySql.config.tickets_table + ' t ' +
-		                 'ORDER BY t.companyname ASC, t.status ASC, t.indicator_tag ASC';
+		                 'ORDER BY t.customer ASC, t.status ASC, t.indicator_tag ASC';
 			
 			mySql.query(query, null, function (err, result) {
 				if (err) {
-					throw new SQL_Error(err);
+					throw new Error(err);
+					next(err);
+				} else if (mySql.verifyResult(result)) {
+					next(null, {
+						success : true,
+						data 	: result,
+						status	: 200
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'No tickets were found that matched your query',
+						status	: 404
+					});
+				}
+			});
+		},
+		
+		filter : function (field, search, next) {
+			console.log('\x1b[33mticket.all query\x1b[0m');
+			var query = 'SELECT t.id, t.status, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
+		                 '( SELECT firstName FROM users WHERE id = t.created_by ) AS created_by, ' +
+		                 '( SELECT firstName FROM users WHERE id = t.updated_by ) AS updated_by FROM ' + mySql.config.tickets_table + ' t ' +
+		                 'WHERE t.' + field + ' like \'%' + search + '%\' ' +
+		                 'ORDER BY t.customer ASC, t.status ASC, t.indicator_tag ASC';
+			
+			mySql.query(query, null, function (err, result) {
+				if (err) {
+					throw new Error(err);
 					next(err);
 				} else if (mySql.verifyResult(result)) {
 					next(null, {
@@ -161,7 +189,7 @@ module.exports = function(config) {
 			
 			mySql.query(query, options, function (err, result) {			
 				if (err) {
-					throw new SQL_Error(err);
+					throw new Error(err);
 					next(err);
 				} else if ( mySql.verifyResult(result[0]) ) {
 					next(null, {
@@ -186,7 +214,7 @@ module.exports = function(config) {
 			
 			mySql.query(query, ticket, function (err, result) {
 				if (err) {
-					throw new SQL_Error(err);
+					throw new Error(err);
 					next(err);
 				} else if ( result.affectedRows > 0 ) {
 					next(null, {
@@ -214,7 +242,7 @@ module.exports = function(config) {
 					query = 'UPDATE ' + mySql.config.tickets_table + ' SET ? WHERE id = ?';
 					mySql.query(query, [ticket, ticket.id], function (err, result) {
 						if (err) {
-							throw new SQL_Error(err);
+							throw new Error(err);
 							next(err);
 						} else if ( result.changedRows > 0 ) {
 							next(null, {
@@ -250,7 +278,7 @@ module.exports = function(config) {
 				
 				mySql.query(query, ticketId, function (err, result) {
 					if (err) {
-						throw new SQL_Error(err);
+						throw new Error(err);
 						next(err);
 					} else if ( result.affectedRows > 0 ) {
 						next(null, {
@@ -287,8 +315,8 @@ module.exports = function(config) {
 			
 			Ticket.status = req.body.status ? req.body.status : 'Pending';
 			
-			if ( req.body.companyname )
-				Ticket.companyname = req.body.companyname;
+			if ( req.body.customer )
+				Ticket.customer = req.body.customer;
 			
 			if ( req.body.street ) 
 				Ticket.street = req.body.street;
@@ -341,17 +369,21 @@ module.exports = function(config) {
 			if ( method == 'save' )
 				Ticket.updated_by = req.decoded.id;
 			
-			if ( method === 'create' &&
-		 	 (!Ticket.companyname || !Ticket.street ||
-		 	  !Ticket.city || !Ticket.state || 
-		 	  !Ticket.indicator_tag || !Ticket.indicator_model ||
-		 	  !Ticket.indicator_manu || !Ticket.indicator_serial || 
-		 	  !Ticket.scale_capacity || !Ticket.scale_divisions) 
-		 	 ) {
-				console.log(Ticket);
-				return false;
+			if ( method === 'create' || method === 'save' ) {
+				if (!Ticket.customer || !Ticket.street ||
+		 	  		!Ticket.city || !Ticket.state || 
+		 	  		!Ticket.indicator_tag || !Ticket.indicator_model ||
+		 	  		!Ticket.indicator_manu || !Ticket.indicator_serial || 
+		 	  		!Ticket.scale_capacity || !Ticket.scale_divisions ) {
+					
+					console.log(Ticket);
+					return false;
+				} else {
+					return Ticket;
+				}
 			} else {
-				return Ticket;
+				throw new Error('The methods \'create\' or \'save\' must be passed when using this function');
+				return false;
 			}
 		}
 	}
@@ -363,7 +395,7 @@ module.exports = function(config) {
 			
 			mySql.query(query, null, function (err, result) {
 				if (err) {
-					throw new SQL_Error(err);
+					throw new Error(err);
 					next(err);
 				} else if ( mySql.verifyResult(result)) {
 					next(null, {
@@ -387,7 +419,7 @@ module.exports = function(config) {
 			if ( options ) {
 				mySql.query(query, options, function (err, result) {
 					if (err) {
-						throw new SQL_Error(err);
+						throw new Error(err);
 						next(err);
 					} else if ( mySql.verifyResult(result[0])) {
 						next(null, {
@@ -412,7 +444,6 @@ module.exports = function(config) {
 					note	: 'If you received this in error, please notify the admin.'
 				});
 			}
-			
 		},
 		
 		findLogin : function (options, next) {
@@ -422,7 +453,7 @@ module.exports = function(config) {
 			if ( options ) {
 				mySql.query(query, options, function (err, result) {
 					if (err) {
-						throw new SQL_Error(err);
+						throw new Error(err);
 						next(err);
 					} else if ( mySql.verifyResult(result[0])) {
 						next(null, {
@@ -461,7 +492,7 @@ module.exports = function(config) {
 								message : 'That username is already in use.  Please try a different username.'
 							});
 						} else {
-							throw new SQL_Error(err);
+							throw new Error(err);
 							next(err);
 						}
 					} else if ( result.affectedRows > 0 ) {
@@ -485,7 +516,6 @@ module.exports = function(config) {
 					note	: 'If you received this in error, please notify the admin.'
 				});
 			}
-			
 		},
 		
 		save : function (user, next) {
@@ -501,7 +531,7 @@ module.exports = function(config) {
 								message : 'That username is already in use.  Your changes have not been saved.'
 							});
 						} else {
-							throw new SQL_Error(err);
+							throw new Error(err);
 							next(err);
 						}
 					} else if ( result.changedRows > 0 ) {
@@ -525,18 +555,16 @@ module.exports = function(config) {
 					note	: 'If you received this in error, please notify the admin.'
 				});
 			}
-			
 		},
 		
 		remove : function (userId, next) {
-			
 			console.log('\x1b[33musers.save query\x1b[0m');
 			
 			if ( userId ) {
 				var query = 'DELETE FROM ' + mySql.config.users_table + ' WHERE id = ?';
 				mySql.query(query, userId, function (err, result) {
 					if (err) {
-						throw new SQL_Error(err);
+						throw new Error(err);
 					} else if ( result.affectedRows > 0 ) {
 						next(null, {
 							success : true,
@@ -632,16 +660,205 @@ module.exports = function(config) {
 				User.updated_by = req.decoded.id;
 			}
 			
-			if ( method === 'create' && ( User.firstName && User.lastName && User.username && User.password && User.email )) {
-				return User;
-			} else if ( method === 'save' && ( User.firstName && User.lastName && User.username && User.email )) {
-				return User;
-			} else if ( !( User.firstName && User.lastName && User.username && User.email )) {
-				throw new Exception('You must fill out all of the fields.\n' +
-				                    'Required fields: Firstname, Lastname, Username, Password and Email');
-				return false;
+			if ( method === 'create' || method === 'save' ) {
+				if ( method === 'create' && ( User.firstName && User.lastName && 
+				    User.username && User.password && User.email) ) {
+					return User;
+				} else if ( method === 'save' && ( User.firstName && User.lastName && 
+				           User.username && User.email )) {
+					return User;
+				} else {
+					throw new Exception('You must fill out all of the fields.\n' +
+					                    'Required fields: Firstname, Lastname, Username, Password and Email');
+					return false;
+				}
 			} else {
 				throw new Exception('You must define the method: create / save');
+				return false;
+			}
+		}
+	}
+	
+	mySql.events = {
+		all : function (next) {
+			console.log('\x1b[33mevents.all query\x1b[0m');
+			var query = 'SELECT * FROM ' + mySql.config.events_table;
+			
+			mySql.query(query, null, function (err, result) {
+				if (err) {
+					throw new Error(err);
+					next(err);
+				} else if ( mySql.verifyResult(result)) {
+					next(null, {
+						success : true,
+						data 	: result,
+						message : ''
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'There are no events available at this time.'
+					});
+				}
+			});
+		},
+		
+		findOne : function (options, next) {
+			console.log('\x1b[33mevents.findOne query\x1b[0m');
+			var query = 'SELECT * FROM ' + mySql.config.events_table + ' WHERE ?';
+			
+			if ( options ) {
+				mySql.query(query, options, function (err, result) {
+					if (err) {
+						throw new Error(err);
+						next(err);
+					} else if ( mySql.verifyResult(result[0])) {
+						next(null, {
+							success : true,
+							data 	: result[0],
+							status 	: 200
+						});
+					} else {
+						next(null, {
+							success : false,
+							status 	: 304,
+							message : 'The event you were looking for could not be found.'
+						});
+					}
+				});
+			} else {
+				throw new Exception('No options were passed for the search query.');
+				next({
+					success : false,
+					message : 'No options were passed for the search query.',
+					value	: options,
+					note	: 'If you received this in error, please notify the admin.'
+				});
+			}
+		},
+		
+		create : function (event, next) {
+			console.log('\x1b[33musers.create query\x1b[0m');
+			var query = 'INSERT INTO ' + mySql.config.events_table + ' SET ?';
+			
+			if ( event ) {
+				mySql.query(query, event, function (err, result) {
+					if (err) {
+						throw new Error(err);
+						next(err);
+					} else if ( result.affectedRows > 0 ) {
+						next(null, {
+							success : true,
+							message : 'The event was created successfully!'
+						});
+					} else {
+						next(null, {
+							success : false,
+							message	: 'An error occured while creating the event.'
+						});
+					}
+				});
+			} else {
+				throw new Exception('No event was passed as an argument for creation.');
+				next({
+					success : false,
+					message : 'No event was passed as an argument for creation.',
+					value	: event,
+					note	: 'If you received this in error, please notify the admin.'
+				});
+			}
+		},
+		
+		save : function (event, next) {
+			console.log('\x1b[33musers.save query\x1b[0m');
+			var query = 'UPDATE ' + mySql.config.events_table + ' SET ? WHERE id = ?';
+			
+			if ( event ) {
+				mySql.query(query, [event, event.id], function (err, result) {
+					if (err) {
+						throw new Error(err);
+						next(err);
+					} else if ( result.changedRows > 0 ) {
+						next(null, {
+							success : true,
+							message : 'The event was updated successfully!'
+						});
+					} else {
+						next(null, {
+							success : false,
+							message : 'No changes were made, nothing to save.'
+						});
+					}
+				});
+			} else {
+				throw new Exception('No event was passed as an argument for updating.');
+				next({
+					success : false,
+					message : 'No event was passed as an argument for updating.',
+					value	: event,
+					note	: 'If you received this in error, please notify the admin.'
+				});
+			}
+		},
+		
+		remove : function (eventId, next) {
+			console.log('\x1b[33musers.save query\x1b[0m');
+			
+			if ( eventId ) {
+				var query = 'DELETE FROM ' + mySql.config.events_table + ' WHERE id = ?';
+				mySql.query(query, eventId, function (err, result) {
+					if (err) {
+						throw new Error(err);
+					} else if ( result.affectedRows > 0 ) {
+						next(null, {
+							success : true,
+							message : 'The event was deleted successfully!'
+						});
+					} else {
+						next(null, {
+							success : false,
+							message : 'An error occured while deleting the event.'
+						});
+					}
+				});
+			} else {
+				throw new Exception('No event was passed as an argument for deletion!')
+				next({
+					success: false,
+					message: 'No event was passed as an argument for deletion.',
+					value  : eventId,
+					note   : 'If you received this in error, please notify the admin.'
+				});
+			}
+		},
+		
+		setEvent : function (method, req) {
+			
+			var Event = {};
+			
+			if ( req.body.status )
+				Event.status = req.body.status;
+			
+			Event.timespent = req.body.time ? req.body.time : 0;
+			
+			if ( req.body.comment)
+				Event.comment = req.body.comment;
+			
+			if ( method === 'create' )
+				Event.created_by = req.decoded.id;
+			
+			if ( method === 'save' )
+				Event.updated_by = req.decoded.id;
+			
+			if ( method === 'create' || method === 'save' ) {
+				if (!Event.status && !Event.comment) {
+					console.log(Event);
+					return false;
+				} else {
+					return Event;
+				}
+			} else {
+				throw new Error('The methods \'create\' or \'save\' must be passed when using this function');
 				return false;
 			}
 		}

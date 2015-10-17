@@ -35,7 +35,7 @@
 </div>
 
 <div class="jumbotron text-center" ng-show="!ticket.processing && !ticket.ticket">
-	<p>No active tickets available at this time.</p>
+	<p>There is no available ticket data at this time.</p>
 </div>
 
 <div class='col-xs-12 col-md-6' ng-show="ticket.ticket">
@@ -44,7 +44,7 @@
 		<tbody>
 			<tr>
 				<th class='col-xs-6 col-md-3'>Customer</th>
-				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.companyname }}</td>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.customer }}</td>
 			</tr>
 			<tr>
 				<th class='col-xs-6 col-md-3'>Street</th>
@@ -172,7 +172,7 @@
 							<i class="glyphicon glyphicon-pencil"></i> Edit
 						</a>
 					</li>
-					<li>
+					<li ng-if="main.user.role === 'admin'">
 						<a href="#" ng-click="">
 							<i class="glyphicon glyphicon-trash"></i> Delete
 						</a>
