@@ -33,6 +33,24 @@ angular.module('ticketService', [])
 	ticketFactory.delete = function(id) {
 		return $http.delete('/api/tickets/' + id);
 	};
+	
+	ticketFactory.event = {
+		get : function(ticketId) {
+			return $http.get('/api/tickets/' + ticketId + '/events');
+		},
+		
+		create : function(ticketId, eventData) {
+			return $http.post('/api/tickets/' + ticketId + '/events', eventData);
+		},
+		
+		update : function(ticketId, eventId, eventData) {
+			return $http.put('/api/tickets/' + ticketId + '/events/' + eventId, eventData);
+		},
+		
+		delete : function(ticketId, eventId) {
+			return $http.delete('/api/tickets/' + ticketId + '/events/' + eventId)
+		}
+	}
 
 	// return our entire userFactory object
 	return ticketFactory;

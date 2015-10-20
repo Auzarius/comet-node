@@ -1,0 +1,57 @@
+<div id="welcome" class="jumbotron text-center">
+	<h1>Access Forbidden</h1>
+	
+	<div>
+		<p>The resource you attempted to access was one that you did not have permissions for.  If you feel this was an error, please contact the admin.</p>
+	</div>
+
+	<div ng-if="!main.loggedIn">
+		<p>Login to manage your tickets.</p>
+		<a href="/signin" class="btn btn-primary">Login</a>
+	</div>
+
+	<div ng-if="main.loggedIn">
+		<p>Manage your tickets.</p>
+		<a href="/tickets" class="btn btn-primary">View Tickets</a>
+	</div>
+</div>
+<style>
+	/* Extra Small Devices, Phones */ 
+	@media only screen and (min-width : 480px) {
+		body {
+			background-image: url('/assets/img/comet-earth-blur.jpg');
+			background-repeat: no-repeat;
+			background-position: 75% 25%;
+			width: 100%;
+			height: 100%;
+			background-color: #544CA2;
+		}
+		
+		.jumbotron {
+			background-color: rgba(250,250,250,0.7);
+		}
+	}
+
+	/* Small Devices, Tablets */
+	@media only screen and (min-width : 768px) {
+		
+	}
+
+	/* Medium Devices, Desktops */
+	@media only screen and (min-width : 992px) {
+		
+	}
+
+	/* Large Devices, Wide Screens */
+	@media only screen and (min-width : 1200px) {
+		body {
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-ms-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			background-position: top left;
+
+		}
+	}
+</style>

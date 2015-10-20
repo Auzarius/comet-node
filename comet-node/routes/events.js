@@ -75,16 +75,6 @@ module.exports = function (app, express, mySql) {
 					message: 'Please fill in all of the required fields.'
 				});
 			}
-		})
-		
-		.delete(function (req, res) {
-			mySql.events.remove(req.params.event_id, function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.status(200).json(result);
-				}
-			});
 		});
 	
 	return apiEvents;

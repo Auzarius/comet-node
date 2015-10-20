@@ -8,6 +8,7 @@ var express		= require('express'),
 var config		= require('./config'),
 	mySql 		= require('./comet-node/models/mySql-pooled')(config.db);
 
+//app.set("view engine", "vash");
 // set up the app to handle CORS requests and grab POST requests
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

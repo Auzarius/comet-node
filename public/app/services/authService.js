@@ -47,12 +47,6 @@ angular.module('authService', [])
 		else
 			return $q.reject({ message: 'User has no token.' });		
 	};
-	
-	authFactory.hasRole = function(user, role) {
-		if ( user.roles.indexOf(role) > -1 )
-			return true;
-		return false;
-	}
 
 	// return auth factory object
 	return authFactory;

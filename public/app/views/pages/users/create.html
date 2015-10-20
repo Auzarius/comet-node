@@ -1,71 +1,73 @@
-<div class="show-hide-message fixed" ng-show="user.message">
-	<div class="row alert alert-info alert-dismissable">
-		<div class='col-xs-11'>{{ user.message }}</div>
-		<button type="button" class="close" ng-click="user.message = ''" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
+<div ng-if="main.user.role === 'mod' || main.user.role === 'admin'">
+	<div class="show-hide-message fixed" ng-show="user.message">
+		<div class="row alert alert-info alert-dismissable">
+			<div class='col-xs-11'>{{ user.message }}</div>
+			<button type="button" class="close" ng-click="user.message = ''" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
 	</div>
+
+	<div class="page-header">
+		<h1>Create User</h1>
+	</div>
+
+	<form class="form-horizontal" ng-submit="user.saveUser()" name='userform' novalidate>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label">First Name</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" ng-model="user.userData.firstName" required>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Last Name</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" ng-model="user.userData.lastName" required>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Username</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" ng-model="user.userData.username" required>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Email</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" ng-model="user.userData.email" required>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Role</label>
+			<div class="col-sm-6">
+				<select name='role' class="form-control" ng-model="user.userData.role">
+					<option value='user'>User</option>
+					<option value='mod' ng-if="main.user.role === 'admin' || main.user.role === 'mod'">Moderator</option>
+					<option value='admin' ng-if="main.user.role === 'admin'">Admin</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Password</label>
+			<div class="col-sm-6">
+				<input type="password" class="form-control" ng-model="user.userData.password" required>
+			</div>
+		</div>
+		
+		<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-6">
+			<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='userform.$invalid'>Create User</button>
+		</div>
+		</div>
+
+	</form>
 </div>
-
-<div class="page-header">
-	<h1>Create User</h1>
-</div>
-
-<form class="form-horizontal" ng-submit="user.saveUser()" name='userform' novalidate>
-	
-	<div class="form-group">
-		<label class="col-sm-2 control-label">First Name</label>
-		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="user.userData.firstName" required>
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Last Name</label>
-		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="user.userData.lastName" required>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Username</label>
-		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="user.userData.username" required>
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Email</label>
-		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="user.userData.email" required>
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Role</label>
-		<div class="col-sm-6">
-			<select name='role' class="form-control" ng-model="user.userData.role">
-				<option value='user'>User</option>
-				<option value='mod'>Moderator</option>
-				<option value='admin'>Admin</option>
-			</select>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Password</label>
-		<div class="col-sm-6">
-			<input type="password" class="form-control" ng-model="user.userData.password" required>
-		</div>
-	</div>
-	
-	<div class="form-group">
-	<div class="col-sm-offset-2 col-sm-6">
-		<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='userform.$invalid'>Create User</button>
-	</div>
-	</div>
-
-</form>
 
 <!--
 <div class="row show-hide-message" ng-show="user.message">

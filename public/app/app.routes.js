@@ -20,7 +20,7 @@ angular.module('app.routes', ['ngRoute'])
 			})
 			
 			.when('/forbidden', {
-				templateUrl : 'app/views/pages/401.html'
+				templateUrl : 'app/views/pages/403.html'
 			})
 			
 			// show all users

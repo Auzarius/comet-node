@@ -136,21 +136,18 @@ angular.module('ticketCtrl', ['ticketService'])
 		Ticket.update($routeParams.ticket_id, vm.ticketData)
 			.success(function(data) {
 				vm.processing = false;
-
-				// clear the form
-				// vm.ticketData = {};
-
-				// bind the message from our API to vm.message
 				vm.message = data.message;
 			});
 	};
 
 })
 
-.controller('ticketViewController', function($routeParams, Ticket) {
+.controller('ticketViewController', function($scope, $routeParams, Ticket) {
 
 	var vm = this;
+	$scope.eventform = {};
 	vm.processing = true;
+	vm.event_processing = true;
 	
 	// get the ticket data for the ticket you want to view
 	// $routeParams is the way we grab data from the URL
@@ -158,26 +155,61 @@ angular.module('ticketCtrl', ['ticketService'])
 		.success(function(node) {
 			vm.ticket = node.data;
 			vm.processing = false;
+		})
+		.error(function(err) {
+			vm.processing = false;
+			vm.message = err;
 		});
+	
+	vm.getEvents = function() {
+		Ticket.event.get($routeParams.ticket_id)
+		.success(function(node) {
+			vm.events = node.data;
+			vm.event_processing = false;
+		})
+		.error(function(err) {
+			vm.event_processing = false;
+			vm.message = err;
+		});
+	}	
 		
-	// function to delete a ticket
-	vm.deleteTicket = function(id) {
-		vm.processing = true;
-
-		Ticket.delete(id)
+	vm.getEvents();
+	
+	vm.addEvent = function() {
+		vm.event_processing = true;
+		vm.message = '';
+		
+		Ticket.event.create($routeParams.ticket_id, vm.eventData)
 			.success(function(data) {
-
-				// get all active tickets to update the table
-				// you can also set up your api 
-				// to return the list of tickets with the delete call
-				Ticket.active()
-					.success(function(data) {
-						vm.processing = false;
-						vm.ticket = {};
-						
-						vm.message = 'The ticket was successfully deleted!'
-					});
-
+				vm.event_processing = false;
+				vm.message = data.message;
+				vm.eventData = {};
+				$scope.eventform.$setPristine();
+				
+				vm.getEvents();
+			})
+			.error(function(data) {
+				vm.event_processing = false;
+				vm.message = data.message;
 			});
-	};
+	}
+	
+	vm.deleteEvent = function(id) {
+		vm.event_processing = true;
+		
+		Ticket.event.delete(id)
+			.success(function(data) {
+				if ( data.success ) {
+					vm.getEvents();
+					
+				}
+				
+				vm.event_processing = false;
+				vm.message = data.message;
+			})
+			.error(function(data) {
+				vn.event_processing = false;
+				vm.message = data.message;
+			});
+	}
 });

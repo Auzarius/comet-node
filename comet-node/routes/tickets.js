@@ -11,7 +11,14 @@ module.exports = function (app, express, mySql) {
 					if (err) {
 						res.status(500).send(err);
 					} else {
-						res.json(result);
+						var Event = mySql.events.setEvent('create', req);
+						mySql.events.create(Event, function (err, dos) {
+							if (err) {
+								res.status(500).send(err);
+							} else {
+								res.json(result);
+							}
+						});
 					}
 				});		
 			} else {
@@ -42,17 +49,6 @@ module.exports = function (app, express, mySql) {
 				}
 			});
 		});
-		
-	apiTickets.route('/all')
-		.get(function (req, res) {
-			mySql.tickets.all(function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.status(200).json(result);
-				}
-			});
-		});	
 	
 	apiTickets.get('/search', function (req, res) {
 		res.json({
@@ -105,7 +101,6 @@ module.exports = function (app, express, mySql) {
 					message: 'An error occured, please make sure you have all required fields filled out.'
 				});
 			}
-			
 		})
 		
 		.delete(function (req, res) {
@@ -117,6 +112,77 @@ module.exports = function (app, express, mySql) {
 				}
 			});
 		});	
+		
+	apiTickets.route('/:id/events')
+		.get(function (req, res) {			
+			mySql.events.all({ ticket_id: req.params.id }, function (err, result) {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					res.json(result);
+				}
+			});
+		})
+		
+		.post(function (req, res) {
+			var Event = mySql.events.setEvent('create', req);
+			
+			if ( Event ) {
+				mySql.events.create(Event, function (err, result) {
+					if (err) {
+						res.status(500).send(err);
+					} else {
+						res.json(result);
+					}
+				});		
+			} else {
+				res.status(422).json({
+					success: false,
+					message: 'Please fill in all of the required fields.'
+				});
+			}
+		});
+	
+	apiTickets.route('/:id/events/:eventId')
+		.get(function (req, res) {
+			var eventId = req.params.event_id;
+			mySql.events.findOne({ id: eventId }, function (err, result) {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					res.status(200).json(result);
+				}
+			});
+		})
+		
+		.put(function (req, res) {
+			var Event = mySql.events.setEvent('save', req);
+			
+			if ( Event ) {
+				mySql.events.save(Event, function (err, result) {
+					if (err) {
+						res.status(500).send(err);
+					} else {
+						res.json(result);
+					}
+				});
+			} else {
+				return res.status(422).json({
+					success: false,
+					message: 'An error occured, please make sure you have all required fields filled out.'
+				});
+			}
+		})
+		
+		.delete(function (req, res) {
+			mySql.events.remove(req.params.id, function (err, result) {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					res.json(result);
+				}
+			});
+		});
 		
 	return apiTickets;
 }

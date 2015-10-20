@@ -3,6 +3,66 @@ var	jwt		= require('jsonwebtoken');
 module.exports = function (app, express, mySql) {
 	var apiUsers = express.Router();
 	
+	apiUsers.get('/', function (req, res) {
+		mySql.users.all(function (err, result) {
+			if (err) {
+				res.status(500).send(err);
+			} else {
+				res.json(result);
+			}
+		});
+	});
+	
+	apiUsers.get('/:user_id', function (req, res) {
+		var userId = req.params.user_id;
+		
+		console.log( userId == req.decoded.id );
+		if ( userId == req.decoded.id || req.decoded.role === 'admin' || req.decoded.role === 'mod' ) {
+			mySql.users.findOne({ id: userId }, function (err, result) {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					res.json(result);
+				}
+			});
+		} else {
+			res.status(403).json({
+				success: false,
+				message: 'You do not have permission to perform this action.'
+			});
+		}
+		
+	});
+	
+	apiUsers.use(function (req, res, next) {
+		if (req.decoded) {
+			if ( req.decoded.role === 'admin' || req.decoded.role === 'mod' ) {
+				next()
+			} else {
+				return res.status(403).json({
+					success: false,
+					message: 'You do not have permission to perform this action.'
+				});
+			}
+		} else {
+			return res.status(401).json({
+				success: false,
+				message: 'You must be authenticated before using this site.'
+			});
+		}
+	});
+	
+	apiUsers.get('/username/:username', function (req, res) {
+		var username = req.params.username;
+		mySql.users.findOne({ username: username }, function (err, result) {
+			if (err) {
+				res.status(500).send(err);
+			} else {
+				res.json(result);
+			}
+		});
+	});
+	
 	apiUsers.route('/')
 		.post(function (req, res) {
 			// create a new instance of the User model
@@ -23,42 +83,9 @@ module.exports = function (app, express, mySql) {
 					message: 'Please fill in all of the required fields.'
 				});
 			}
-		})
-		
-		.get(function (req, res) {
-			mySql.users.all(function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.json(result);
-				}
-			});
 		});
 		
-	apiUsers.route('/username/:username')
-		.get(function (req, res) {
-			var username = req.params.username;
-			mySql.users.findOne({ username: username }, function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.json(result);
-				}
-			});
-		})
-	
 	apiUsers.route('/:user_id')	
-		.get(function (req, res) {
-			var userId = req.params.user_id;
-			mySql.users.findOne({ id: userId }, function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.json(result);
-				}
-			});
-		})
-		
 		.put(function (req,res) {
 			
 			var User = mySql.users.setUser('save', req);
