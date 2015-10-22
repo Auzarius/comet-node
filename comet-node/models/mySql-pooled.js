@@ -222,6 +222,7 @@ module.exports = function(config) {
 					throw new Error(err);
 					next(err);
 				} else if ( result.affectedRows > 0 ) {
+					
 					next(null, {
 						success : true,
 						message	: 'The ticket was created successfully!',
@@ -370,6 +371,9 @@ module.exports = function(config) {
 			
 			if ( method == 'create' )
 				Ticket.created_by = req.decoded.id;
+				Ticket.comments = req.body.comments;
+				Ticket.status = 'Pending';
+				Ticket.timespent = 0;
 			
 			if ( method == 'save' )
 				Ticket.updated_by = req.decoded.id;
@@ -857,8 +861,8 @@ module.exports = function(config) {
 			
 			Event.timespent = req.body.time ? req.body.time : 0;
 			
-			if ( req.body.comment)
-				Event.comments = req.body.comment;
+			if ( req.body.comments)
+				Event.comments = req.body.comments;
 			
 			if ( method === 'create' )
 				Event.created_by = req.decoded.id;

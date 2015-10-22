@@ -115,7 +115,36 @@
 	<div ng-view></div>
 </main>
 
-
+<footer class='footer' ng-if="main.loggedIn">
+	<div class='container'>
+		<div class='row'>
+			<div class='col-md-4 col-sm-6 col-xs-12'>
+				<h4>Author</h4>
+				<ul class='list-unstyled'>
+					<li><strong>Anthony Gillespie</strong></li>
+					<li><a href="mailto:auzarius@gmail.com">auzarius@gmail.com</a></li>
+					<li>Twitter</li>
+					<li>Facebook</li>
+					<li>GitHub</li>
+				</ul>
+			</div>
+			<div class='col-md-4 col-sm-6 col-xs-12'>
+				<h4>Navigation</h4>
+				<ul class='list-unstyled'>
+					<li><a href='/feedback'>Feedback</a></li>
+					<li><a href='/'>Home</a></li>
+					<li><a href='/profile'>Profile</a></li>
+					<li><a href='/tickets'>Tickets</a></li>
+					<li><a href='/users'>Users</a></li>
+				</ul>
+			</div>
+			<div class='col-md-4 col-sm-12 col-xs-12'>
+				<h4>About</h4>
+				<p>This site is currently in development.  I built this site to help accomodate an inshop ticket system and in this case act as an upgrade/replacement to our existing system.  This experience has also been a great learning experience.  Please feel free to email me if you have any comments or concerns.  I hope to get the feedback page finished very soon.</p>
+			</div>
+		</div>
+	</div>
+</footer>
 
 <!-- jquery and bootstrap -->
 <script src="assets/js/jquery.min.js"></script>

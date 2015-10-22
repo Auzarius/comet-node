@@ -68,15 +68,4 @@
 
 	</form>
 </div>
-
-<!--
-<div class="row show-hide-message" ng-show="user.message">
-	<div class="col-sm-6 col-sm-offset-2">
-		
-		<div class="alert alert-info">
-			{{ user.message }}
-		</div>
-
-	</div>
-</div>
--->
+<div ng-if="main.user.role !== 'mod' && main.user.role !== 'admin'" ng-include="'app/views/pages/403.html'"></div>

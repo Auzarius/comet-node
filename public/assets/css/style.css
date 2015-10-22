@@ -5,6 +5,10 @@
 	color: rgb(12,190,155);
 }
 
+.bold {
+	font-weight: bold;
+}
+
 .node-comet, .node-header {
 	text-shadow: 2px 0px 2px #333;
 	text-shadow: 2px 0px 2px rgb(40,40,40);
@@ -212,11 +216,24 @@ dt, dd {
 }	*/
 
 main {
-	padding-top: 30px;
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+	min-height: 100rem !important;
 }
 
 header .navbar {
 	border-radius: 0;
+}
+
+footer {
+	background-color: #333;
+	color: #aaa;
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+}
+
+footer h4 {
+	color: #ddd;
 }
 
 .spinner {

@@ -182,11 +182,10 @@ angular.module('ticketCtrl', ['ticketService'])
 		Ticket.event.create($routeParams.ticket_id, vm.eventData)
 			.success(function(data) {
 				vm.event_processing = false;
-				vm.message = data.message;
 				vm.eventData = {};
-				$scope.eventform.$setPristine();
-				
 				vm.getEvents();
+				vm.message = data.message;
+				//$scope.eventform.$setPristine();
 			})
 			.error(function(data) {
 				vm.event_processing = false;

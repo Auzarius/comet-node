@@ -17,8 +17,10 @@ angular.module('mainCtrl', ['angularMoment'])
 			.then(function(data) {
 				vm.user = data.data;
 			});	
+		} else if ( $location.path() == '/' || $location.path == '/signin' ) {
+			// do nothing;
 		} else {
-			//$location.path('/login');
+			$location.path('/signin');
 		}
 		// get user information on page load
 		
@@ -51,7 +53,7 @@ angular.module('mainCtrl', ['angularMoment'])
 		Auth.logout();
 		vm.user = null;
 		
-		$location.path('/login');
+		$location.path('/signin');
 	};
 
 });

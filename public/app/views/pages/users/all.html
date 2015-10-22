@@ -23,20 +23,6 @@
 	<p>Loading Users...</p>
 </div>
 
-<!--
-<div class="row show-hide-message" ng-show="user.message">
-	<div class="col-sm-12">
-		<div class="alert alert-info alert-dismissable">
-			{{ user.message }}
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-
-	</div>
-</div>
--->
-
 <div class="jumbotron text-center" ng-show="!user.processing && !user.users">
 	<span class="glyphicon glyphicon-repeat spinner"></span>
 	<p>There are no users at this time.</p>
@@ -54,9 +40,9 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="person in user.users">
+		<tr ng-repeat="person in user.users" ng-class="[ main.user.username == person.username ? 'bold' : '' ]">
 			<td class="col-xs-1" ng-if="main.user.role === 'admin' || main.user.role === 'mod'">
-				<div class="dropdown" ng-if="person.username !== main.user.username">
+				<div class="dropdown"><!--ng-if="person.username !== main.user.username"-->
 					<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" role="button">
 						<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Manage
 					</a>
