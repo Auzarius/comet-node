@@ -130,6 +130,7 @@ label {
 .comment-container .comment-remarks {
 	background-color: #F9F9F9;
 	background-color: rgb(249,249,249);
+	word-break: break-all;
 }
 
 .comment-container .comment-footer {
@@ -216,8 +217,8 @@ dt, dd {
 }	*/
 
 main {
-	padding-top: 3rem;
-	padding-bottom: 3rem;
+	padding-top: 3em;
+	padding-bottom: 4em;
 	min-height: 100rem !important;
 }
 

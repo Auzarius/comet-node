@@ -107,8 +107,8 @@ module.exports = function(config) {
 		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
 		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
 		                'FROM ' + mySql.config.tickets_table + ' t ' +
-		                'WHERE t.status = \'Pending\' OR t.status = \'Diagnosed\' OR t.status = \'Repaired\' ' +
-		                'ORDER BY t.customer ASC, t.status ASC, t.indicator_tag ASC';
+		                //'WHERE status = \'Pending\' OR status = \'Diagnosed\' OR status = \'Repaired\' ' +
+		                'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
 			
 			mySql.query(query, null, function (err, result) {
 				if (err) {
@@ -216,18 +216,18 @@ module.exports = function(config) {
 		create : function (ticket, next) {
 			console.log('\x1b[33mticket.create query\x1b[0m');
 			var query = 'INSERT INTO ' + mySql.config.tickets_table + ' SET ?';
-			
+			console.log(ticket);
 			mySql.query(query, ticket, function (err, result) {
 				if (err) {
 					throw new Error(err);
 					next(err);
 				} else if ( result.affectedRows > 0 ) {
-					
 					next(null, {
 						success : true,
 						message	: 'The ticket was created successfully!',
 						rows 	: result.affectedRows,
-						status	: 200
+						status	: 200,
+						insertId: result.insertId
 					});
 				} else {
 					next(null, {
@@ -287,6 +287,8 @@ module.exports = function(config) {
 						throw new Error(err);
 						next(err);
 					} else if ( result.affectedRows > 0 ) {
+						mySql.events.purge(ticketId);
+						
 						next(null, {
 							success : true,
 							message : 'The ticket was deleted successfully!',
@@ -319,8 +321,6 @@ module.exports = function(config) {
 			if ( req.params.id )
 				Ticket.id = req.params.id;
 			
-			Ticket.status = req.body.status ? req.body.status : 'Pending';
-			
 			if ( req.body.customer )
 				Ticket.customer = req.body.customer;
 			
@@ -348,14 +348,11 @@ module.exports = function(config) {
 			if ( req.body.indicator_serial ) 
 				Ticket.indicator_serial = req.body.indicator_serial;
 			
-			if ( req.body.scale_manu ) 
-				Ticket.scale_manu = req.body.scale_manu;
+			Ticket.scale_manu = req.body.scale_manu ? req.body.scale_manu : '';
 			
-			if ( req.body.scale_model )
-				Ticket.scale_model = req.body.scale_model;
+			Ticket.scale_model = req.body.scale_model ? req.body.scale_model : '';
 			
-			if ( req.body.scale_serial )
-				Ticket.scale_serial = req.body.scale_serial;
+			Ticket.scale_serial = req.body.scale_serial ? req.body.scale_serial : '';
 			
 			if ( req.body.scale_capacity ) 
 				Ticket.scale_capacity = req.body.scale_capacity;
@@ -371,9 +368,6 @@ module.exports = function(config) {
 			
 			if ( method == 'create' )
 				Ticket.created_by = req.decoded.id;
-				Ticket.comments = req.body.comments;
-				Ticket.status = 'Pending';
-				Ticket.timespent = 0;
 			
 			if ( method == 'save' )
 				Ticket.updated_by = req.decoded.id;
@@ -699,13 +693,11 @@ module.exports = function(config) {
 						'WHERE ? ' +
 						'ORDER BY created_at DESC';
 			
-			console.log(query);
 			mySql.query(query, ticketId, function (err, result) {
 				if (err) {
 					//throw new Error(err);
 					next(err);
 				} else if ( mySql.verifyResult(result)) {
-					console.log(result);
 					next(null, {
 						success : true,
 						data 	: result,
@@ -757,7 +749,7 @@ module.exports = function(config) {
 		create : function (event, next) {
 			console.log('\x1b[33mevents.create query\x1b[0m');
 			var query = 'INSERT INTO ' + mySql.config.events_table + ' SET ?';
-			
+			console.log(event);
 			if ( event ) {
 				mySql.query(query, event, function (err, result) {
 					if (err) {
@@ -776,7 +768,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No event was passed as an argument for creation.');
+				throw new Error('No event was passed as an argument for creation.');
 				next({
 					success : false,
 					message : 'No event was passed as an argument for creation.',
@@ -849,33 +841,65 @@ module.exports = function(config) {
 			}
 		},
 		
+		purge : function (ticketId, next) {
+			console.log('\x1b[33mevents.save query\x1b[0m');
+			
+			if ( ticketId ) {
+				var query = 'DELETE FROM ' + mySql.config.events_table + ' WHERE ticket_id = ?';
+				mySql.query(query, ticketId, function (err, result) {
+					if (err) {
+						throw new Error(err);
+					} else if ( result.affectedRows > 0 ) {
+						next(null, {
+							success : true,
+							message : 'The events were deleted successfully!',
+							count	: result.affectedRows
+						});
+					} else {
+						next(null, {
+							success : false,
+							message : 'An error occured while deleting the events.'
+						});
+					}
+				});
+			} else {
+				throw new Exception('No ticket id was passed as an argument for deletion!')
+				next({
+					success: false,
+					message: 'No ticket id was passed as an argument for deletion.',
+					value  : eventId,
+					note   : 'If you received this in error, please notify the admin.'
+				});
+			}
+		},
+		
 		setEvent : function (method, req) {
 			
 			var Event = {};
 			
-			if ( req.body.status )
-				Event.status = req.body.status;
+			Event.status = req.body.status ? req.body.status : 'Pending';
 			
-			if ( req.params.id )
-				Event.ticket_id = req.params.id;
+			if ( req.params.id || req.ticket_id )
+				Event.ticket_id = req.ticket_id ? req.ticket_id : req.params.id;
 			
 			Event.timespent = req.body.time ? req.body.time : 0;
 			
 			if ( req.body.comments)
 				Event.comments = req.body.comments;
 			
-			if ( method === 'create' )
+			if ( method === 'create' ) {
 				Event.created_by = req.decoded.id;
-			
+			}
+
 			if ( method === 'save' )
 				Event.updated_by = req.decoded.id;
 			
 			if ( method === 'create' || method === 'save' ) {
-				if (!Event.status && !Event.comment && Event.ticket_id) {
+				if (Event.status && Event.comments && Event.ticket_id) {
+					return Event;
+				} else {
 					console.log(Event);
 					return false;
-				} else {
-					return Event;
 				}
 			} else {
 				throw new Error('The methods \'create\' or \'save\' must be passed when using this function');

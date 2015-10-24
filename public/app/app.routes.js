@@ -3,12 +3,11 @@ angular.module('app.routes', ['ngRoute'])
 	// configure our routes
 	.config(function ($routeProvider, $locationProvider) {
 		$routeProvider
-			// route for the home page
+
 			.when('/', {
 				templateUrl: 'app/views/pages/home.html'
 			})
 			
-			// route for the about page
 			.when('/signin', {
 				templateUrl : 'app/views/pages/login.html',
 				controller  : 'mainController',
@@ -19,26 +18,23 @@ angular.module('app.routes', ['ngRoute'])
 				templateUrl : 'app/views/pages/feedback.html'
 			})
 			
+			// backup 403 display if the server throws the 403 status code
 			.when('/forbidden', {
 				templateUrl : 'app/views/pages/403.html'
 			})
 			
-			// show all users
 			.when('/users', {
 				templateUrl : 'app/views/pages/users/all.html',
 				controller  : 'userController',
 				controllerAs: 'user'
 			})
 
-			// form to create a new user
-			// same view as edit page
 			.when('/users/create', {
 				templateUrl : 'app/views/pages/users/create.html',
 				controller  : 'userCreateController',
 				controllerAs: 'user'
 			})
 
-			// page to edit a ticket
 			.when('/users/:user_id', {
 				templateUrl : 'app/views/pages/users/edit.html',
 				controller  : 'userEditController',
@@ -51,7 +47,6 @@ angular.module('app.routes', ['ngRoute'])
 				controllerAs: 'user'
 			})
 			
-			// show all tickets
 			.when('/tickets', {
 				templateUrl : 'app/views/pages/tickets/all.html',
 				controller  : 'ticketController',
@@ -64,15 +59,12 @@ angular.module('app.routes', ['ngRoute'])
 				controllerAs: 'ticket'
 			})
 
-			// form to create a new ticket
-			// same view as edit page
 			.when('/tickets/create', {
 				templateUrl : 'app/views/pages/tickets/create.html',
 				controller  : 'ticketCreateController',
 				controllerAs: 'ticket'
 			})
 
-			// page to edit a ticket
 			.when('/tickets/:ticket_id/edit', {
 				templateUrl : 'app/views/pages/tickets/edit.html',
 				controller  : 'ticketEditController',
@@ -83,6 +75,12 @@ angular.module('app.routes', ['ngRoute'])
 				templateUrl : 'app/views/pages/tickets/single.html',
 				controller  : 'ticketViewController',
 				controllerAs: 'ticket'
+			})
+			
+			.when('/events/:event_id/edit', {
+				templateUrl : 'app/views/pages/events/edit.html',
+				controller  : 'eventEditController',
+				controllerAs: 'event'
 			})
 			
 			.otherwise({

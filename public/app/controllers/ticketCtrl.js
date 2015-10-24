@@ -142,7 +142,7 @@ angular.module('ticketCtrl', ['ticketService'])
 
 })
 
-.controller('ticketViewController', function($scope, $routeParams, Ticket) {
+.controller('ticketViewController', function($scope, $routeParams, $location, Ticket) {
 
 	var vm = this;
 	$scope.eventform = {};
@@ -160,6 +160,21 @@ angular.module('ticketCtrl', ['ticketService'])
 			vm.processing = false;
 			vm.message = err;
 		});
+		
+	vm.deleteTicket = function(id) {
+		vm.processing = true;
+		
+		Ticket.delete(id)
+			.success(function(data) {
+				
+				if ( data.success) {
+					$location.path('/tickets');
+				}
+				
+				vm.processing = false;
+				//vm.message = data.message;
+			});
+	};
 	
 	vm.getEvents = function() {
 		Ticket.event.get($routeParams.ticket_id)

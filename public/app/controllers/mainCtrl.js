@@ -24,7 +24,13 @@ angular.module('mainCtrl', ['angularMoment'])
 		}
 		// get user information on page load
 		
-	});	
+	});
+	
+	// resets the view to the top of the page when a new route loads
+	// this prevents the view focus from staying the same from page to page
+	$rootScope.$on('$routeChangeSuccess',function() { 
+		$("html, body").animate({ scrollTop: 0 }, 300); 
+	});
 
 	// function to handle login form
 	vm.doLogin = function() {
@@ -39,7 +45,7 @@ angular.module('mainCtrl', ['angularMoment'])
 				
 				vm.user = vm.loginData.username;
 				
-				// if a user successfully logs in, redirect to users page
+				// if a user successfully logs in, redirect to tickets page
 				if (data.success)			
 					$location.path('/tickets');
 				else 

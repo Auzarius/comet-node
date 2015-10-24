@@ -11,6 +11,7 @@ module.exports = function (app, express, mySql) {
 					if (err) {
 						res.status(500).send(err);
 					} else {
+						req.ticket_id = result.insertId;
 						var Event = mySql.events.setEvent('create', req);
 						mySql.events.create(Event, function (err, dos) {
 							if (err) {
