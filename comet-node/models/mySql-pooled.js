@@ -100,7 +100,7 @@ module.exports = function(config) {
 	
 	mySql.tickets = {
 		active : function (next) {
-			console.log('\x1b[33mticket.active query\x1b[0m');
+			//console.log('\x1b[33mticket.active query\x1b[0m');
 			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
 		                '( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
 		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
@@ -130,7 +130,7 @@ module.exports = function(config) {
 		},
 		
 		all : function (next) {
-			console.log('\x1b[33mticket.all query\x1b[0m');
+			//console.log('\x1b[33mticket.all query\x1b[0m');
 			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
 		                '( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
 		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
@@ -159,7 +159,7 @@ module.exports = function(config) {
 		},
 		
 		filter : function (field, search, next) {
-			console.log('\x1b[33mticket.all query\x1b[0m');
+			//console.log('\x1b[33mticket.all query\x1b[0m');
 			var query = 'SELECT t.id, t.status, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
 		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
 		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
@@ -213,9 +213,9 @@ module.exports = function(config) {
 		},
 		
 		create : function (ticket, next) {
-			console.log('\x1b[33mticket.create query\x1b[0m');
+			//console.log('\x1b[33mticket.create query\x1b[0m');
 			var query = 'INSERT INTO ' + mySql.config.tickets_table + ' SET ?';
-			console.log(ticket);
+			
 			mySql.query(query, ticket, function (err, result) {
 				if (err) {
 					throw new Error(err);
@@ -239,7 +239,7 @@ module.exports = function(config) {
 		},
 		
 		save : function (ticket, next) {
-			console.log('\x1b[33mticket.save query\x1b[0m');
+			//console.log('\x1b[33mticket.save query\x1b[0m');
 			var query  = 'SELECT id FROM ' + mySql.config.tickets_table + ' WHERE ?';
 			
 			mySql.query(query, { id: ticket.id }, function (err, result) {
@@ -278,7 +278,7 @@ module.exports = function(config) {
 		remove : function (ticketId, next) {
 			
 			if ( ticketId ) {
-				console.log('\x1b[33mticket.remove query\x1b[0m');
+				//console.log('\x1b[33mticket.remove query\x1b[0m');
 				var query = 'DELETE FROM ' + mySql.config.tickets_table + ' WHERE id = ?';
 				
 				mySql.query(query, ticketId, function (err, result) {
@@ -319,9 +319,7 @@ module.exports = function(config) {
 		
 		setTicket : function (method, req) {
 			var Ticket = {};
-			
-			console.log(req.body);
-			
+
 			if ( req.params.id )
 				Ticket.id = req.params.id;
 			
@@ -383,7 +381,6 @@ module.exports = function(config) {
 		 	  		!Ticket.indicator_manu || !Ticket.indicator_serial || 
 		 	  		!Ticket.scale_capacity || !Ticket.scale_divisions ) {
 					
-					console.log(Ticket);
 					return false;
 				} else {
 					return Ticket;
@@ -397,7 +394,7 @@ module.exports = function(config) {
 	
 	mySql.users = {
 		all : function (next) {
-			console.log('\x1b[33musers.all query\x1b[0m');
+			//console.log('\x1b[33musers.all query\x1b[0m');
 			var query = 'SELECT id, username, firstName, lastName, email, role FROM ' + mySql.config.users_table;
 			
 			mySql.query(query, null, function (err, result) {
@@ -420,7 +417,7 @@ module.exports = function(config) {
 		},
 		
 		findOne : function (options, next) {
-			console.log('\x1b[33musers.findOne query\x1b[0m');
+			//console.log('\x1b[33musers.findOne query\x1b[0m');
 			var query = 'SELECT id, username, firstName, lastName, email, role FROM ' + mySql.config.users_table + ' WHERE ?';
 			
 			if ( options ) {
@@ -454,7 +451,7 @@ module.exports = function(config) {
 		},
 		
 		findLogin : function (options, next) {
-			console.log('\x1b[33musers.findLogin query\x1b[0m');
+			//console.log('\x1b[33musers.findLogin query\x1b[0m');
 			var query = 'SELECT id, username, password, firstName, lastName, role, email FROM ' + mySql.config.users_table + ' WHERE ?';
 			
 			if ( options ) {
@@ -487,7 +484,7 @@ module.exports = function(config) {
 		},
 		
 		create : function (user, next) {
-			console.log('\x1b[33musers.create query\x1b[0m');
+			//console.log('\x1b[33musers.create query\x1b[0m');
 			var query = 'INSERT INTO ' + mySql.config.users_table + ' SET ?';
 			
 			if ( user ) {
@@ -526,7 +523,7 @@ module.exports = function(config) {
 		},
 		
 		save : function (user, next) {
-			console.log('\x1b[33musers.save query\x1b[0m');
+			//console.log('\x1b[33musers.save query\x1b[0m');
 			var query = 'UPDATE ' + mySql.config.users_table + ' SET ? WHERE id = ?';
 			
 			if ( user ) {
@@ -565,7 +562,7 @@ module.exports = function(config) {
 		},
 		
 		remove : function (userId, next) {
-			console.log('\x1b[33musers.save query\x1b[0m');
+			//console.log('\x1b[33musers.save query\x1b[0m');
 			
 			if ( userId ) {
 				var query = 'DELETE FROM ' + mySql.config.users_table + ' WHERE id = ?';
@@ -688,7 +685,7 @@ module.exports = function(config) {
 	
 	mySql.events = {
 		all : function (ticketId, next) {
-			console.log('\x1b[33mevents.all query\x1b[0m');
+			//console.log('\x1b[33mevents.all query\x1b[0m');
 			var query = 'SELECT t.id, t.status, t.comments, t.created_at, t.updated_at, ' + 
 						'( SELECT username FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS username, ' +
 						'( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
@@ -716,7 +713,7 @@ module.exports = function(config) {
 		},
 		
 		findOne : function (options, next) {
-			console.log('\x1b[33mevents.findOne query\x1b[0m');
+			//console.log('\x1b[33mevents.findOne query\x1b[0m');
 			var query = 'SELECT *, (SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = e.created_by) AS author ' +
 						'FROM ' + mySql.config.events_table + ' e ' +
 						'WHERE ?';
@@ -752,9 +749,9 @@ module.exports = function(config) {
 		},
 		
 		create : function (event, next) {
-			console.log('\x1b[33mevents.create query\x1b[0m');
+			//console.log('\x1b[33mevents.create query\x1b[0m');
 			var query = 'INSERT INTO ' + mySql.config.events_table + ' SET ?';
-			console.log(event);
+
 			if ( event ) {
 				mySql.query(query, event, function (err, result) {
 					if (err) {
@@ -784,7 +781,7 @@ module.exports = function(config) {
 		},
 		
 		save : function (event, next) {
-			console.log('\x1b[33mevents.save query\x1b[0m');
+			//console.log('\x1b[33mevents.save query\x1b[0m');
 			var query = 'UPDATE ' + mySql.config.events_table + ' SET ? WHERE id = ?';
 			
 			if ( event ) {
@@ -816,7 +813,7 @@ module.exports = function(config) {
 		},
 		
 		remove : function (eventId, next) {
-			console.log('\x1b[33mevents.remove query\x1b[0m');
+			//console.log('\x1b[33mevents.remove query\x1b[0m');
 			
 			if ( eventId ) {
 				var query = 'DELETE FROM ' + mySql.config.events_table + ' WHERE id = ?';
@@ -848,7 +845,7 @@ module.exports = function(config) {
 		},
 		
 		purge : function (ticketId, next) {
-			console.log('\x1b[33mevents.purge query\x1b[0m');
+			//console.log('\x1b[33mevents.purge query\x1b[0m');
 			
 			if ( ticketId ) {
 				var query = 'DELETE FROM ' + mySql.config.events_table + ' WHERE ticket_id = ?';
@@ -908,14 +905,12 @@ module.exports = function(config) {
 				if (Event.status && Event.comments && Event.ticket_id && Event.created_by ) {
 					return Event;
 				} else {
-					console.log(Event);
 					return false;
 				}
 			} else if ( method === 'save' ) {
 				if (Event.status && Event.comments && Event.updated_by ) {
 					return Event;
 				} else {
-					console.log(Event);
 					return false;
 				}
 			} else {
@@ -927,7 +922,7 @@ module.exports = function(config) {
 	
 	mySql.feedback = {
 		all : function (next) {
-			console.log('\x1b[33mfeedback.all query\x1b[0m');
+			//console.log('\x1b[33mfeedback.all query\x1b[0m');
 			var query = 'SELECT f.id, f.status, f.comments, f.created_at, f.updated_at, ' +
 						'( SELECT username FROM ' + mySql.config.users_table + ' WHERE id = f.created_by ) AS username, ' +
 						'(SELECT CONCAT(firstName, \' \', lastName) FROM users WHERE id = f.created_by) AS created_by, ' +
@@ -955,7 +950,7 @@ module.exports = function(config) {
 		},
 		
 		findOne : function (options, next) {
-			console.log('\x1b[33mfeedback.findOne query\x1b[0m');
+			//console.log('\x1b[33mfeedback.findOne query\x1b[0m');
 			var query = 'SELECT * FROM ' + mySql.config.feedback_table + ' WHERE ?';
 			
 			if ( options ) {
@@ -989,7 +984,7 @@ module.exports = function(config) {
 		},
 		
 		create : function (feedback, next) {
-			console.log('\x1b[33mfeedback.create query\x1b[0m');
+			//console.log('\x1b[33mfeedback.create query\x1b[0m');
 			var query = 'INSERT INTO ' + mySql.config.feedback_table + ' SET ?';
 
 			if ( feedback ) {
@@ -1021,7 +1016,7 @@ module.exports = function(config) {
 		},
 		
 		save : function (feedback, next) {
-			console.log('\x1b[33mfeedback.save query\x1b[0m');
+			//console.log('\x1b[33mfeedback.save query\x1b[0m');
 			var query = 'UPDATE ' + mySql.config.feedback_table + ' SET ? WHERE id = ?';
 			
 			if ( feedback ) {
@@ -1053,7 +1048,7 @@ module.exports = function(config) {
 		},
 		
 		remove : function (feedbackId, next) {
-			console.log('\x1b[33mfeedback.save query\x1b[0m');
+			//console.log('\x1b[33mfeedback.save query\x1b[0m');
 			
 			if ( feedbackId ) {
 				var query = 'DELETE FROM ' + mySql.config.feedback_table + ' WHERE id = ?';
@@ -1103,12 +1098,10 @@ module.exports = function(config) {
 			if ( method === 'save' )
 				Feedback.updated_by = req.decoded.id;
 			
-			console.log(Feedback);
 			if ( method === 'create' || method === 'save' ) {
 				if (Feedback.status && Feedback.comments) {
 					return Feedback;
 				} else {
-					console.log(Feedback);
 					return false;
 				}
 			} else {

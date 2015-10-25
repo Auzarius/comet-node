@@ -60,7 +60,7 @@
 		<div class='row comment-header'>
 			<div class='col-xs-3 col-md-4'><strong>{{ _comment.created_by }}</strong></div>
 			<div class='col-xs-3 col-md-4'>{{ _comment.status }}</div>
-			<div class='col-xs-6 col-md-4 dropdown' ng-if="main.user.role === 'admin' || main.user.username === _comment.username">
+			<div class='col-xs-6 col-md-4 dropdown' ng-if="main.user.role === 'admin' || main.user.id === _comment.created">
 				<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
 					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
 				</a>

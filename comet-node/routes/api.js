@@ -39,7 +39,7 @@ module.exports = function (app, express, mySql) {
 				
 				mySql.users.findLogin({username: User.username}, function (err, user) {
 					if (err) {
-						console.log(err);
+						throw new Error(err);
 						res.status(500).send(err);
 					} else if ( !user.success ) {
 						res.status(200).json({
@@ -79,7 +79,6 @@ module.exports = function (app, express, mySql) {
 							}
 						});
 					} else {
-						console.log('some error');
 						res.status(500).send({
 							success: false,
 							message: 'Something happened while trying to authenticate.'
@@ -118,26 +117,12 @@ module.exports = function (app, express, mySql) {
 			});
 		} else {
 			// if there is no token
-			// return an HTTP response of 403 (access forbidden) and an error message
-			/*
+			// return an HTTP response of 401 and an error message
 			return res.status(401).send({
 				success: false,
 				message: 'No token was provided.'
 			});
-			*/
-			req.decoded = {
-        		firstName	: "Anthony",
-        		lastName	: "Gillespie",
-        		username	: "agillespie",
-        		id 			: 13,
-        		email		: "apickelheimer@bscales.com",
-        		role   		: "Admin"
-        	};
-        	
-			next();	
 		}
-		
-		//next() used to be here
 	});
 		
 	apiRouter.get('/me', function (req, res) {

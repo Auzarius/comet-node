@@ -29,7 +29,7 @@ angular.module('mainCtrl', ['angularMoment'])
 	// resets the view to the top of the page when a new route loads
 	// this prevents the view focus from staying the same from page to page
 	$rootScope.$on('$routeChangeSuccess',function() { 
-		$("html, body").animate({ scrollTop: 0 }, 300); 
+		$("html, body").animate({ scrollTop: 0 }, 200); 
 	});
 
 	// function to handle login form
