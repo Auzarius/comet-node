@@ -1,205 +1,218 @@
 
-	<div class="show-hide-message fixed" ng-show="ticket.message">
-		<div class="row alert alert-info alert-dismissable">
-			<div class='col-xs-11'>{{ ticket.message }}</div>
-			<button type="button" class="close" ng-click="ticket.message = ''" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
+<div class="show-hide-message fixed" ng-show="ticket.message">
+	<div class="row alert alert-info alert-dismissable">
+		<div class='col-xs-11'>{{ ticket.message }}</div>
+		<button type="button" class="close" ng-click="ticket.message = ''" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
 	</div>
+</div>
 
-	<div class="page-header" ng-hide="!ticket.ticket && !ticket.processing">
-		<h1 ng-cloak>
-			Ticket #{{ ticket.ticket.id }}
-			<a href="/tickets/{{ ticket.ticket.id }}/edit" class="btn btn-default">
-				<span class="glyphicon glyphicon-plus"></span> 
-				Edit Ticket
-			</a>
-			<a href="#" class="btn btn-default" ng-click="ticket.deleteTicket(ticket.ticket.id)" ng-if="main.user.role === 'admin'">
-				<span class="glyphicon glyphicon-trash"></span> 
-				Delete Ticket
-			</a>
-		</h1>
+<div class="page-header" ng-hide="!ticket.ticket && !ticket.processing">
+	<h1 ng-cloak>
+		Ticket #{{ ticket.ticket.id }}
+		<a href="/tickets" class="btn btn-default">
+			<span class="glyphicon glyphicon-chevron-left"></span> 
+			Back to Tickets
+		</a>
+		<a href="/tickets/{{ ticket.ticket.id }}/edit" class="btn btn-default">
+			<span class="glyphicon glyphicon-plus"></span> 
+			Edit Ticket
+		</a>
+		<a href="#" class="btn btn-default" ng-click="ticket.deleteTicket(ticket.ticket.id)" ng-if="main.user.role === 'admin'">
+			<span class="glyphicon glyphicon-trash"></span> 
+			Delete Ticket
+		</a>
+	</h1>
 
-	</div>
+</div>
 
-	<div class="jumbotron text-center" ng-if="ticket.processing && !ticket.ticket">
-		<span class="glyphicon glyphicon-repeat spinner"></span>
-		<p>Loading Ticket...</p>
-	</div>
+<div class="jumbotron text-center" ng-if="ticket.processing && !ticket.ticket">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<p>Loading Ticket...</p>
+</div>
 
-	<div class="jumbotron text-center" ng-if="!ticket.processing && !ticket.ticket">
-		<p>There is no available ticket data at this time.</p>
-	</div>
+<div class="jumbotron text-center" ng-if="!ticket.processing && !ticket.ticket">
+	<p>There is no available ticket data at this time.</p>
+</div>
 
-	<div class='col-xs-12 col-md-6' ng-if="ticket.ticket">
-		<h4>Customer Information</h4>
-		<table ng-cloak id="ticket" class="table table-bordered table-striped">
-			<tbody>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Customer</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.customer }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Street</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.street }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>City</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.city }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>State</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.state }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Zipcode</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.zipcode }}</td>
-				</tr>
-			</tbody>
-		</table>
-		
-		<h4>Indicator Information</h4>
-		<table ng-cloak id="ticket" class="table table-bordered table-striped">
-			<tbody>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Tag ID</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_tag }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Manufacturer</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_manu }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Model</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_model }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Serial</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_serial }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Capacity</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_capacity }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Divisions</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_divisions }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Units</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.units }}</td>
-				</tr>
-			</tbody>
-		</table>
-		
-		<h4 ng-if="ticket.ticket.scale_manu">Scale Information</h4>
-		<table ng-cloak id="ticket" class="table table-bordered table-striped" ng-show="ticket.ticket.scale_manu">
-			<tbody>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Manufacturer</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_manu }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Model</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_model }}</td>
-				</tr>
-				<tr>
-					<th class='col-xs-6 col-md-3'>Serial</th>
-					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_serial }}</td>
-				</tr>
-			</tbody>
-		</table>	
-		
-		<form class="form-horizontal no-print" ng-submit="ticket.addEvent()" id='eventform' name='eventform' novalidate>
-		
+<div class='col-xs-12 col-md-6' ng-show="ticket.ticket">
+	<h4>Customer Information</h4>
+	<table ng-cloak id="ticket" class="table table-bordered table-striped">
+		<tbody>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Customer</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.customer }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Street</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.street }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>City</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.city }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>State</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.state }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Zipcode</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.zipcode }}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h4>Indicator Information</h4>
+	<table ng-cloak id="ticket" class="table table-bordered table-striped">
+		<tbody>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Tag ID</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_tag }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Manufacturer</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_manu }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Model</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_model }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Serial</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.indicator_serial }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Capacity</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_capacity }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Divisions</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_divisions }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Units</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.units }}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h4 ng-if="ticket.ticket.scale_manu">Scale Information</h4>
+	<table ng-cloak id="ticket" class="table table-bordered table-striped" ng-show="ticket.ticket.scale_manu">
+		<tbody>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Manufacturer</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_manu }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Model</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_model }}</td>
+			</tr>
+			<tr>
+				<th class='col-xs-6 col-md-3'>Serial</th>
+				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.scale_serial }}</td>
+			</tr>
+		</tbody>
+	</table>	
+	
+	<form class="form-horizontal" ng-submit="ticket.addEvent()" id='eventform' name='eventform' novalidate>
+		<div>
 			<h4>Add Comment</h4>
-			
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Status</label>
-				<div class="col-sm-10">
-					<select class="form-control" ng-model="ticket.eventData.status" name="status" required>
-						<option value='Additional Notes'>Additional Notes</option>
-						<option value='Complete'>Complete</option>
-						<option value='Delivered'>Delivered</option>
-						<option value='Diagnosed'>Diagnosed</option>
-						<option value='Non-repairable'>Non-repairable</option>
-						<option value='Repaired'>Repaired</option>
-						<option value='Replaced'>Replaced</option>
-						<option value='Waiting for Customer'>Waiting for Customer</option>
-						<option value='Waiting for Parts'>Waiting for Parts</option>
-					</select>
-				</div>
+		</div>
+		
+		<div class="form-group has-feedback" ng-class="[ eventform.status.$invalid && !eventform.status.$pristine ? 'has-error' : '', eventform.status.$valid && !eventform.status.$pristine ? 'has-success' : '' ]">
+			<label class="col-sm-2 control-label">Status</label>
+			<div class="col-sm-10">
+				<select class="form-control" ng-model="ticket.eventData.status" name="status" required>
+					<option value='Additional Notes'>Additional Notes</option>
+					<option value='Complete'>Complete</option>
+					<option value='Delivered'>Delivered</option>
+					<option value='Diagnosed'>Diagnosed</option>
+					<option value='Non-repairable'>Non-repairable</option>
+					<option value='Repaired'>Repaired</option>
+					<option value='Replaced'>Replaced</option>
+					<option value='Waiting for Customer'>Waiting for Customer</option>
+					<option value='Waiting for Parts'>Waiting for Parts</option>
+				</select>
+				<span ng-show="eventform.status.$invalid && !eventform.status.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<p ng-if="eventform.status.$error.required && !eventform.status.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+				<span ng-show="!eventform.status.$invalid && !eventform.status.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
-			
-			<div class="form-group" ng-if="ticket.eventData.status == 'Diagnosed' || ticket.eventData.status == 'Repaired' || ticket.eventData.status == 'Additional Notes'">
-				<label class="col-sm-2 control-label" title="Time spent in minutes">Time Spent</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" ng-model="ticket.eventData.time" name="time" required />
-				</div>
+		</div>
+		
+		<div class="form-group has-feedback" ng-if="ticket.eventData.status == 'Diagnosed' || ticket.eventData.status == 'Repaired' || ticket.eventData.status == 'Additional Notes'" ng-class="[ eventform.time.$invalid && !eventform.time.$pristine ? 'has-error' : '', eventform.time.$valid && !eventform.time.$pristine ? 'has-success' : '' ]">
+			<label class="col-sm-2 control-label" title="Time spent in minutes">Time Spent</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" ng-model="ticket.eventData.timespent" name="time" pattern="[0-9]+" required />
+				<span ng-show="eventform.time.$invalid && !eventform.time.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<p ng-if="eventform.time.$error.required && !eventform.time.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+				<p ng-if="eventform.time.$error.pattern && !eventform.time.$pristine" class="help-block alert alert-info" style="color: white;">Enter a value for time spent using only numerical values.</p>
+				<span ng-show="!eventform.time.$invalid && !eventform.time.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
-			
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Comments</label>
-				<div class="col-sm-10">
-					<textarea class="form-control" ng-model="ticket.eventData.comments" name="comments" required></textarea>
-				</div>
+		</div>
+		
+		<div class="form-group has-feedback" ng-class="[ eventform.comments.$invalid && !eventform.comments.$pristine ? 'has-error' : '', eventform.comments.$valid && !eventform.comments.$pristine ? 'has-success' : '' ]">
+			<label class="col-sm-2 control-label">Comments</label>
+			<div class="col-sm-10">
+				<textarea class="form-control" ng-model="ticket.eventData.comments" name="comments" required></textarea>
+				<span ng-show="eventform.comments.$invalid && !eventform.comments.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<p ng-if="eventform.comments.$error.required && !eventform.comments.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+				<span ng-show="!eventform.comments.$invalid && !eventform.comments.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
-			
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='eventform.$invalid'>Add Comment</button>
-				</div>
+		</div>
+		
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='eventform.$invalid'>Add Comment</button>
 			</div>
-		</form>	
-	</div>
+		</div>
+	</form>	
+</div>
 
-	<div class="jumbotron text-center" ng-show="ticket.event_processing && !ticket.events">
-		<span class="glyphicon glyphicon-repeat spinner"></span>
-		<p>Loading Comments...</p>
-	</div>
+<div class="jumbotron text-center" ng-show="ticket.event_processing && !ticket.events">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<p>Loading Comments...</p>
+</div>
 
-	<div class='col-xs-12 col-md-6' ng-show="!ticket.event_processing && ticket.events && ticket.events.length > 0">
-		<h4>Comments</h4>
-		<div class='comment-container' ng-repeat="_event in ticket.events">
-			<div class='row comment-header'>
-				<div class='col-xs-3 col-md-4'><strong>{{ _event.created_by }}</strong></div>
-				<div class='col-xs-3 col-md-4'>{{ _event.status }}</div>
-				<div class='col-xs-6 col-md-4 dropdown' ng-if="main.user.role === 'admin' || main.user.username === _event.username">
-					<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-						<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
-					</a>
-					<ul class="dropdown-menu" style="width: 100%;">
-						<li>
-							<a href="#" ng-href="">
-								<i class="glyphicon glyphicon-pencil"></i> Edit
-							</a>
-						</li>
-						<li ng-if="main.user.role === 'admin'">
-							<a href="#" ng-click="ticket.deleteEvent(_event.id)">
-								<i class="glyphicon glyphicon-trash"></i> Delete
-							</a>
-						</li>
-					</ul>
-				</div>
+<div class='col-xs-12 col-sm-12 col-md-6' ng-show="!ticket.event_processing && ticket.events && ticket.events.length > 0">
+	<h4>Comments</h4>
+	<div class='comment-container margin-fix' ng-repeat="_event in ticket.events">
+		<div class='row comment-header'>
+			<div class='col-xs-3 col-md-4'><strong>{{ _event.created_by }}</strong></div>
+			<div class='col-xs-3 col-md-4'>{{ _event.status }}</div>
+			<div class='col-xs-6 col-md-4 dropdown' ng-if="main.user.role === 'admin' || main.user.username === _event.username">
+				<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
+				</a>
+				<ul class="dropdown-menu" style="width: 100%;">
+					<li>
+						<a href="#" ng-href="/events/{{ _event.id }}/edit">
+							<i class="glyphicon glyphicon-pencil"></i> Edit
+						</a>
+					</li>
+					<li ng-if="main.user.role === 'admin'">
+						<a href="#" ng-click="ticket.deleteEvent(_event.id)">
+							<i class="glyphicon glyphicon-trash"></i> Delete
+						</a>
+					</li>
+				</ul>
 			</div>
-			<div class='row comment-remarks'>
-				<p class='col-xs-12'>
-					{{ _event.comments }}
-				</p>
+		</div>
+		<div class='row comment-remarks'>
+			<p class='col-xs-12'>{{ _event.comments }}</p>
+		</div>
+		<div class='row comment-footer no-print' ng-if="_event.created_at">
+			<div class='col-xs-6' title="{{_event.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
+				Created: {{ _event.created_at | amTimeAgo }}
 			</div>
-			<div class='row comment-footer' ng-if="_event.created_at">
-				<div class='col-xs-6' title="{{_event.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
-					Created: {{ _event.created_at | amTimeAgo }}
-				</div>
-				<div class='col-xs-6' ng-if="_event.updated_at" title="{{_event.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
-					Updated: {{ _event.updated_at | amTimeAgo }} by 
-					<span ng-if="_event.updated_by">{{ _event.updated_by }}</span>
-					<span ng-if="!_event.updated_by">Unknown</span>
-				</div>
+			<div class='col-xs-6' ng-if="_event.updated_at" title="{{_event.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
+				Updated: {{ _event.updated_at | amTimeAgo }} by 
+				<span ng-if="_event.updated_by">{{ _event.updated_by }}</span>
+				<span ng-if="!_event.updated_by">Unknown</span>
 			</div>
 		</div>
 	</div>
+</div>
 <div class="jumbotron text-center" ng-if="!ticket.ticket && !ticket.processing">
 	<p>The ticket that you have requested does not exist.</p>
 </div>

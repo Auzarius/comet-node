@@ -1,0 +1,125 @@
+
+<div class="show-hide-message fixed" ng-show="feedback.message">
+	<div class="row alert alert-info alert-dismissable">
+		<div class='col-xs-10'>{{ feedback.message }}</div>
+		<button type="button" class="close" ng-click="feedback.message = ''" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
+<div id="welcome" class="jumbotron text-center">
+	<h1>Welcome to the Comet.node feedback page!</h1>
+	<p>Please feel free to leave a comment here if you want to let me know what you think of the site!  You can also leave feedback here if you find any bugs or issues with the site and I will try to resolve them as soon as I can!  All feedback is appreciated but please try to keep it constructive if at all possible! <br/><br/>
+	
+	</p>
+</div>
+<div class='bg-fill opaque'>
+	<h4 class='page-header'>Comments</h4>
+	<form class="form-horizontal no-print opaque" ng-submit="feedback.addComment()" id='commentform' name='commentform' novalidate>
+	
+		<h5>Add Comment</h5>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Status</label>
+			<div class="col-sm-10">
+				<select class="form-control" ng-model="feedback.feedbackData.status" name="status" required>
+					<option value='Bug Report'>Bug Report</option>
+					<option value='Feature Request'>Feature Request</option>
+					<option value='Other'>Other</option>
+					<option value='Praise'>Praise</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Comments</label>
+			<div class="col-sm-10">
+				<textarea class="form-control" ng-model="feedback.feedbackData.comments" name="comments" rows='5' required></textarea>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='commentform.$invalid'>Add Comment</button>
+			</div>
+		</div>
+	</form>
+	<br />
+	
+</div>
+<br />
+<div class="jumbotron text-center" ng-show="feedback.processing && !feedback.comments">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<p>Loading Comments...</p>
+</div>
+
+<div class='col-xs-12' ng-if="!feedback.processing && feedback.comments && feedback.comments.length > 0" >
+	
+	<div class='comment-container opaque' ng-repeat="_comment in feedback.comments">
+		<div class='row comment-header'>
+			<div class='col-xs-3 col-md-4'><strong>{{ _comment.created_by }}</strong></div>
+			<div class='col-xs-3 col-md-4'>{{ _comment.status }}</div>
+			<div class='col-xs-6 col-md-4 dropdown' ng-if="main.user.role === 'admin' || main.user.username === _comment.username">
+				<a class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+					<i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Manage
+				</a>
+				<ul class="dropdown-menu" style="width: 100%;">
+					<li>
+						<a href="#" ng-href="/feedback/{{ _comment.id }}/edit">
+							<i class="glyphicon glyphicon-pencil"></i> Edit
+						</a>
+					</li>
+					<li ng-if="main.user.role === 'admin'">
+						<a href="#" ng-click="feedback.deleteComment(_comment.id)">
+							<i class="glyphicon glyphicon-trash"></i> Delete
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class='row comment-remarks'>
+			<p class='col-xs-12'>{{ _comment.comments }}</p>
+		</div>
+		<div class='row comment-footer no-print' ng-if="_comment.created_at">
+			<div class='col-xs-6' title="{{_comment.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
+				Created: {{ _comment.created_at | amTimeAgo }}
+			</div>
+			<div class='col-xs-6' ng-if="_comment.updated_at" title="{{_comment.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
+				Updated: {{ _comment.updated_at | amTimeAgo }} by 
+				<span ng-if="_comment.updated_by">{{ _comment.updated_by }}</span>
+				<span ng-if="!_comment.updated_by">Unknown</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	/* Extra Small Devices, Phones */ 
+	@media only screen and (min-width : 480px) {
+		body {
+			background-image: url('/assets/img/comet-earth-blur.jpg');
+			background-repeat: no-repeat;
+			background-position: 75% 25%;
+			width: 100%;
+			height: 100%;
+			background-color: #eee;
+		}
+		
+		.jumbotron {
+			background-color: rgba(250,250,250,0.7);
+		}
+	}
+
+	/* Large Devices, Wide Screens */
+	@media only screen and (min-width : 1200px) {
+		body {
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-ms-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			background-position: top left;
+		}
+	}
+</style>

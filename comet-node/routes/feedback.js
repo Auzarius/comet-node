@@ -1,32 +1,35 @@
 
 module.exports = function (app, express, mySql) {
-	var apiEvents = express.Router();
+	var apiFeedback = express.Router();
 	
-	apiEvents.route('/')
-		/*.post(function (req, res) {
-			// create a new instance of the Event model
-			var Event = mySql.events.setEvent('create', req);
-			
-			if ( Event ) {
-				mySql.events.create(Event, function (err, result) {
+	apiFeedback.route('/')
+		.post(function (req, res) {
+			// create a new instance of the Feedback model
+			var Feedback = mySql.feedback.setFeedback('create', req);
+
+			if ( Feedback ) {
+				mySql.feedback.create(Feedback, function (err, result) {
+					console.log('result: ' + result);
 					if (err) {
-						console.log(err.code);
+						console.log(err);
 						res.status(500).send(err);
 					} else {
 						res.status(200).json(result);
 					}
 				});		
 			} else {
-				res.status(422).json({
-					success: false,
-					message: 'Please fill in all of the required fields.'
+				res.status(200).json({
+					success : false,
+					data	: {},
+					message : 'Please fill in all of the required fields.'
 				});
 			}
-		})*/
+		})
 		
 		.get(function (req, res) {
-			mySql.events.all(function (err, result) {
+			mySql.feedback.all(function (err, result) {
 				if (err) {
+					console.log(err);
 					res.status(500).send(err);
 				} else {
 					res.status(200).json(result);
@@ -34,29 +37,28 @@ module.exports = function (app, express, mySql) {
 			});
 		});
 	
-	apiEvents.route('/:event_id')	
+	apiFeedback.route('/:fb_id')	
 		.get(function (req, res) {
-			var eventId = req.params.event_id;
-			mySql.events.findOne({ id: eventId }, function (err, result) {
+			var fbId = req.params.fb_id;
+			mySql.feedback.findOne({ id: fbId }, function (err, result) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					console.log(result);
 					res.status(200).json(result);
 				}
 			});
 		})
 		
 		.put(function (req,res) {
-			console.log(req.body);
-			var Event = mySql.events.setEvent('save', req);
 			
-			if ( Event ) {
-				mySql.events.findOne({id: Event.id}, function (err, event) {
+			var Feedback = mySql.feedback.setFeedback('save', req);
+			
+			if ( Feedback ) {
+				mySql.feedback.findOne({id: Feedback.id}, function (err, event) {
 					if (err) {
 						res.status(500).send(err);
 					} else if (event) {
-						mySql.events.save(Event, function (err, result) {
+						mySql.feedback.save(Feedback, function (err, result) {
 							if (err) {
 								res.status(500).send(err);
 							} else {								
@@ -66,7 +68,7 @@ module.exports = function (app, express, mySql) {
 					} else {
 						res.json({
 							success: false,
-							message : 'An error occured while updating the event.'
+							message : 'An error occured while updating the comment.'
 						});
 					}
 				})
@@ -77,11 +79,11 @@ module.exports = function (app, express, mySql) {
 				});
 			}
 		});
-	
-	apiEvents.use(function (req, res, next) {
+		
+	apiFeedback.use(function (req, res, next) {
 		if (req.decoded) {
-			if ( req.decoded.role === 'admin' ) {
-				next();
+			if ( req.decoded.role === 'admin' || req.decoded.role === 'mod' ) {
+				next()
 			} else {
 				return res.status(403).json({
 					success: false,
@@ -96,8 +98,8 @@ module.exports = function (app, express, mySql) {
 		}
 	});
 	
-	apiEvents.delete('/:event_id', function (req, res) {
-		mySql.events.remove(req.params.event_id, function (err, result) {
+	apiFeedback.delete('/:fb_id', function (req, res) {
+		mySql.feedback.remove(req.params.fb_id, function (err, result) {
 			if (err) {
 				res.status(500).send(err);
 			} else {
@@ -106,5 +108,5 @@ module.exports = function (app, express, mySql) {
 		});
 	});
 	
-	return apiEvents;
+	return apiFeedback;
 }

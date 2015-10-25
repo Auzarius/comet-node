@@ -1,3 +1,6 @@
+// Courtesy of Scotch.io Chris Sevilleja & Holly Lloyd
+// http://leanpub.com/mean-machine
+
 angular.module('authService', [])
 
 // ===================================================

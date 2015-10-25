@@ -15,7 +15,15 @@ angular.module('app.routes', ['ngRoute'])
 			})
 			
 			.when('/feedback', {
-				templateUrl : 'app/views/pages/feedback.html'
+				templateUrl : 'app/views/pages/feedback/all.html',
+				controller  : 'feedbackController',
+				controllerAs: 'feedback'
+			})
+			
+			.when('/feedback/:fb_id/edit', {
+				templateUrl : 'app/views/pages/feedback/edit.html',
+				controller  : 'feedbackEditController',
+				controllerAs: 'feedback'
 			})
 			
 			// backup 403 display if the server throws the 403 status code

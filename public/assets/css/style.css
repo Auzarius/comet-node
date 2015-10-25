@@ -1,5 +1,6 @@
 
 /*body { padding-top: 50px; }*/
+
 .node-header {
 	color: #0CBE9B;
 	color: rgb(12,190,155);
@@ -101,7 +102,7 @@ table#events tbody tr:nth-child(2) td:nth-child(2) {
 }
 
 [ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
+ 	display: none !important;
 }
 
 label {
@@ -111,7 +112,8 @@ label {
 }
 
 .comment-container {
-	margin: 1.4rem;
+	margin-bottom: 1.2em;
+	min-width: 100%;
 	background-color: #fff;
 }
 
@@ -119,7 +121,7 @@ label {
 	margin-top: -1px;
 	border: 1px solid #ddd;
 	border: 1px solid rgb(221,221,221);
-	padding: 1rem .5rem;
+	padding: 1em .5em;
 }
 
 .comment-container .comment-header {
@@ -130,7 +132,12 @@ label {
 .comment-container .comment-remarks {
 	background-color: #F9F9F9;
 	background-color: rgb(249,249,249);
-	word-break: break-all;
+	word-break: break-word;
+	padding-bottom: 0.4em;
+}
+
+.comment-container .comment-remarks p {
+	white-space: pre-line;
 }
 
 .comment-container .comment-footer {
@@ -139,10 +146,16 @@ label {
 	background-color: #fff;
 }
 
+.margin-fix {
+	margin-left: 1em;
+	margin-right: 1em;
+	min-width: auto !important;
+}
+
 .bg-fill {
 	background-color: #fff;
-	padding: 2rem;
-	border-radius: .2rem;
+	padding: 2em;
+	border-radius: .2em;
 }
 
 .opaque {
@@ -155,7 +168,6 @@ label {
 .opaque:hover {
 	opacity: 1.0 !important;
 }
-
 
 @media only print {
 	* {
@@ -178,43 +190,13 @@ label {
 	.btn {
 		display: none;
 	}
+	
+	.comment-container, .comment-container .row {
+		padding: 0em;
+		margin-left: -0.8em;
+		border: 0.1em solid #ddd;
+	}
 }
-/*
-.navbar-inverse {
-	background: rgba(10,10,10,0.9);
-}
-
-.btn-orange {
-	background-color: #EA6A33;
-	color: white;
-	font-weight: bold;
-}*/
-
-/*
-dt, dd {
-	border: 0.1em solid rgba(200,200,200,.8);
-	margin-top: -0.1em;
-	margin-left: -0.1em;
-	height: 100%;
-	padding: 8px;
-	white-space: nowrap;
-}
-
-#ticket-list .row:nth-child(even) dl dd, #ticket-list .row:nth-child(even) dl dt {
-	background-color: rgb(250,250,250);
-}*/
-
-/*
-.navbar-brand {
-	color: #f35626!important;
-	background-color: #2196f3!important;
-    *background-image: -webkit-linear-gradient(92deg,#f35626,#feab3a);
-    background-image: -webkit-linear-gradient(92deg,#07B9F9,#AC33F7);
-    *background-image: -webkit-linear-gradient(92deg,#2196f3,#feab3a);
-    -webkit-background-clip: text;
-    *-webkit-text-fill-color: transparent;
-    -webkit-animation: hue 60s infinite linear;
-}	*/
 
 main {
 	padding-top: 3em;
@@ -259,9 +241,9 @@ footer h4 {
 }
 
 .ng-hide-remove {
-	-webkit-animation: rubberBand 0.7s both ease;
-	-moz-animation: rubberBand 0.7s both ease;
-	animation: rubberBand 0.7s both ease;
+	-webkit-animation: fadeInRight 1s both ease;
+	-moz-animation: fadeInRight 1s both ease;
+	animation: fadeInRight 1s both ease;
 }
 
 main .ng-enter {
@@ -325,8 +307,9 @@ main .ng-leave {
 	}
 	
 	.fixed {
-		min-width: 750px;
-		width: 750px;
+		min-width: 720px;
+		width: 720px;
+		max-width: 720px;
 		top: 6rem;
 	}
 }
@@ -350,8 +333,9 @@ main .ng-leave {
 	}
 	
 	.fixed {
-		min-width: 970px;
-		width: 970px;
+		min-width: 940px;
+		width: 940px;
+		max-width: 940px;
 		top: 6rem !important;
 	}
 }
@@ -359,8 +343,9 @@ main .ng-leave {
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {
 	.fixed {
-		min-width: 1170px;
-		width: 1170px;
+		min-width: 1140px;
+		width: 1140px;
+		max-width: 1140px;
 	}
 }
 

@@ -39,20 +39,46 @@ angular.module('ticketService', [])
 			return $http.get('/api/tickets/' + ticketId + '/events');
 		},
 		
+		getOne : function (eventId) {
+			return $http.get('/api/events/' + eventId);
+		},
+		
 		create : function(ticketId, eventData) {
 			return $http.post('/api/tickets/' + ticketId + '/events', eventData);
 		},
 		
-		update : function(ticketId, eventId, eventData) {
-			return $http.put('/api/tickets/' + ticketId + '/events/' + eventId, eventData);
+		update : function(eventId, eventData) {
+			return $http.put('/api/events/' + eventId, eventData);
 		},
 		
 		delete : function(ticketId, eventId) {
-			return $http.delete('/api/tickets/' + ticketId + '/events/' + eventId)
+			return $http.delete('/api/events/' + eventId)
 		}
-	}
+	};
+	
+	ticketFactory.feedback = {
+		get : function () {
+			return $http.get('/api/feedback/');
+		},
+		
+		getOne : function (feedbackId) {
+			return $http.get('/api/feedback/' + feedbackId);
+		},
+		
+		create : function (feedbackData) {
+			return $http.post('/api/feedback/', feedbackData);
+		},
+		
+		update : function (feedbackId, feedbackData) {
+			return $http.put('/api/feedback/' + feedbackId, feedbackData);
+		},
+		
+		delete : function (feedbackId) {
+			return $http.delete('/api/feedback/' + feedbackId)
+		}
+	};
 
-	// return our entire userFactory object
+	// return our entire ticketFactory object
 	return ticketFactory;
 
 });

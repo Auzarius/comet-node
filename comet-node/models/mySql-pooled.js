@@ -23,8 +23,8 @@ module.exports = function(config) {
 			console.log('[mySql] A connection was made to the pool on thread #' + connection.threadId);
 		});
 		
-		process.on('uncaughtException', function (err) {
-			console.log('\x1b[31mUncaught Exception occured:\x1b[00m ' + err.message );
+		process.on('uncaughtError', function (err) {
+			console.log('\x1b[31mUncaught Error occured:\x1b[00m ' + err.message );
 			
 			if ( err.message === 'listen EADDRINUSE' ) {
 				console.log("\x1b[33mIt is highly likely that the port you have chosen:\x1b[00m " +
@@ -97,7 +97,6 @@ module.exports = function(config) {
 			                '@params query (string), vars [optional] (array), callback (function)');
 		}
 	}
-	
 	
 	mySql.tickets = {
 		active : function (next) {
@@ -287,13 +286,18 @@ module.exports = function(config) {
 						throw new Error(err);
 						next(err);
 					} else if ( result.affectedRows > 0 ) {
-						mySql.events.purge(ticketId);
-						
-						next(null, {
-							success : true,
-							message : 'The ticket was deleted successfully!',
-							status	: 200
+						mySql.events.purge(ticketId, function (err, result) {
+							if (err)
+								throw new Error(err);
+							
+							next(null, {
+								success : true,
+								message : 'The ticket was deleted successfully!',
+								status	: 200
+							});
 						});
+						
+						
 					} else {
 						next(null, {
 							success : false,
@@ -439,7 +443,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No options were passed for the search query.');
+				throw new Error('No options were passed for the search query.');
 				next({
 					success : false,
 					message : 'No options were passed for the search query.',
@@ -471,7 +475,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No options were passed for the search query.');
+				throw new Error('No options were passed for the search query.');
 				next({
 					success : false,
 					message : 'No options were passed for the search query.',
@@ -511,7 +515,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No user was passed as an argument for creation.');
+				throw new Error('No user was passed as an argument for creation.');
 				next({
 					success : false,
 					message : 'No user was passed as an argument for creation.',
@@ -550,7 +554,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No user was passed as an argument for updating.');
+				throw new Error('No user was passed as an argument for updating.');
 				next({
 					success : false,
 					message : 'No user was passed as an argument for updating.',
@@ -581,7 +585,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No user was passed as an argument for deletion!')
+				throw new Error('No user was passed as an argument for deletion!')
 				next({
 					success: false,
 					message: 'No user was passed as an argument for deletion.',
@@ -671,12 +675,12 @@ module.exports = function(config) {
 				           User.username && User.email )) {
 					return User;
 				} else {
-					throw new Exception('You must fill out all of the fields.\n' +
+					throw new Error('You must fill out all of the fields.\n' +
 					                    'Required fields: Firstname, Lastname, Username, Password and Email');
 					return false;
 				}
 			} else {
-				throw new Exception('You must define the method: create / save');
+				throw new Error('You must define the method: create / save');
 				return false;
 			}
 		}
@@ -692,10 +696,9 @@ module.exports = function(config) {
 						'FROM ' + mySql.config.events_table + ' t ' +
 						'WHERE ? ' +
 						'ORDER BY created_at DESC';
-			
 			mySql.query(query, ticketId, function (err, result) {
 				if (err) {
-					//throw new Error(err);
+					throw new Error(err);
 					next(err);
 				} else if ( mySql.verifyResult(result)) {
 					next(null, {
@@ -714,7 +717,9 @@ module.exports = function(config) {
 		
 		findOne : function (options, next) {
 			console.log('\x1b[33mevents.findOne query\x1b[0m');
-			var query = 'SELECT * FROM ' + mySql.config.events_table + ' WHERE ?';
+			var query = 'SELECT *, (SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = e.created_by) AS author ' +
+						'FROM ' + mySql.config.events_table + ' e ' +
+						'WHERE ?';
 			
 			if ( options ) {
 				mySql.query(query, options, function (err, result) {
@@ -736,7 +741,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No options were passed for the search query.');
+				throw new Error('No options were passed for the search query.');
 				next({
 					success : false,
 					message : 'No options were passed for the search query.',
@@ -800,7 +805,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No event was passed as an argument for updating.');
+				throw new Error('No event was passed as an argument for updating.');
 				next({
 					success : false,
 					message : 'No event was passed as an argument for updating.',
@@ -811,13 +816,14 @@ module.exports = function(config) {
 		},
 		
 		remove : function (eventId, next) {
-			console.log('\x1b[33mevents.save query\x1b[0m');
+			console.log('\x1b[33mevents.remove query\x1b[0m');
 			
 			if ( eventId ) {
 				var query = 'DELETE FROM ' + mySql.config.events_table + ' WHERE id = ?';
 				mySql.query(query, eventId, function (err, result) {
 					if (err) {
 						throw new Error(err);
+						next(err);
 					} else if ( result.affectedRows > 0 ) {
 						next(null, {
 							success : true,
@@ -831,7 +837,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No event was passed as an argument for deletion!')
+				throw new Error('No event was passed as an argument for deletion!')
 				next({
 					success: false,
 					message: 'No event was passed as an argument for deletion.',
@@ -842,13 +848,14 @@ module.exports = function(config) {
 		},
 		
 		purge : function (ticketId, next) {
-			console.log('\x1b[33mevents.save query\x1b[0m');
+			console.log('\x1b[33mevents.purge query\x1b[0m');
 			
 			if ( ticketId ) {
 				var query = 'DELETE FROM ' + mySql.config.events_table + ' WHERE ticket_id = ?';
 				mySql.query(query, ticketId, function (err, result) {
 					if (err) {
 						throw new Error(err);
+						next(err);
 					} else if ( result.affectedRows > 0 ) {
 						next(null, {
 							success : true,
@@ -863,7 +870,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No ticket id was passed as an argument for deletion!')
+				throw new Error('No ticket id was passed as an argument for deletion!')
 				next({
 					success: false,
 					message: 'No ticket id was passed as an argument for deletion.',
@@ -879,10 +886,13 @@ module.exports = function(config) {
 			
 			Event.status = req.body.status ? req.body.status : 'Pending';
 			
+			if ( req.params.event_id )
+				Event.id = req.params.event_id;
+			
 			if ( req.params.id || req.ticket_id )
 				Event.ticket_id = req.ticket_id ? req.ticket_id : req.params.id;
 			
-			Event.timespent = req.body.time ? req.body.time : 0;
+			Event.timespent = req.body.timespent ? req.body.timespent : 0;
 			
 			if ( req.body.comments)
 				Event.comments = req.body.comments;
@@ -894,8 +904,15 @@ module.exports = function(config) {
 			if ( method === 'save' )
 				Event.updated_by = req.decoded.id;
 			
-			if ( method === 'create' || method === 'save' ) {
-				if (Event.status && Event.comments && Event.ticket_id) {
+			if ( method === 'create') {
+				if (Event.status && Event.comments && Event.ticket_id && Event.created_by ) {
+					return Event;
+				} else {
+					console.log(Event);
+					return false;
+				}
+			} else if ( method === 'save' ) {
+				if (Event.status && Event.comments && Event.updated_by ) {
 					return Event;
 				} else {
 					console.log(Event);
@@ -911,7 +928,11 @@ module.exports = function(config) {
 	mySql.feedback = {
 		all : function (next) {
 			console.log('\x1b[33mfeedback.all query\x1b[0m');
-			var query = 'SELECT * FROM ' + mySql.config.feedback_table + ' ' +
+			var query = 'SELECT f.id, f.status, f.comments, f.created_at, f.updated_at, ' +
+						'( SELECT username FROM ' + mySql.config.users_table + ' WHERE id = f.created_by ) AS username, ' +
+						'(SELECT CONCAT(firstName, \' \', lastName) FROM users WHERE id = f.created_by) AS created_by, ' +
+						'(SELECT CONCAT(firstName, \' \', lastName) FROM users WHERE id = f.updated_by) AS updated_by ' +
+						'FROM ' + mySql.config.feedback_table + ' f ' +
 						'ORDER BY created_at DESC';
 			
 			mySql.query(query, null, function (err, result) {
@@ -957,7 +978,7 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No options were passed for the search query.');
+				throw new Error('No options were passed for the search query.');
 				next({
 					success : false,
 					message : 'No options were passed for the search query.',
@@ -970,7 +991,7 @@ module.exports = function(config) {
 		create : function (feedback, next) {
 			console.log('\x1b[33mfeedback.create query\x1b[0m');
 			var query = 'INSERT INTO ' + mySql.config.feedback_table + ' SET ?';
-			
+
 			if ( feedback ) {
 				mySql.query(query, feedback, function (err, result) {
 					if (err) {
@@ -989,11 +1010,11 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No feedback was passed as an argument for creation.');
+				throw new Error('No feedback was passed as an argument for creation.');
 				next({
 					success : false,
 					message : 'No feedback was passed as an argument for creation.',
-					value	: event,
+					value	: feedback,
 					note	: 'If you received this in error, please notify the admin.'
 				});
 			}
@@ -1021,11 +1042,11 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No feedback was passed as an argument for updating.');
+				throw new Error('No feedback was passed as an argument for updating.');
 				next({
 					success : false,
 					message : 'No feedback was passed as an argument for updating.',
-					value	: event,
+					value	: feedback,
 					note	: 'If you received this in error, please notify the admin.'
 				});
 			}
@@ -1034,7 +1055,7 @@ module.exports = function(config) {
 		remove : function (feedbackId, next) {
 			console.log('\x1b[33mfeedback.save query\x1b[0m');
 			
-			if ( eventId ) {
+			if ( feedbackId ) {
 				var query = 'DELETE FROM ' + mySql.config.feedback_table + ' WHERE id = ?';
 				mySql.query(query, feedbackId, function (err, result) {
 					if (err) {
@@ -1052,11 +1073,11 @@ module.exports = function(config) {
 					}
 				});
 			} else {
-				throw new Exception('No feedback was passed as an argument for deletion!')
+				throw new Error('No feedback was passed as an argument for deletion!')
 				next({
 					success: false,
 					message: 'No feedback was passed as an argument for deletion.',
-					value  : eventId,
+					value  : feedbackId,
 					note   : 'If you received this in error, please notify the admin.'
 				});
 			}
@@ -1065,12 +1086,16 @@ module.exports = function(config) {
 		setFeedback : function (method, req) {
 			
 			var Feedback = {};
+			var id = req.params.fb_id ? req.params.fb_id : null;
+			
+			if ( id )
+				Feedback.id = id;
 			
 			if ( req.body.status )
 				Feedback.status = req.body.status;
 			
-			if ( req.body.comment)
-				Feedback.comment = req.body.comment;
+			if ( req.body.comments )
+				Feedback.comments = req.body.comments;
 			
 			if ( method === 'create' )
 				Feedback.created_by = req.decoded.id;
@@ -1078,12 +1103,13 @@ module.exports = function(config) {
 			if ( method === 'save' )
 				Feedback.updated_by = req.decoded.id;
 			
+			console.log(Feedback);
 			if ( method === 'create' || method === 'save' ) {
-				if (!Feedback.status && !Feedback.comment) {
+				if (Feedback.status && Feedback.comments) {
+					return Feedback;
+				} else {
 					console.log(Feedback);
 					return false;
-				} else {
-					return Feedback;
 				}
 			} else {
 				throw new Error('The methods \'create\' or \'save\' must be passed when using this function');

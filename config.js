@@ -15,7 +15,8 @@ module.exports = {
 		database 		: 'comet_dev',
 		users_table		: 'users',
 		tickets_table	: 'tickets_import',
-		events_table	: 'events'
+		events_table	: 'events',
+		feedback_table 	: 'feedback'
 	},
 	
 	secret		: '2ynIfxH9z3r0c00l'

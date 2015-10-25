@@ -21,13 +21,13 @@ angular.module('userCtrl', ['userService'])
 	// function to delete a user
 	vm.deleteUser = function(id) {
 		vm.processing = true;
-
+		vm.users = {};
+		
 		User.delete(id)
 			.success(function(data) {
-
+				
 				// get all users to update the table
-				// you can also set up your api 
-				// to return the list of users with the delete call
+				// could also return the list of users with the delete call
 				User.all()
 					.success(function (node) {
 						vm.processing = false;
@@ -46,7 +46,7 @@ angular.module('userCtrl', ['userService'])
 	
 	var vm = this;
 	vm.type = 'create';
-	$scope.userform = {};
+	vm.userData = {};
 
 	// function to create a user
 	vm.saveUser = function() {
@@ -91,9 +91,6 @@ angular.module('userCtrl', ['userService'])
 		User.update($routeParams.user_id, vm.userData)
 			.success(function (data) {
 				vm.processing = false;
-
-				// clear the form
-				// vm.userData = {};
 
 				// bind the message from our API to vm.message
 				vm.message = data.message;

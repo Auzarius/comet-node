@@ -47,7 +47,7 @@ angular.module('mainCtrl', ['angularMoment'])
 				
 				// if a user successfully logs in, redirect to tickets page
 				if (data.success)			
-					$location.path('/tickets');
+					$location.path('/');
 				else 
 					vm.error = data.message;
 				

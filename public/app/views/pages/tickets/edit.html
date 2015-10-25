@@ -27,38 +27,64 @@
 	<div class="form-group has-feedback" ng-class="[ ticketform.customer.$invalid && !ticketform.customer.$pristine ? 'has-error' : '', ticketform.customer.$valid && !ticketform.customer.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label" for="customer">Company</label>
 		<div class="col-sm-6">
-			<input type="text" name="customer" class="form-control" ng-model="ticket.ticketData.customer" required>
+			<input type="text" name="customer" class="form-control" ng-model="ticket.ticketData.customer" ng-minlength="2" ng-maxlength="40" pattern="^[A-Z][A-Za-z\,\.\- ]+" required />
 			<span ng-show="ticketform.customer.$invalid && !ticketform.customer.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-			<p ng-if="ticketform.customer.$invalid && !ticketform.customer.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid customer name using only letters and proper capitalization.</p>
+			<p ng-if="ticketform.customer.$error.required && !ticketform.customer.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.customer.$error.pattern && !ticketform.customer.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid customer name using only letters and proper capitalization.</p>
+			<p ng-if="ticketform.customer.$error.maxlength && !ticketform.customer.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.customer.$error.minlength && !ticketform.customer.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
 			<span ng-show="!ticketform.customer.$invalid && !ticketform.customer.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.street.$invalid && !ticketform.street.$pristine ? 'has-error' : '', ticketform.street.$valid && !ticketform.street.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Street</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.street" name="street" required />
+			<input type="text" class="form-control" ng-model="ticket.ticketData.street" name="street" ng-minlength="6" ng-maxlength="40" pattern="[A-Za-z0-9\,\.\- ]+" required />
+			<span ng-show="ticketform.street.$invalid && !ticketform.street.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.street.$error.required && !ticketform.street.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.street.$error.pattern && !ticketform.street.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid street address using only letters and numbers.</p>
+			<p ng-if="ticketform.street.$error.maxlength && !ticketform.street.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.street.$error.minlength && !ticketform.street.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
+			<span ng-show="!ticketform.street.$invalid && !ticketform.street.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.city.$invalid && !ticketform.city.$pristine ? 'has-error' : '', ticketform.city.$valid && !ticketform.city.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">City</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.city" name="city" required />
+			<input type="text" class="form-control" ng-model="ticket.ticketData.city" name="city" ng-minlength="3" ng-maxlength="40" pattern="[A-Za-z\,\.\- ]+" required />
+			<span ng-show="ticketform.city.$invalid && !ticketform.city.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.city.$error.required && !ticketform.city.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.city.$error.pattern && !ticketform.city.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid city name using only letters.</p>
+			<p ng-if="ticketform.city.$error.maxlength && !ticketform.city.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.city.$error.minlength && !ticketform.city.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
+			<span ng-show="!ticketform.city.$invalid && !ticketform.city.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.state.$invalid && !ticketform.state.$pristine ? 'has-error' : '', ticketform.state.$valid && !ticketform.state.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">State</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.state" name="state" required />
+			<input type="text" class="form-control" ng-model="ticket.ticketData.state" name="state" ng-minlength="2" ng-maxlength="2" pattern="[A-Z]+" required />
+			<span ng-show="ticketform.state.$invalid && !ticketform.state.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.state.$error.required && !ticketform.state.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.state.$error.pattern && !ticketform.state.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid state abbreviation using only letters and proper capitalization.</p>
+			<p ng-if="ticketform.state.$error.maxlength && !ticketform.state.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.state.$error.minlength && !ticketform.state.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
+			<span ng-show="!ticketform.state.$invalid && !ticketform.state.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.zipcode.$invalid && !ticketform.zipcode.$pristine ? 'has-error' : '', ticketform.zipcode.$valid && !ticketform.zipcode.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Zipcode</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.zipcode" name="zipcode" />
+			<input type="text" class="form-control" ng-model="ticket.ticketData.zipcode" name="zipcode" ng-minlength="5" ng-maxlength="5" pattern="[0-9]+" />
+			<span ng-show="ticketform.zipcode.$invalid && !ticketform.zipcode.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.zipcode.$error.pattern && !ticketform.zipcode.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid zipcode name using only numerical values.</p>
+			<p ng-if="ticketform.zipcode.$error.maxlength && !ticketform.zipcode.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.zipcode.$error.minlength && !ticketform.zipcode.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
+			<span ng-show="!ticketform.zipcode.$invalid && !ticketform.zipcode.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
@@ -68,49 +94,80 @@
 		<h4>Indicator Information</h4>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_tag.$invalid && !ticketform.indicator_tag.$pristine ? 'has-error' : '', ticketform.indicator_tag.$valid && !ticketform.indicator_tag.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Tag</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_tag" name="indicator_tag" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_tag" name="indicator_tag" ng-maxlength="24" required>
+			<span ng-show="ticketform.indicator_tag.$invalid && !ticketform.indicator_tag.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.indicator_tag.$error.required && !ticketform.indicator_tag.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.indicator_tag.$error.maxlength && !ticketform.indicator_tag.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<span ng-show="!ticketform.indicator_tag.$invalid && !ticketform.indicator_tag.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_manu.$invalid && !ticketform.indicator_manu.$pristine ? 'has-error' : '', ticketform.indicator_manu.$valid && !ticketform.indicator_manu.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Manufacturer</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_manu" name="indicator_manu" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_manu" name="indicator_manu" ng-minlength="3" ng-maxlength="24" pattern="[A-Za-z0-9\,\.\-\& ]+" required>
+			<span ng-show="ticketform.indicator_manu.$invalid && !ticketform.indicator_manu.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.indicator_manu.$error.required && !ticketform.indicator_manu.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.indicator_manu.$error.pattern && !ticketform.indicator_manu.$pristine" class="help-block alert alert-info" style="color: white;">Please enter a valid manufacturer name.</p>
+			<p ng-if="ticketform.indicator_manu.$error.maxlength && !ticketform.indicator_manu.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.indicator_manu.$error.minlength && !ticketform.indicator_manu.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
+			<span ng-show="!ticketform.indicator_manu.$invalid && !ticketform.indicator_manu.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_model.$invalid && !ticketform.indicator_model.$pristine ? 'has-error' : '', ticketform.indicator_model.$valid && !ticketform.indicator_model.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Model</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_model" name="indicator_model" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_model" name="indicator_model" ng-minlength="3" ng-maxlength="24" pattern="[A-Za-z0-9\,\.\-\& ]+" required>
+			<span ng-show="ticketform.indicator_model.$invalid && !ticketform.indicator_model.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.indicator_model.$error.required && !ticketform.indicator_model.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.indicator_model.$error.pattern && !ticketform.indicator_model.$pristine" class="help-block alert alert-info" style="color: white;">Please enter a valid model name.</p>
+			<p ng-if="ticketform.indicator_model.$error.maxlength && !ticketform.indicator_model.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.indicator_model.$error.minlength && !ticketform.indicator_model.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
+			<span ng-show="!ticketform.indicator_model.$invalid && !ticketform.indicator_model.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_serial.$invalid && !ticketform.indicator_serial.$pristine ? 'has-error' : '', ticketform.indicator_serial.$valid && !ticketform.indicator_serial.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Serial</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" name="indicator_serial" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" name="indicator_serial" ng-minlength="3" ng-maxlength="24" pattern="[A-Za-z0-9\,\.\-\& ]+" required>
+			<span ng-show="ticketform.indicator_serial.$invalid && !ticketform.indicator_serial.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.indicator_serial.$error.required && !ticketform.indicator_serial.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.indicator_serial.$error.pattern && !ticketform.indicator_serial.$pristine" class="help-block alert alert-info" style="color: white;">Please enter a valid serial number.</p>
+			<p ng-if="ticketform.indicator_serial.$error.maxlength && !ticketform.indicator_serial.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.indicator_serial.$error.minlength && !ticketform.indicator_serial.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
+			<span ng-show="!ticketform.indicator_serial.$invalid && !ticketform.indicator_serial.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.scale_capacity.$invalid && !ticketform.scale_capacity.$pristine ? 'has-error' : '', ticketform.scale_capacity.$valid && !ticketform.scale_capacity.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Capacity</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_capacity" name="scale_capacity" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_capacity" name="scale_capacity" pattern="[0-9]+" ng-maxlength="6" required>
+			<span ng-show="ticketform.scale_capacity.$invalid && !ticketform.scale_capacity.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.scale_capacity.$error.required && !ticketform.scale_capacity.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.scale_capacity.$error.pattern && !ticketform.scale_capacity.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid capacity name using only numerical values.</p>
+			<p ng-if="ticketform.scale_capacity.$error.maxlength && !ticketform.scale_capacity.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<span ng-show="!ticketform.scale_capacity.$invalid && !ticketform.scale_capacity.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>	
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.divisions.$invalid && !ticketform.divisions.$pristine ? 'has-error' : '', ticketform.divisions.$valid && !ticketform.divisions.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Divisions</label>
 		<div class="col-sm-6">
-			<input type="text" name='divisions' class="form-control" ng-model="ticket.ticketData.scale_divisions" name="scale_divisions" required>
+			<input type="text" name='divisions' class="form-control" ng-model="ticket.ticketData.scale_divisions" name="scale_divisions" pattern="[0-9\.]+" required>
+			<span ng-show="ticketform.divisions.$invalid && !ticketform.divisions.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.divisions.$error.required && !ticketform.divisions.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<p ng-if="ticketform.divisions.$error.pattern && !ticketform.divisions.$pristine" class="help-block alert alert-info" style="color: white;">Enter valid scale divisions using only numerical and/or floating point values.</p>
+			<span ng-show="!ticketform.divisions.$invalid && !ticketform.divisions.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.units.$invalid && !ticketform.units.$pristine ? 'has-error' : '', ticketform.units.$valid && !ticketform.units.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Units</label>
 		<div class="col-sm-6">
 			<select class="form-control" ng-model="ticket.ticketData.units" name="units" required>
@@ -119,6 +176,9 @@
 				<option value='oz'>Ounces (oz)</option>
 				<option value='lb' selected>Pounds (lb)</option>
 			</select>
+			<span ng-show="ticketform.units.$invalid && !ticketform.units.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.units.$error.required && !ticketform.units.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+			<span ng-show="!ticketform.units.$invalid && !ticketform.units.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
@@ -128,24 +188,33 @@
 		<h4>Scale Base Information (Optional)</h4>
 	</div>
 
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.scale_manu.$invalid && !ticketform.scale_manu.$pristine ? 'has-error' : '', ticketform.scale_manu.$valid && !ticketform.scale_manu.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Manufacturer</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_manu" name="scale_manu">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_manu" name="scale_manu" ng-maxlength="24">
+			<span ng-show="ticketform.scale_manu.$invalid && !ticketform.scale_manu.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.scale_manu.$error.maxlength && !ticketform.scale_manu.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<span ng-show="!ticketform.scale_manu.$invalid && !ticketform.scale_manu.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.scale_model.$invalid && !ticketform.scale_model.$pristine ? 'has-error' : '', ticketform.scale_model.$valid && !ticketform.scale_model.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Model</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_model" name="scale_model">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_model" name="scale_model" ng-maxlength="24">
+			<span ng-show="ticketform.scale_model.$invalid && !ticketform.scale_model.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.scale_model.$error.maxlength && !ticketform.scale_model.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<span ng-show="!ticketform.scale_model.$invalid && !ticketform.scale_model.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ ticketform.scale_serial.$invalid && !ticketform.scale_serial.$pristine ? 'has-error' : '', ticketform.scale_serial.$valid && !ticketform.scale_serial.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Serial</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_serial" name="scale_serial">
+			<input type="text" class="form-control" ng-model="ticket.ticketData.scale_serial" name="scale_serial" ng-maxlength="24">
+			<span ng-show="ticketform.scale_serial.$invalid && !ticketform.scale_serial.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.scale_serial.$error.maxlength && !ticketform.scale_serial.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<span ng-show="!ticketform.scale_serial.$invalid && !ticketform.scale_serial.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	

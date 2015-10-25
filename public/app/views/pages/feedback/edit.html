@@ -1,0 +1,51 @@
+<div ng-if="feedback.feedbackData.created_by == main.user.id || main.user.role === 'mod' || main.user.role === 'admin'">
+	<div class="show-hide-message fixed" ng-show="feedback.message">
+		<div class="row alert alert-info alert-dismissable">
+			<div class='col-xs-11'>{{ feedback.message }}</div>
+			<button type="button" class="close" ng-click="feedback.message = ''" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+
+	<div class="page-header">
+		<h1>Edit Comment
+			<a ng-href="/feedback" class="btn btn-default">
+				<span class="glyphicon glyphicon-chevron-left"></span> 
+				Back to Feedback
+			</a>
+		</h1>
+		
+	</div>
+
+	<form class="form-horizontal" ng-submit="feedback.saveComment()" id='commentform' name='commentform' novalidate>
+	
+		<h4>Add Comment</h4>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Status</label>
+			<div class="col-sm-8">
+				<select class="form-control" ng-model="feedback.feedbackData.status" name="status" required>
+					<option value='Bug Report'>Bug Report</option>
+					<option value='Feature Request'>Feature Request</option>
+					<option value='Other'>Other</option>
+					<option value='Praise'>Praise</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Comments</label>
+			<div class="col-sm-8">
+				<textarea class="form-control" ng-model="feedback.feedbackData.comments" name="comments" rows='5' required></textarea>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-8">
+				<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='commentform.$invalid'>Edit Comment</button>
+			</div>
+		</div>
+	</form>
+</div>
+<div ng-if="feedback.feedbackData.created_by != main.user.id && main.user.role !== 'admin'" ng-include="'app/views/pages/403.html'"></div>

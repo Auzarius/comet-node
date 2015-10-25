@@ -36,7 +36,7 @@
 </div>
 -->
 
-<div class="jumbotron text-center" ng-show="!ticket.processing && ticket.tickets.length <= 0">
+<div class="jumbotron text-center" ng-show="!ticket.processing && ( ticket.tickets.length < 1 || !ticket.tickets )">
 	<p>No tickets are available at this time.</p>
 </div>
 

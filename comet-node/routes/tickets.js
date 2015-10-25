@@ -15,7 +15,11 @@ module.exports = function (app, express, mySql) {
 						var Event = mySql.events.setEvent('create', req);
 						mySql.events.create(Event, function (err, dos) {
 							if (err) {
-								res.status(500).send(err);
+								res.json({
+									success: false,
+									message: 'The ticket was created successfully, but the comment could not be saved.',
+									status : 500
+								});
 							} else {
 								res.json(result);
 							}
@@ -173,16 +177,6 @@ module.exports = function (app, express, mySql) {
 					message: 'An error occured, please make sure you have all required fields filled out.'
 				});
 			}
-		})
-		
-		.delete(function (req, res) {
-			mySql.events.remove(req.params.id, function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.json(result);
-				}
-			});
 		});
 		
 	return apiTickets;
