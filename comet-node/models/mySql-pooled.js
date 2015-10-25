@@ -103,8 +103,8 @@ module.exports = function(config) {
 			//console.log('\x1b[33mticket.active query\x1b[0m');
 			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
 		                '( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
-		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
-		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
+		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
+		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
 		                'FROM ' + mySql.config.tickets_table + ' t ' +
 		                //'WHERE status = \'Pending\' OR status = \'Diagnosed\' OR status = \'Repaired\' ' +
 		                'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
@@ -133,10 +133,10 @@ module.exports = function(config) {
 			//console.log('\x1b[33mticket.all query\x1b[0m');
 			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
 		                '( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
-		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
-		                '( SELECT firstName FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
+		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
+		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
 		                'FROM ' + mySql.config.tickets_table + ' t ' +
-		                'ORDER BY t.customer ASC, t.status ASC, t.indicator_tag ASC';
+		                'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
 			console.log(query);
 			mySql.query(query, null, function (err, result) {
 				if (err) {
