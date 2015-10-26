@@ -106,7 +106,7 @@ module.exports = function(config) {
 		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
 		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
 		                'FROM ' + mySql.config.tickets_table + ' t ' +
-		                //'WHERE status = \'Pending\' OR status = \'Diagnosed\' OR status = \'Repaired\' ' +
+		                'HAVING status = \'Pending\' OR status = \'Diagnosed\' OR status = \'Repaired\' ' +
 		                'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
 			
 			mySql.query(query, null, function (err, result) {
