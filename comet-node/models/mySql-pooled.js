@@ -137,7 +137,6 @@ module.exports = function(config) {
 		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
 		                'FROM ' + mySql.config.tickets_table + ' t ' +
 		                'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
-			console.log(query);
 			mySql.query(query, null, function (err, result) {
 				if (err) {
 					throw new Error(err);
@@ -188,7 +187,7 @@ module.exports = function(config) {
 		},
 		
 		findOne : function (options, next) {
-			console.log('\x1b[33mticket.findOne query\x1b[0m');
+			//console.log('\x1b[33mticket.findOne query\x1b[0m');
 			var query = 'SELECT * FROM ' + mySql.config.tickets_table + ' WHERE ?';
 			
 			mySql.query(query, options, function (err, result) {			
