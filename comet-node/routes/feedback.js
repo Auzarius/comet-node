@@ -9,9 +9,8 @@ module.exports = function (app, express, mySql) {
 
 			if ( Feedback ) {
 				mySql.feedback.create(Feedback, function (err, result) {
-					console.log('result: ' + result);
 					if (err) {
-						console.log(err);
+						throw new Error(err);
 						res.status(500).send(err);
 					} else {
 						res.status(200).json(result);
@@ -29,17 +28,29 @@ module.exports = function (app, express, mySql) {
 		.get(function (req, res) {
 			mySql.feedback.all(function (err, result) {
 				if (err) {
-					console.log(err);
+					throw new Error(err);
 					res.status(500).send(err);
 				} else {
 					res.status(200).json(result);
 				}
 			});
 		});
+		
+	apiFeedback.use('/:id', function (req, res, next) {
+		if ( req.decoded.role === 'admin' || req.params.id === req.decoded.id ) {
+			next();
+		} else {
+			return res.status(403).json({
+				success: false,
+				message: 'You do not have permission to perform this action.'
+			});
+		}
+	})
 	
-	apiFeedback.route('/:fb_id')	
+	apiFeedback.route('/:id')
+			
 		.get(function (req, res) {
-			var fbId = req.params.fb_id;
+			var fbId = req.params.id;
 			mySql.feedback.findOne({ id: fbId }, function (err, result) {
 				if (err) {
 					res.status(500).send(err);
@@ -49,7 +60,7 @@ module.exports = function (app, express, mySql) {
 			});
 		})
 		
-		.put(function (req,res) {
+		.put(function (req, res) {
 			
 			var Feedback = mySql.feedback.setFeedback('save', req);
 			
@@ -83,7 +94,7 @@ module.exports = function (app, express, mySql) {
 	apiFeedback.use(function (req, res, next) {
 		if (req.decoded) {
 			if ( req.decoded.role === 'admin' || req.decoded.role === 'mod' ) {
-				next()
+				next();
 			} else {
 				return res.status(403).json({
 					success: false,
@@ -98,8 +109,8 @@ module.exports = function (app, express, mySql) {
 		}
 	});
 	
-	apiFeedback.delete('/:fb_id', function (req, res) {
-		mySql.feedback.remove(req.params.fb_id, function (err, result) {
+	apiFeedback.delete('/:id', function (req, res) {
+		mySql.feedback.remove(req.params.id, function (err, result) {
 			if (err) {
 				res.status(500).send(err);
 			} else {

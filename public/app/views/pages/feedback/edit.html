@@ -1,4 +1,4 @@
-<div ng-if="feedback.feedbackData.created_by == main.user.id || main.user.role === 'mod' || main.user.role === 'admin'">
+<div ng-if="feedback.feedbackData.created_by == main.user.id || main.user.role === 'admin'">
 	<div class="show-hide-message fixed" ng-show="feedback.message">
 		<div class="row alert alert-info alert-dismissable">
 			<div class='col-xs-11'>{{ feedback.message }}</div>

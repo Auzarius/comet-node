@@ -108,16 +108,6 @@ module.exports = function (app, express, mySql) {
 			}
 		})
 		
-		.delete(function (req, res) {
-			mySql.tickets.remove(req.params.id, function (err, result) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.json(result);
-				}
-			});
-		});	
-		
 	apiTickets.route('/:id/events')
 		.get(function (req, res) {			
 			mySql.events.all({ ticket_id: req.params.id }, function (err, result) {
@@ -178,6 +168,27 @@ module.exports = function (app, express, mySql) {
 				});
 			}
 		});
+		
+	apiTickets.use(function (req, res, next) {
+		if ( req.decoded.role === 'admin' ) {
+			next();
+		} else {
+			return res.status(403).json({
+				success: false,
+				message: 'You do not have permission to perform this action.'
+			});
+		}
+	});
+	
+	apiTickets.delete('/:id', function (req, res) {
+		mySql.tickets.remove(req.params.id, function (err, result) {
+			if (err) {
+				res.status(500).send(err);
+			} else {
+				res.json(result);
+			}
+		});
+	});	
 		
 	return apiTickets;
 }

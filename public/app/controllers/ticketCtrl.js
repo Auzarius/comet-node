@@ -11,7 +11,7 @@ angular.module('ticketCtrl', ['ticketService'])
 	Ticket.active()
 		.success(function(node) {
 
-			if ( node.success === false || node.data === null ) {
+			if ( node.success == false || node.data == null ) {
 				vm.tickets = null;
 			} else {
 				vm.tickets = node.data;
@@ -60,7 +60,7 @@ angular.module('ticketCtrl', ['ticketService'])
 	Ticket.all()
 		.success(function(node) {
 
-			if ( node.success === false ) {
+			if ( node.success == false || node.data == null) {
 				vm.tickets = null;
 			} else {
 				vm.tickets = node.data;
@@ -77,7 +77,7 @@ angular.module('ticketCtrl', ['ticketService'])
 			.success(function(data) {
 				
 				if ( data.success) {
-					Ticket.active()
+					Ticket.all()
 						.success(function(node) {
 							vm.tickets = node.data;
 						});

@@ -41,14 +41,12 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					console.log(result);
 					res.status(200).json(result);
 				}
 			});
 		})
 		
 		.put(function (req,res) {
-			console.log(req.body);
 			var Event = mySql.events.setEvent('save', req);
 			
 			if ( Event ) {
