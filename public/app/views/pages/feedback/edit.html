@@ -1,4 +1,4 @@
-<div ng-if="feedback.feedbackData.created_by == main.user.id || main.user.role === 'admin'">
+<div ng-show="feedback.feedbackData.created_by == main.user.id || main.user.role === 'admin'">
 	<div class="show-hide-message fixed" ng-show="feedback.message">
 		<div class="row alert alert-info alert-dismissable">
 			<div class='col-xs-11'>{{ feedback.message }}</div>
@@ -22,7 +22,7 @@
 	
 		<h4>Add Comment</h4>
 		
-		<div class="form-group">
+		<div class="form-group has-feedback">
 			<label class="col-sm-2 control-label">Status</label>
 			<div class="col-sm-8">
 				<select class="form-control" ng-model="feedback.feedbackData.status" name="status" required>
@@ -31,13 +31,21 @@
 					<option value='Other'>Other</option>
 					<option value='Praise'>Praise</option>
 				</select>
+				<span ng-show="commentform.status.$invalid && !commentform.status.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<p ng-if="commentform.status.$error.required && !commentform.status.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+				<p ng-if="commentform.status.$error.pattern && !commentform.status.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid street address using only letters and numbers.</p>
+				<span ng-show="!commentform.status.$invalid && !commentform.status.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group has-feedback">
 			<label class="col-sm-2 control-label">Comments</label>
 			<div class="col-sm-8">
 				<textarea class="form-control" ng-model="feedback.feedbackData.comments" name="comments" rows='5' required></textarea>
+				<span ng-show="commentform.comments.$invalid && !commentform.comments.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<p ng-if="commentform.comments.$error.required && !commentform.comments.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+				<p ng-if="commentform.comments.$error.pattern && !commentform.comments.$pristine" class="help-block alert alert-info" style="color: white;">Enter a valid street address using only letters and numbers.</p>
+				<span ng-show="!commentform.comments.$invalid && !commentform.comments.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
 		</div>
 		

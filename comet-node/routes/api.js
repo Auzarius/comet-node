@@ -93,6 +93,30 @@ module.exports = function (app, express, mySql) {
 			}
 		});
 
+	apiRouter.get('/plunker/awesomplete', function (req, res) {
+		res.status(200).json({
+			data: [
+		        {
+		          name: "Ada"
+		        }, {
+		          name: "Javascript"
+		        }, {
+		          name: "Ruby on Rails"
+		        }, {
+		          name: "Perl"
+		        }, {
+		          name: "Java"
+		        }, {
+		          name: "HTML"
+		        }, {
+		          name: "CSS"
+		        }, {
+		          name: "AAJSONNameList"
+		        }],
+        	datalist: ["Ada", "Java", "JavaScript", "Brainfuck", "LOLCODE", "Node.js", "Ruby on Rails", "AAJSONArrayList"]
+		});
+	});
+
 	apiRouter.use(function (req, res, next) {
 		// do logging
 		//console.log('Somebody just came to our app!');

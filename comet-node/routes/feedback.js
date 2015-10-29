@@ -35,17 +35,6 @@ module.exports = function (app, express, mySql) {
 				}
 			});
 		});
-		
-	apiFeedback.use('/:id', function (req, res, next) {
-		if ( req.decoded.role === 'admin' || req.params.id === req.decoded.id ) {
-			next();
-		} else {
-			return res.status(403).json({
-				success: false,
-				message: 'You do not have permission to perform this action.'
-			});
-		}
-	})
 	
 	apiFeedback.route('/:id')
 			

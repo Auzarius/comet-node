@@ -27,7 +27,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group has-feedback" ng-class="[ eventform.status.$invalid && !eventform.status.$pristine ? 'has-error' : '', eventform.status.$valid && !eventform.status.$pristine ? 'has-success' : '' ]">
 			<label class="col-sm-2 control-label">Status</label>
 			<div class="col-sm-8">
 				<select class="form-control" ng-model="event.eventData.status" name="status" required>
@@ -42,20 +42,30 @@
 					<option value='Waiting for Customer'>Waiting for Customer</option>
 					<option value='Waiting for Parts'>Waiting for Parts</option>
 				</select>
+				<span ng-show="eventform.status.$invalid && !eventform.status.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<p ng-if="eventform.status.$error.required && !eventform.status.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+				<span ng-show="!eventform.status.$invalid && !eventform.status.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
 		</div>
 		
-		<div class="form-group" ng-if="event.eventData.status == 'Diagnosed' || event.eventData.status == 'Repaired' || event.eventData.status == 'Additional Notes'">
+		<div class="form-group has-feedback" ng-if="event.eventData.status == 'Diagnosed' || event.eventData.status == 'Repaired' || event.eventData.status == 'Additional Notes'" ng-class="[ eventform.time.$invalid && !eventform.time.$pristine ? 'has-error' : '', eventform.time.$valid && !eventform.time.$pristine ? 'has-success' : '' ]">
 			<label class="col-sm-2 control-label" title="Time spent in minutes">Time Spent</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" ng-model="event.eventData.timespent" name="time" required />
+				<input type="text" class="form-control" ng-model="event.eventData.timespent" name="time" pattern="[0-9]+" required />
+				<span ng-show="eventform.time.$invalid && !eventform.time.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<p ng-if="eventform.time.$error.required && !eventform.time.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+				<p ng-if="eventform.time.$error.pattern && !eventform.time.$pristine" class="help-block alert alert-info" style="color: white;">Enter a value for time spent using only numerical values.</p>
+				<span ng-show="!eventform.time.$invalid && !eventform.time.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<div class="form-group has-feedback" ng-class="[ eventform.comments.$invalid && !eventform.comments.$pristine ? 'has-error' : '', eventform.comments.$valid && !eventform.comments.$pristine ? 'has-success' : '' ]">
 			<label class="col-sm-2 control-label">Comments</label>
 			<div class="col-sm-8">
-				<textarea type="text" class="form-control" ng-model="event.eventData.comments" name="comments" rows='8' required></textarea>
+				<textarea class="form-control" ng-model="event.eventData.comments" name="comments" required></textarea>
+				<span ng-show="eventform.comments.$invalid && !eventform.comments.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<p ng-if="eventform.comments.$error.required && !eventform.comments.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
+				<span ng-show="!eventform.comments.$invalid && !eventform.comments.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
 		</div>
 		
