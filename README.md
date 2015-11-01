@@ -9,4 +9,4 @@ This will also server as my first node.js project and also my first real javascr
 - [X] Just launched the first full version with the completed database migration.  There could be more to come as bugs or other usages are requested.
   
 ##To-do
-- [X] Nothing to see here (at this time)
+- [ ] Write the API Documentation
