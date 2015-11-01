@@ -5,8 +5,19 @@ I am open to feedback to help along the development.
 This is just a small project I am working on in my spare time.
 This will also server as my first node.js project and also my first real javascript project.
 
+##Completed
+- [X] API Routes and JSON responses
+- [X] MySQL database interface
+- [X] Front-end Angular Website
+- [X] Angular functions for using the Node.js API including the login/logout functionality
+- [X] User permissions
+- [X] Feedback page & database
+- [X] Website bug testing and some code cleanup
+- [X] Database migration from the old system to this one
+
 ##Currently working on
 - [X] Just launched the first full version with the completed database migration.  There could be more to come as bugs or other usages are requested.
   
 ##To-do
 - [ ] Write the API Documentation
+- [ ] Add the ability to disabled a user account without deletion (this would be to maintain records)
