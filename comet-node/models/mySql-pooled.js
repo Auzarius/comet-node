@@ -101,13 +101,33 @@ module.exports = function(config) {
 	mySql.tickets = {
 		active : function (next) {
 			//console.log('\x1b[33mticket.active query\x1b[0m');
-			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
-		                '( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
-		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
-		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
-		                'FROM ' + mySql.config.tickets_table + ' t ' +
-		                'HAVING status = \'Pending\' OR status = \'Diagnosed\' OR status = \'Repaired\' ' +
-		                'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
+			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, ' +
+				'( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
+				'( SELECT CONCAT(firstName,\' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
+				'( SELECT created_at FROM ' + mySql.config.events_table + ' ' + 
+				'	WHERE ticket_id = t.id ' +
+				'	ORDER BY created_at DESC ' +
+				'	LIMIT 1 ' +
+				') AS updated_at, ' +
+				'( SELECT CONCAT(u.firstName,\' \', u.lastName) FROM ' + mySql.config.events_table + ' e ' +
+				'	INNER JOIN ' + mySql.config.users_table + ' u ON u.id = e.created_by ' +
+				' 	WHERE e.ticket_id = t.id ' +
+				' 	ORDER BY e.created_at DESC ' +
+				' 	LIMIT 1 ' +
+				') AS updated_by ' +
+				'FROM ' + mySql.config.tickets_table + ' t ' +
+				'HAVING status = \'Pending\' OR status = \'Diagnosed\' OR status = \'Repaired\' ' +
+				'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
+			
+			/* old query, changed to get the most recent event as the updated value
+			'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
+            '( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
+            '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
+            '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
+            'FROM ' + mySql.config.tickets_table + ' t ' +
+            'HAVING status = \'Pending\' OR status = \'Diagnosed\' OR status = \'Repaired\' ' +
+            'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
+            */
 			
 			mySql.query(query, null, function (err, result) {
 				if (err) {
@@ -131,12 +151,22 @@ module.exports = function(config) {
 		
 		all : function (next) {
 			//console.log('\x1b[33mticket.all query\x1b[0m');
-			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.updated_at, ' +
-		                '( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
-		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
-		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
-		                'FROM ' + mySql.config.tickets_table + ' t ' +
-		                'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
+			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, ' +
+				'( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
+				'( SELECT CONCAT(firstName,\' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
+				'( SELECT created_at FROM ' + mySql.config.events_table + ' ' + 
+				'	WHERE ticket_id = t.id ' +
+				'	ORDER BY created_at DESC ' +
+				'	LIMIT 1 ' +
+				') AS updated_at, ' +
+				'( SELECT CONCAT(u.firstName,\' \', u.lastName) FROM ' + mySql.config.events_table + ' e ' +
+				'	INNER JOIN ' + mySql.config.users_table + ' u ON u.id = e.created_by ' +
+				' 	WHERE e.ticket_id = t.id ' +
+				' 	ORDER BY e.created_at DESC ' +
+				' 	LIMIT 1 ' +
+				') AS updated_by ' +
+				'FROM ' + mySql.config.tickets_table + ' t ' +
+				'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
 			mySql.query(query, null, function (err, result) {
 				if (err) {
 					throw new Error(err);
@@ -188,7 +218,11 @@ module.exports = function(config) {
 		
 		findOne : function (options, next) {
 			//console.log('\x1b[33mticket.findOne query\x1b[0m');
-			var query = 'SELECT * FROM ' + mySql.config.tickets_table + ' WHERE ?';
+			var query = 'SELECT *, ( ' +
+			    'SELECT sum(timespent) ' +
+			    'FROM ' + mySql.config.events_table + ' e ' +
+			    'WHERE e.ticket_id = t.id ) as timespent ' +
+				'FROM ' + mySql.config.tickets_table + ' t WHERE ?';
 			
 			mySql.query(query, options, function (err, result) {			
 				if (err) {
@@ -373,10 +407,11 @@ module.exports = function(config) {
 			if ( method == 'save' )
 				Ticket.updated_by = req.decoded.id;
 			
+			// Removed these as required fields, leaving here as a note
+			// !Ticket.street || !Ticket.city || !Ticket.state
 			if ( method === 'create' || method === 'save' ) {
-				if (!Ticket.customer || !Ticket.street ||
-		 	  		!Ticket.city || !Ticket.state || 
-		 	  		!Ticket.indicator_tag || !Ticket.indicator_model ||
+				if (!Ticket.customer || !Ticket.indicator_tag || 
+				    !Ticket.indicator_model ||
 		 	  		!Ticket.indicator_manu || !Ticket.indicator_serial || 
 		 	  		!Ticket.scale_capacity || !Ticket.scale_divisions ) {
 					
@@ -683,13 +718,13 @@ module.exports = function(config) {
 	}
 	
 	mySql.events = {
-		all : function (ticketId, next) {
+		all : function (ticketId, next) { 
 			//console.log('\x1b[33mevents.all query\x1b[0m');
-			var query = 'SELECT t.id, t.status, t.comments, t.created_at, t.updated_at, ' + 
-						'( SELECT username FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS username, ' +
-						'( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
-		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.updated_by ) AS updated_by ' +
-						'FROM ' + mySql.config.events_table + ' t ' +
+			var query = 'SELECT e.id, e.status, e.comments, e.created_at, e.updated_at, e.timespent, ' + 
+						'( SELECT username FROM ' + mySql.config.users_table + ' WHERE id = e.created_by ) AS username, ' +
+						'( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = e.created_by ) AS created_by, ' +
+		                '( SELECT CONCAT(firstName, \' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = e.updated_by ) AS updated_by ' +
+						'FROM ' + mySql.config.events_table + ' e ' +
 						'WHERE ? ' +
 						'ORDER BY created_at DESC';
 			mySql.query(query, ticketId, function (err, result) {
@@ -888,7 +923,12 @@ module.exports = function(config) {
 			if ( req.params.id || req.ticket_id )
 				Event.ticket_id = req.ticket_id ? req.ticket_id : req.params.id;
 			
-			Event.timespent = req.body.timespent ? req.body.timespent : 0;
+			if ( Event.status == 'Diagnosed' || Event.status == 'Repaired' || Event.status == 'Additional Notes' ) {
+				Event.timespent = req.body.timespent ? req.body.timespent : 0;
+			} else {
+				Event.timespent = 0;
+			}
+			
 			
 			if ( req.body.comments)
 				Event.comments = req.body.comments;
@@ -1080,7 +1120,7 @@ module.exports = function(config) {
 		setFeedback : function (method, req) {
 			
 			var Feedback = {};
-			var id = req.params.fb_id ? req.params.fb_id : null;
+			var id = req.params.id ? req.params.id : null;
 			
 			if ( id )
 				Feedback.id = id;

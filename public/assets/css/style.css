@@ -1,6 +1,8 @@
 
 /*body { padding-top: 50px; }*/
-
+.background {
+	background-image: '/assets/img/comet-earth-blur.jpg';
+}
 .node-header {
 	color: #0CBE9B;
 	color: rgb(12,190,155);
@@ -219,6 +221,19 @@ footer h4 {
 	color: #ddd;
 }
 
+.search-box {
+	border-radius: 3px !important;
+	padding-left: 1em !important;
+	border: 1px solid #ddd !important;
+	box-shadow: 1px 0 1em #fff !important;
+	transition: all 1.5s ease-in-out;
+}
+
+.search-box:focus {
+	border: 1px solid #93D6F9 !important;
+	box-shadow: 1px 0 1em #549FCF !important;
+}
+
 .spinner {
 	animation: spin 1s infinite;
 	-webkit-animation: spin 1s infinite;
@@ -251,13 +266,6 @@ main .ng-enter {
 	-moz-animation: fadeInRight 1s both ease;
 	animation: fadeInRight 1s both ease;
 }
-/*
-main .ng-leave {
-	position: absolute;
-	-webkit-animation: fadeOutLeft 0.7s both ease;
-	-moz-animation: fadeOutLeft 0.7s both ease;
-	animation: fadeOutLeft 0.7s both ease;
-}*/
 
 @-webkit-keyframes hue {
   from {

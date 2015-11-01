@@ -50,6 +50,7 @@ module.exports = function (app, express, mySql) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
+					console.log(result);
 					res.status(200).json(result);
 				}
 			});

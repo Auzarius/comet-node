@@ -13,11 +13,12 @@ angular.module('mainCtrl', ['angularMoment'])
 		vm.loggedIn = Auth.isLoggedIn();	
 		
 		if (vm.loggedIn) {
+			vm.location = $location.path();
 			Auth.getUser()
 			.then(function(data) {
 				vm.user = data.data;
 			});	
-		} else if ( $location.path() == '/' || $location.path == '/signin' ) {
+		} else if ( $location.path() == '/' || $location.path() == '/signin' ) {
 			// do nothing;
 		} else {
 			$location.path('/signin');

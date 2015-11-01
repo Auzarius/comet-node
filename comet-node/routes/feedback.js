@@ -63,6 +63,7 @@ module.exports = function (app, express, mySql) {
 								res.status(500).send(err);
 							} else {								
 								res.status(200).json(result);
+								console.log(result);
 							}
 						});		
 					} else {
@@ -82,7 +83,7 @@ module.exports = function (app, express, mySql) {
 		
 	apiFeedback.use(function (req, res, next) {
 		if (req.decoded) {
-			if ( req.decoded.role === 'admin' || req.decoded.role === 'mod' ) {
+			if ( req.decoded.role === 'admin' ) {
 				next();
 			} else {
 				return res.status(403).json({

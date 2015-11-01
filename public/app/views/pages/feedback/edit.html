@@ -22,9 +22,9 @@
 	
 		<h4>Add Comment</h4>
 		
-		<div class="form-group has-feedback">
+		<div class="form-group has-feedback" ng-class="[ commentform.status.$invalid && !commentform.status.$pristine ? 'has-error' : '', commentform.status.$valid && !commentform.status.$pristine ? 'has-success' : '' ]">
 			<label class="col-sm-2 control-label">Status</label>
-			<div class="col-sm-8">
+			<div class="col-sm-8 col-md-6">
 				<select class="form-control" ng-model="feedback.feedbackData.status" name="status" required>
 					<option value='Bug Report'>Bug Report</option>
 					<option value='Feature Request'>Feature Request</option>
@@ -38,9 +38,9 @@
 			</div>
 		</div>
 		
-		<div class="form-group has-feedback">
+		<div class="form-group has-feedback" ng-class="[ commentform.comments.$invalid && !commentform.comments.$pristine ? 'has-error' : '', commentform.comments.$valid && !commentform.comments.$pristine ? 'has-success' : '' ]">
 			<label class="col-sm-2 control-label">Comments</label>
-			<div class="col-sm-8">
+			<div class="col-sm-8 col-md-6">
 				<textarea class="form-control" ng-model="feedback.feedbackData.comments" name="comments" rows='5' required></textarea>
 				<span ng-show="commentform.comments.$invalid && !commentform.comments.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
 				<p ng-if="commentform.comments.$error.required && !commentform.comments.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
@@ -50,7 +50,7 @@
 		</div>
 		
 		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-8">
+			<div class="col-sm-offset-2 col-sm-8 col-md-6">
 				<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='commentform.$invalid'>Edit Comment</button>
 			</div>
 		</div>

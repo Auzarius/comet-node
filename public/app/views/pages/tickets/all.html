@@ -10,10 +10,19 @@
 <div class="page-header">
 	<h1>
 		Tickets 
+		<a href="/tickets" class="btn btn-default" ng-if="main.location == '/tickets/all'">
+			<span class="glyphicon glyphicon-chevron-left"></span> 
+			Back to Active Tickets
+		</a>
 		<a href="/tickets/create" class="btn btn-default">
 			<span class="glyphicon glyphicon-plus"></span> 
 			New Ticket
 		</a>
+		<a href="/tickets/all" class="btn btn-default" ng-if="main.location != '/tickets/all'">
+			<span class="glyphicon glyphicon-edit"></span> 
+			All Tickets
+		</a>
+		
 	</h1>
 
 </div>
@@ -40,6 +49,14 @@
 	<p>No tickets are available at this time.</p>
 </div>
 
+<div class="form-group" ng-show="ticket.tickets && ticket.tickets.length > 0">
+	<div class="col-sm-5">
+		<input type="text" class="form-control search-box" name="searchBox" ng-model="searchBox" placeholder="Search for..." />
+	</div>
+</div>
+
+<br /><br />
+
 <table ng-cloak id="tickets" class="table table-bordered tbody-striped" ng-show="ticket.tickets && ticket.tickets.length > 0">
 	<thead>
 		<tr>
@@ -51,7 +68,7 @@
 			<th>Model</th>
 		</tr>
 	</thead>
-	<tbody ng-repeat="_ticket in ticket.tickets">
+	<tbody ng-repeat="_ticket in ticket.tickets | filter:searchBox">
 			<tr>
 				<td><a class='btn btn-primary btn-block' ng-href='/tickets/{{ _ticket.id }}'>View Ticket</a></td>
 				<td>{{ _ticket.customer }}</td>
