@@ -6,13 +6,7 @@ This is just a small project I am working on in my spare time.
 This will also server as my first node.js project and also my first real javascript project.
 
 Currently working on:
-  Finishing up the database functions for interfacing with the MySQL server,
-  Completing all of the API routes so the Angular front end can begin development
+  :Just launched the first full version with the completed database migration.  There could be more to come as bugs or other usages are requested.
   
 To-do:
-  Complete the node API
-  Write the angular front end
-    :Create, Update, Delete and view users
-    :Create, Update, Delete and view tickets
-    :Create and view ticket events
-    :Admin/Mod/User seperation of power
+  :Nothing to see here (at this time)
