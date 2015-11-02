@@ -102,7 +102,7 @@ module.exports = function(config) {
 		active : function (next) {
 			//console.log('\x1b[33mticket.active query\x1b[0m');
 			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, ' +
-				'( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
+				'( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id AND status != \'Additional Notes\' ORDER BY created_at DESC LIMIT 1) AS status, ' +
 				'( SELECT CONCAT(firstName,\' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
 				'( SELECT created_at FROM ' + mySql.config.events_table + ' ' + 
 				'	WHERE ticket_id = t.id ' +
@@ -116,7 +116,8 @@ module.exports = function(config) {
 				' 	LIMIT 1 ' +
 				') AS updated_by ' +
 				'FROM ' + mySql.config.tickets_table + ' t ' +
-				'HAVING status = \'Pending\' OR status = \'Diagnosed\' OR status = \'Repaired\' ' +
+				'HAVING status != \'Complete\' AND status != \'Non-repairable\' AND ' +
+				'		status != \'Replaced the Scale\' AND status != \'Delivered\' ' +
 				'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
 			
 			/* old query, changed to get the most recent event as the updated value
@@ -963,7 +964,7 @@ module.exports = function(config) {
 		all : function (next) {
 			//console.log('\x1b[33mfeedback.all query\x1b[0m');
 			var query = 'SELECT f.id, f.status, f.comments, f.created_at, f.updated_at, ' +
-						'( SELECT username FROM ' + mySql.config.users_table + ' WHERE id = f.created_by ) AS username, ' +
+						'(SELECT username FROM ' + mySql.config.users_table + ' WHERE id = f.created_by ) AS username, ' +
 						'(SELECT CONCAT(firstName, \' \', lastName) FROM users WHERE id = f.created_by) AS created_by, ' +
 						'(SELECT CONCAT(firstName, \' \', lastName) FROM users WHERE id = f.updated_by) AS updated_by ' +
 						'FROM ' + mySql.config.feedback_table + ' f ' +
