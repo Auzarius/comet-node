@@ -117,7 +117,7 @@ module.exports = function(config) {
 				') AS updated_by ' +
 				'FROM ' + mySql.config.tickets_table + ' t ' +
 				'HAVING status != \'Complete\' AND status != \'Non-repairable\' AND ' +
-				'		status != \'Replaced the Scale\' AND status != \'Delivered\' ' +
+				'		status != \'Replaced\' AND status != \'Delivered\' ' +
 				'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
 			
 			/* old query, changed to get the most recent event as the updated value
