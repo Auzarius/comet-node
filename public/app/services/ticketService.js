@@ -51,7 +51,7 @@ angular.module('ticketService', [])
 			return $http.put('/api/events/' + eventId, eventData);
 		},
 		
-		delete : function(ticketId, eventId) {
+		delete : function(eventId) {
 			return $http.delete('/api/events/' + eventId)
 		}
 	};
