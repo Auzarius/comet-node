@@ -153,7 +153,7 @@ module.exports = function(config) {
 		all : function (next) {
 			//console.log('\x1b[33mticket.all query\x1b[0m');
 			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, ' +
-				'( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id ORDER BY created_at DESC LIMIT 1) AS status, ' +
+				'( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id AND status != \'Additional Notes\' ORDER BY created_at DESC LIMIT 1) AS status, ' +
 				'( SELECT CONCAT(firstName,\' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
 				'( SELECT created_at FROM ' + mySql.config.events_table + ' ' + 
 				'	WHERE ticket_id = t.id ' +
