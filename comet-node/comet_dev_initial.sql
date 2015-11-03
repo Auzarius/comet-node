@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 01, 2015 at 07:44 PM
+-- Generation Time: Nov 03, 2015 at 01:35 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -22,31 +22,6 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `comet_dev` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `comet_dev`;
 
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveTickets`()
-    READS SQL DATA
-SELECT id, status, created_at, updated_at, companyname, indicator_tag, indicator_model, indicator_manu 
-FROM tickets 
-ORDER BY id ASC, created_at ASC, companyname ASC$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTickets`()
-    READS SQL DATA
-SELECT id, status, created_at, updated_at, companyname, indicator_tag, indicator_model, indicator_manu 
-FROM tickets 
-WHERE status = 'Pending' OR status = 'Diagnosed' OR status = 'Repaired' OR status = 'Waiting for Parts' OR status = 'Waiting for Customer' 
-ORDER BY id ASC, created_at ASC, companyname ASC$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsers`()
-    READS SQL DATA
-SELECT id, username, firstName, lastName, email 
-FROM users 
-ORDER BY username ASC, firstName ASC, lastName ASC$$
-
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
@@ -63,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `created_by` int(10) NOT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(6) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=329 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=331 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `events`
@@ -155,7 +130,7 @@ INSERT INTO `events` (`id`, `ticket_id`, `status`, `timespent`, `comments`, `cre
 (145, 45, 'Pending', 0, 'Weigh bars are weighing right on to 500 lb some drift can be introduced via the small slit in the cable where the weigh bars connect to the indicator. Power port pin is tight however power clamp is worn and not retaining shape resulting in very inconsistent connection. Proposed repair cut damaged part of homerun connection at indicator which would in turn shorten cable &amp; wire power supply directly to indicator\\''s power receptacle. Could replace indicator with a T103SB would work as well .', '2015-07-13 12:43:06', 3, '2015-11-01 18:29:56', 0),
 (146, 45, 'Additional Notes', 40, 'Time Added.', '2015-07-14 20:43:33', 3, '2015-11-01 18:30:22', 0),
 (147, 10, 'Waiting for Parts', 0, 'Ordered new load cell', '2015-07-14 13:45:24', 10, NULL, 0),
-(148, 29, 'Replaced the Scale', 0, 'We are replacing this scale with an Ohaus RC31P30 Counting scale', '2015-07-14 13:47:06', 10, NULL, 0),
+(148, 29, 'Replaced', 0, 'We are replacing this scale with an Ohaus RC31P30 Counting scale', '2015-07-14 13:47:06', 10, '2015-11-02 22:12:35', 0),
 (149, 39, 'Waiting for Parts', 0, 'Ordered new Mainboard', '2015-07-14 13:49:29', 10, NULL, 0),
 (150, 40, 'Waiting for Parts', 0, 'Ordered B TEK 24\\&quot; column.', '2015-07-14 13:50:10', 10, NULL, 0),
 (151, 41, 'Waiting for Customer', 0, 'Quoted new scale', '2015-07-14 13:51:27', 10, NULL, 0),
@@ -201,7 +176,7 @@ INSERT INTO `events` (`id`, `ticket_id`, `status`, `timespent`, `comments`, `cre
 (195, 44, 'Complete', 0, '-', '2015-08-14 13:37:01', 7, NULL, 0),
 (196, 52, 'Repaired', 35, 'The plastic piece that actuates the push button on the board was broken off.  Used PVC cement to reattach it and it seems to be working OK.  One of the rubber pieces on the spider that holds the pan in place is missing.  It looks like the screen has been glued into place previously.  This scale is really showing its age.  The scale is testing OK for now.', '2015-08-14 18:04:51', 1, NULL, 0),
 (197, 51, 'Repaired', 0, 'Matko display still seems to be working great.  Likely that this can be returned to the customer whenever possible.  Sean replacing the rs232 chip seems to have done the trick.', '2015-08-14 19:21:39', 1, NULL, 0),
-(198, 41, 'Replaced the Scale', 0, 'The customer replaced this scale with a new one.  Placing this scale into the scale graveyard since the customer is not going to repair it.', '2015-08-14 19:36:58', 1, NULL, 0),
+(198, 41, 'Replaced', 0, 'The customer replaced this scale with a new one.  Placing this scale into the scale graveyard since the customer is not going to repair it.', '2015-08-14 19:36:58', 1, '2015-11-02 22:12:35', 0),
 (199, 53, 'Pending', 0, 'Justin received this scale by someone who dropped it off to the shop.  Unknown as to what is supposed to be wrong with the scale.  The scale powers on and tests within tolerance up to capacity.  Awaiting further information from the customer and letting scale cook on the workbench.', '2015-08-15 01:45:17', 1, NULL, 0),
 (200, 39, 'Delivered', 0, 'na', '2015-08-19 13:06:27', 10, NULL, 0),
 (201, 54, 'Pending', 0, 'Customer reports that the scale will not stay at zero.  They shipped the scale to the shop for troubleshooting/repair.', '2015-08-25 01:38:33', 1, NULL, 0),
@@ -270,7 +245,7 @@ INSERT INTO `events` (`id`, `ticket_id`, `status`, `timespent`, `comments`, `cre
 (269, 33, 'Delivered', 0, 'Delivered the scale to the customer', '2015-09-29 20:26:51', 3, NULL, 0),
 (270, 58, 'Delivered', 0, 'Delivered the scale to the customer.', '2015-09-29 20:27:43', 3, NULL, 0),
 (271, 10, 'Delivered', 0, 'Delivered the scale to the customer', '2015-09-29 20:27:56', 3, NULL, 0),
-(272, 49, 'Replaced the Scale', 0, 'This scale was replaced by a BTEK and T103SB.  The new scale number is #133', '2015-09-29 20:28:55', 1, NULL, 0),
+(272, 49, 'Replaced', 0, 'This scale was replaced by a BTEK and T103SB.  The new scale number is #133', '2015-09-29 20:28:55', 1, '2015-11-02 22:12:35', 0),
 (273, 57, 'Repaired', 0, 'Ready to be returned.', '2015-10-01 19:41:57', 7, '2015-11-01 18:42:56', 0),
 (274, 59, 'Delivered', 0, 'Returned during PI 9-29-15', '2015-09-29 14:08:45', 7, '2015-11-01 18:43:26', 0),
 (276, 69, 'Additional Notes', 50, 'Shits broken get a new one', '2015-09-30 19:22:29', 3, NULL, 0),
@@ -301,9 +276,9 @@ INSERT INTO `events` (`id`, `ticket_id`, `status`, `timespent`, `comments`, `cre
 (303, 75, 'Repaired', 60, '10-8-15 Scale working correctly upon arrival for service call.  Keeping keypad in stock in case the scale fails again.', '2015-10-09 17:56:54', 7, NULL, 0),
 (304, 75, 'Complete', 0, '-', '2015-10-09 17:57:16', 7, NULL, 0),
 (305, 57, 'Repaired', 0, '-', '2015-10-19 13:25:19', 7, NULL, 0),
-(306, 65, 'Replaced the Scale', 0, 'CUSTOMER PURCHASED A REPLACEMENT SCALE', '2015-10-19 13:25:54', 7, NULL, 0),
-(307, 65, 'Replaced the Scale', 0, 'CUSTOMER PURCHASED REPLACEMENT SCALE', '2015-10-19 13:26:21', 7, NULL, 0),
-(308, 66, 'Replaced the Scale', 0, 'CUSTOMER PURCHASED REPLACEMENT SCALE', '2015-10-19 13:28:49', 7, NULL, 0),
+(306, 65, 'Replaced', 0, 'CUSTOMER PURCHASED A REPLACEMENT SCALE', '2015-10-19 13:25:54', 7, '2015-11-02 22:12:35', 0),
+(307, 65, 'Replaced', 0, 'CUSTOMER PURCHASED REPLACEMENT SCALE', '2015-10-19 13:26:21', 7, '2015-11-02 22:12:35', 0),
+(308, 66, 'Replaced', 0, 'CUSTOMER PURCHASED REPLACEMENT SCALE', '2015-10-19 13:28:49', 7, '2015-11-02 22:12:35', 0),
 (309, 78, 'Pending', 0, 'The scale was brought in by the customer and they said that it was not weight correctly and the display was showing random numbers.  Have to unplug it to get it to reset.', '2015-10-21 00:48:28', 1, NULL, 0),
 (310, 78, 'Diagnosed', 20, 'I was unable to duplicate the noted issue but found that the scale was weight incorrectly because the feet were too close to the bottom of the scale.  Lowered the feet to raise the scale further off of the ground and it is now reading right on to 500 lb.  Initially the display would flash dashes and 0.0 because once weight was applied the feet would rub and take the scale into underload.  It was also causing a decent weight fluctuation depending on where you were standing.  Adjusting the feet seems to have resolved the issue.  The scale is testing OK.', '2015-10-20 18:50:17', 1, NULL, 0),
 (311, 57, 'Repaired', 25, 'Had to disassemble and resassemble the doran a few times to get the shift right.  Also had to add a foot to the scale since one had been broken off.  Calibrated the scale and the shift test now passes and the scale is testing within tolerance.  The scale is testing OK.', '2015-10-20 19:33:13', 1, NULL, 0),
@@ -323,7 +298,8 @@ INSERT INTO `events` (`id`, `ticket_id`, `status`, `timespent`, `comments`, `cre
 (325, 84, 'Diagnosed', 45, 'Initially the keypad would not work or would just cause issues.  The indicator also had a weird magnet wire type of smell like something was burning.  Performed more testing and could not find a specific cause but was starting to think it was the option board.  After a while the screen stopped displaying anything but the power to the indicator was still good and I still had DC and mv output for the load cell.  The mainboard seems to have gone bad in this indicator.  Recommend indicator replacement.', '2015-10-30 19:44:46', 1, NULL, 0),
 (326, 51, 'Delivered', 0, '-', '2015-10-30 20:52:50', 7, NULL, 0),
 (327, 69, 'Waiting for Customer', 0, 'CUSTOMER HAS BEEN QUOTED A REPLACEMENT SCALE.', '2015-10-30 20:54:23', 7, NULL, 0),
-(328, 78, 'Delivered', 0, 'CUSTOMER PICKED UP SCALE', '2015-10-30 20:55:17', 7, NULL, 0);
+(328, 78, 'Delivered', 0, 'CUSTOMER PICKED UP SCALE', '2015-10-30 20:55:17', 7, NULL, 0),
+(330, 50, 'Replaced', 0, 'The customer replaced the indicator and took care of the programming on their end.', '2015-11-02 22:00:05', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -339,14 +315,14 @@ CREATE TABLE IF NOT EXISTS `feedback` (
   `created_by` int(10) NOT NULL,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(6) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `feedback`
 --
 
 INSERT INTO `feedback` (`id`, `status`, `comments`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
-(1, 'Other', 'This is just a test comment.  Please feel free to leave more comments here.', '2015-10-24 18:43:38', 13, '2015-10-25 19:23:51', 13);
+(1, 'Other', 'This is just a test comment.  Please feel free to leave more comments here.', '2015-10-24 18:43:38', 1, '2015-11-02 00:36:04', 1);
 
 -- --------------------------------------------------------
 
@@ -513,17 +489,17 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `firstName`, `lastName`, `password`, `email`, `role`, `last_login`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 'agillespie', 'Anthony', 'Gillespie', '$2a$10$bxsQgZKdkPbfmkdI.1iLy.wP7jCABA41SnvqPEGc63q72O0Uo9wy2', 'apickelheimer@bscales.com', 'admin', NULL, 4, 48, '2015-09-07 15:37:07', '2015-11-01 18:06:45'),
+(1, 'agillespie', 'Anthony', 'Gillespie', '$2a$10$kNG8EyccJO1M0a3ui2A0ku8MqJsNy0HQu9LUOfcRtCKHmeat0NNVu', 'apickelheimer@bscales.com', 'admin', NULL, 4, 1, '2015-09-07 15:37:07', '2015-11-01 18:46:14'),
 (2, 'krutledge', 'Kevin', 'Rutledge', '$2a$10$hD8ySEj57/Ey4VeVvo2CU.Q.A4ckYSxbVHOVmp/RSpiSqDr5CIx0a', 'krutledge@bscales.com', 'user', NULL, 13, 13, '2015-09-23 10:53:37', '2015-11-01 18:06:53'),
 (3, 'dgraft', 'Dan', 'Graft', '$2a$10$d0sumnlAEGbpr7A9Ph8qt.TksAj9idrcyoqIJ7A5c4XEfBvUjjQrC', 'dgraft@bscales.com', 'user', NULL, 13, 13, '2015-10-11 17:39:29', '2015-11-01 18:06:57'),
 (4, 'ccripe', 'Chris', 'Cripe', '$2a$10$ygZlbWKv.SSADiRWOr3zPeNB1j4UNHNBpFw6qJKkb6G7/CnT72mJ2', 'ccripe@bscales.com', 'user', NULL, 13, 13, '2015-10-11 17:45:08', '2015-11-01 18:07:00'),
 (5, 'bduncan', 'Barry', 'Duncan', '$2a$10$gMvK2E.CylpycCmcNmnJ5e811ME1H2w5paT2eb1B.cDOPgqJJvjMK', 'bduncan@bscales.com', 'user', NULL, 13, 13, '2015-10-11 17:45:30', '2015-11-01 18:07:05'),
 (6, 'bgoodman', 'Bobby', 'Goodman', '$2a$10$/IeU/5z268I29F5S4ut7Ze0zYmZTP6PeHaWxtb3oovECG/ZTnqlIG', 'bgoodman@bscales.com', 'mod', NULL, 13, 48, '2015-10-11 17:39:45', '2015-11-01 18:07:33'),
-(7, 'ahenderson', 'Amy', 'Henderson', '$2a$10$mR4G7ktvm2.EOoTxT2H1r.sDQ/xdIJ91yuN4dQS8rQugOkSrg3Soi', 'ahenderson@bscales.com', 'mod', NULL, 13, 13, '2015-09-23 10:54:15', '2015-11-01 18:07:36'),
+(7, 'ahenderson', 'Amy', 'Henderson', '$2a$10$Lb0kyJOoihd/ydTZDg/aQu8yNwpdvgOszBsbuA7tP4BKLaNcw8B/.', 'ahenderson@bscales.com', 'mod', NULL, 13, 1, '2015-09-23 10:54:15', '2015-11-02 12:38:58'),
 (8, 'Sbrazill', 'Sean', 'Brazill', '$2a$10$GR85tamVKychIurOGGG97uAKqtQEER0aBj8S3XQz70wvQr4J0eV2S', 'Sbrazill@bscales.com', 'mod', NULL, 13, 48, '2015-10-20 19:59:01', '2015-11-01 18:07:10'),
 (9, 'bmusgrove', 'Bob', 'Musgrove', '$2a$10$e6qT9egpVY4LLqISNbZJg.rfYOKgTqKCifdgIsazuB7LNQF31SPZ.', 'bmusgrove@bscales.com', 'user', NULL, 13, 13, '2015-10-20 19:59:01', '2015-11-01 18:08:48'),
 (10, 'jkonopacki', 'Justin', 'Konopacki', '$2a$10$nu2YkM5bR5ByJodKn/p7gORrrr0t4EZkcj2K3x4FhekcYgS4cZfH2', 'jkonopacki@bscales.com', 'user', NULL, 48, NULL, '2015-11-01 13:04:25', '2015-11-01 18:07:13'),
-(11, 'mmckeever', 'Mark', 'McKeever', '$2a$10$aO9eZd419rTzMkUQiWZ1v.6Sca/DL1C3mDuQlpp2hxm6YTzbt6Bo6', 'msomething@bscales.com', 'user', NULL, 48, NULL, '2015-11-01 13:04:51', '2015-11-01 18:07:24');
+(11, 'mmckeever', 'Mark', 'McKeever', '$2a$10$aO9eZd419rTzMkUQiWZ1v.6Sca/DL1C3mDuQlpp2hxm6YTzbt6Bo6', 'mmckeever@bscales.com', 'user', NULL, 48, 7, '2015-11-01 13:04:51', '2015-11-02 12:39:50');
 
 --
 -- Indexes for dumped tables
@@ -567,12 +543,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=329;
+MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=331;
 --
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tickets`
 --
