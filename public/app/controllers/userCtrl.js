@@ -62,6 +62,7 @@ angular.module('userCtrl', ['userService'])
 				if (data.success) {
 					vm.userData = {};
 					$scope.userform.$setPristine();
+					$("html, body").animate({ scrollTop: 0 }, 200); 
 				}
 			});
 			
@@ -91,9 +92,8 @@ angular.module('userCtrl', ['userService'])
 		User.update($routeParams.user_id, vm.userData)
 			.success(function (data) {
 				vm.processing = false;
-
-				// bind the message from our API to vm.message
 				vm.message = data.message;
+				$("html, body").animate({ scrollTop: 0 }, 200); 
 			});
 	};
 
@@ -123,12 +123,8 @@ angular.module('userCtrl', ['userService'])
 		User.update(vm.userData.id, vm.userData)
 			.success(function (data) {
 				vm.processing = false;
-
-				// clear the form
-				// vm.userData = {};
-
-				// bind the message from our API to vm.message
 				vm.message = data.message;
+				$("html, body").animate({ scrollTop: 0 }, 200); 
 			});
 	};
 

@@ -106,6 +106,7 @@ angular.module('ticketCtrl', ['ticketService'])
 				vm.message = node.message;
 				vm.ticketData = {};
 				$scope.ticketform.$setPristine();
+				$("html, body").animate({ scrollTop: 0 }, 200); 
 			});
 			
 	};
@@ -133,6 +134,7 @@ angular.module('ticketCtrl', ['ticketService'])
 			.success(function(data) {
 				vm.processing = false;
 				vm.message = data.message;
+				$("html, body").animate({ scrollTop: 0 }, 200); 
 			});
 	};
 
@@ -167,7 +169,6 @@ angular.module('ticketCtrl', ['ticketService'])
 				if ( data.success) {
 					$location.path('/tickets');
 				}
-				//vm.message = data.message;
 			});
 	}
 	
@@ -242,6 +243,7 @@ angular.module('ticketCtrl', ['ticketService'])
 			.success(function(data) {
 				vm.processing = false;
 				vm.message = data.message;
+				$("html, body").animate({ scrollTop: 0 }, 200); 
 			})
 			.error(function(data) {
 				vm.processing = false;
@@ -332,6 +334,7 @@ angular.module('ticketCtrl', ['ticketService'])
 			.success(function(data) {
 				vm.processing = false;
 				vm.message = data.message;
+				$("html, body").animate({ scrollTop: 0 }, 200); 
 			})
 			.error(function(data) {
 				vm.processing = false;
