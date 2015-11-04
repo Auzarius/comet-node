@@ -12,9 +12,9 @@ module.exports = {
 		host     		: 'localhost',
 		user     		: 'root',
 		password 		: '',
-		database 		: 'comet_dev',
+		database 		: 'comet_bsi15',
 		users_table		: 'users',
-		tickets_table	: 'tickets_import',
+		tickets_table	: 'tickets',
 		events_table	: 'events',
 		feedback_table 	: 'feedback'
 	},
