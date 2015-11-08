@@ -13,45 +13,58 @@
 
 <form class="form-horizontal" ng-submit="user.saveUser()" name='userform' novalidate>
 	
-	<div class="form-group" ng-cloak>
+	<div class="form-group has-feedback" ng-class="[ userform.firstName.$invalid && userform.firstName.$dirty ? 'has-error' : '', userform.firstName.$valid && userform.firstName.$dirty ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">First Name</label>
 		<div class="col-sm-6">
 			<input type="text" name='firstName' class="form-control" ng-model="user.userData.firstName" required pattern='^[A-Z][A-Za-z]+'>
-			<p ng-if="userform.firstName.$invalid && userform.firstName.$dirty" class="help-block alert alert-info">Enter a valid name using only letters and proper capitalization.</p>
+			<p ng-show="userform.firstName.$invalid && userform.firstName.$dirty" class="help-block alert alert-info">Enter a valid name using only letters and proper capitalization.</p>
+			<span ng-show="userform.firstName.$invalid && userform.firstName.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<span ng-show="userform.firstName.$valid && userform.firstName.$dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ userform.lastName.$invalid && userform.lastName.$dirty ? 'has-error' : '', userform.lastName.$valid && userform.lastName.$dirty ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Last Name</label>
 		<div class="col-sm-6">
-			<input type="text" name='lastName' class="form-control" ng-model="user.userData.lastName" required pattern='[A-Za-z]+'>
-			<p ng-if="userform.lastName.$invalid && userform.lastName.$dirty" class="help-block alert alert-info">Enter a valid name using only letters and proper capitalization.</p>
+			<input type="text" name='lastName' class="form-control" ng-class="[ userform.lastName.$invalid && userform.lastName.$dirty ? 'has-error' : '', userform.lastName.$valid && userform.lastName.$dirty ? 'has-success' : '' ]" ng-model="user.userData.lastName" required pattern='^[A-Z][A-Za-z]+'>
+			<p ng-show="userform.lastName.$invalid && userform.lastName.$dirty" class="help-block alert alert-info">Enter a valid name using only letters and proper capitalization.</p>
+			<span ng-show="userform.lastName.$invalid && userform.lastName.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<span ng-show="userform.lastName.$valid && userform.lastName.$dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ userform.username.$invalid && userform.username.$dirty ? 'has-error' : '', userform.username.$valid && userform.username.$dirty ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Username</label>
-		<div class="col-sm-6">
-			<input type="text" name='username' class="form-control" ng-model="user.userData.username" required pattern='^[A-Za-z][A-Za-z0-9]+'>
-			<p ng-if="userform.username.$invalid && userform.username.$dirty" class="help-block alert alert-info">Enter a valid username that begins with a letter and contains only letters and numbers.</p>
+		<div class="col-sm-6" ng-if="main.user.role === 'admin'">
+			<input type="text" name='username' class="form-control" ng-class="[ userform.username.$invalid && userform.username.$dirty ? 'has-error' : '', userform.username.$valid && userform.username.$dirty ? 'has-success' : '' ]" ng-model="user.userData.username" required pattern='^[A-Za-z][A-Za-z0-9]+'>
+			<p ng-show="userform.username.$invalid && userform.username.$dirty" class="help-block alert alert-info">Enter a valid username that begins with a letter and contains only letters and numbers.</p>
+			<span ng-show="userform.username.$invalid && userform.username.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<span ng-show="userform.username.$valid && userform.username.$dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+		</div>
+		<div class="col-sm-6" ng-if="main.user.role !== 'admin'">
+			<input type="text" name='username' class="form-control" ng-model="user.userData.username" disabled>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group has-feedback" ng-class="[ userform.email.$invalid && userform.email.$dirty ? 'has-error' : '', userform.email.$valid && userform.email.$dirty ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Email</label>
 		<div class="col-sm-6">
-			<input type="email" name='email' class="form-control" ng-model="user.userData.email" required pattern='^[A-Za-z][A-Za-z0-9.\-_]+@[A-Za-z0-9]+\.[A-Za-z]{2,4}'>
-			<p ng-if="userform.email.$invalid && userform.email.$dirty" class="help-block alert alert-info">Please enter a valid email address.</p>
+			<input type="email" name='email' class="form-control" ng-model="user.userData.email" required pattern='^[A-Za-z][A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,4}'>
+			<p ng-show="userform.email.$invalid && userform.email.$dirty" class="help-block alert alert-info">Please enter a valid email address.</p>
+			<span ng-show="userform.email.$invalid && userform.email.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<span ng-show="userform.email.$valid && userform.email.$dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-sm-2 control-label">Password</label>
-		<div class="col-sm-6">
-			<input type="password" name='password' class="form-control" ng-model="user.userData.password" min='6'>
-			<p ng-if="userform.password.$invalid && !userForm.password.$pristine" class="help-block alert alert-info">Please enter a password that is at least six characters long.</p>
+	<div class="form-group has-feedback" ng-class="[ userform.password.$invalid && userform.password.$dirty ? 'has-error' : '', userform.password.$valid && userform.password.$dirty ? 'has-success' : '' ]">
+			<label class="col-sm-2 control-label">Password</label>
+			<div class="col-sm-6">
+				<input type="password" name='password' class="form-control" ng-model="user.userData.password" ng-minlength="6">
+				<p ng-show="userform.password.$error.minlength && userform.password.$dirty" class="help-block alert alert-info">Please enter a password that is at least six characters long.</p>
+				<span ng-show="userform.password.$invalid && userform.password.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<span ng-show="userform.password.$valid && userform.password.$dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+			</div>
 		</div>
-	</div>
 	
 	<div class="form-group">
 	<div class="col-sm-offset-2 col-sm-6">

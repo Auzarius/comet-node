@@ -358,6 +358,10 @@ main .ng-enter {
 	}
 }
 
+.alert-info {
+	color: white !important;
+}
+
 .fixed {
 	padding: 15px;
 	position: fixed !important;
