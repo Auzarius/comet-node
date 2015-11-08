@@ -49,13 +49,14 @@
 	<p>No tickets are available at this time.</p>
 </div>
 
-<div class="form-group" ng-show="ticket.tickets && ticket.tickets.length > 0">
+<div class="form-group has-feedback" ng-show="ticket.tickets && ticket.tickets.length > 0">
 	<div class="col-sm-5">
-		<input type="text" class="form-control search-box" name="searchBox" ng-model="searchBox" placeholder="Search for..." />
+		<input type="search" class="form-control search-box" name="searchBox" ng-model="searchBox" placeholder="Search for..." />
+		<span class="form-control-feedback" aria-hidden="true"></span>
 	</div>
 </div>
 
-<br /><br />
+
 
 <table ng-cloak id="tickets" class="table table-bordered tbody-striped" ng-show="ticket.tickets && ticket.tickets.length > 0">
 	<thead>
@@ -98,7 +99,7 @@
 					</div>
 				</td>
 				<td colspan="2"><i ng-if="_ticket.created_at" title="{{_ticket.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Created: {{ _ticket.created_at | amTimeAgo }} by <span ng-if="_ticket.created_by">{{ _ticket.created_by }}</span><span ng-if="!_ticket.created_by">Unknown</span></i></td>
-				<td colspan="3"><i ng-if="_ticket.updated_at" title="{{_ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Updated: {{ _ticket.updated_at | amTimeAgo }} by <span ng-if="_ticket.updated_by">{{ _ticket.updated_by }}</span><span ng-if="!_ticket.updated_by">Unknown</span></i></td>
+				<td colspan="3"><i ng-if="_ticket.updated_at" title="{{_ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Last Updated: {{ _ticket.updated_at | amTimeAgo }} by <span ng-if="_ticket.updated_by">{{ _ticket.updated_by }}</span><span ng-if="!_ticket.updated_by">Unknown</span></i></td>
 			</tr>
 	</tbody>
 </table>

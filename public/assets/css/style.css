@@ -1,8 +1,7 @@
-
-/*body { padding-top: 50px; }*/
 .background {
 	background-image: '/assets/img/comet-earth-blur.jpg';
 }
+
 .node-header {
 	color: #0CBE9B;
 	color: rgb(12,190,155);
@@ -199,10 +198,12 @@ label {
 	}
 }
 
-main {
-	padding-top: 3em;
-	padding-bottom: 4em;
-	min-height: 100rem !important;
+@media screen {
+	main {
+		padding-top: 3em;
+		padding-bottom: 4em;
+		min-height: 100rem !important;
+	}
 }
 
 header .navbar {
@@ -220,17 +221,18 @@ footer h4 {
 	color: #ddd;
 }
 
-.search-box {
-	border-radius: 3px !important;
-	padding-left: 1em !important;
-	border: 1px solid #ddd !important;
-	box-shadow: 1px 0 1em #fff !important;
+input[type=search].form-control.search-box {
+	border-radius: 3px;
+	padding-left: 1em;
+	border: 1px solid #ddd;
+	box-shadow: 1px 0 1em #fff;
+	margin-bottom: 1em;
 	transition: all 1.5s ease-in-out;
 }
 
-.search-box:focus {
-	border: 1px solid #93D6F9 !important;
-	box-shadow: 1px 0 1em #549FCF !important;
+input[type=search].form-control.search-box:focus {
+	border: 1px solid #93D6F9;
+	box-shadow: 1px 0 1em #549FCF;
 }
 
 .spinner {

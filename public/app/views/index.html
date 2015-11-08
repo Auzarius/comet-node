@@ -42,7 +42,7 @@
 
 <!-- NAVBAR -->
 <header>
-	<div class="navbar navbar-inverse custom-navbar" ng-if="main.loggedIn" role='navigation'>
+	<div class="navbar navbar-inverse" ng-show="main.loggedIn" role='navigation'>
 		<div class="container">
 			<button type='button' class='navbar-toggle navbar-left pull-left' data-toggle='collapse' data-target='.navbar-collapse'>
 				<span class='sr-only'>Toggle Navigation</span>
@@ -149,7 +149,6 @@
 <!-- jquery and bootstrap -->
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
-
 <!-- collapse navbar when a link is clicked -->
 <script>
 	$(function () {
