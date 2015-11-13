@@ -215,6 +215,10 @@ footer {
 	color: #aaa;
 	padding-top: 3rem;
 	padding-bottom: 3rem;
+	display: flex;
+	position: relative !important;
+	bottom: 0 !important;
+	width: 100%;
 }
 
 footer h4 {
