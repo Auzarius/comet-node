@@ -1,7 +1,7 @@
 angular.module('userApp', 
                [
                		'app.routes',
-               		'ngAnimate',
+                         'ngAnimate',
                		'authService',
                		'mainCtrl',
                		'userCtrl',
@@ -10,9 +10,9 @@ angular.module('userApp',
                          'ticketService'
                	])
 	// application configuration to integrate token into requests
-	.config(function($httpProvider) {
+	.config(["$httpProvider", function($httpProvider) {
 
 		// attach our auth interceptor to the http requests
 		$httpProvider.interceptors.push('AuthInterceptor');
 
-	});
+	}]);

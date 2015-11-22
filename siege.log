@@ -1,4 +1,0 @@
-      Date & Time,  Trans,  Elap Time,  Data Trans,  Resp Time,  Trans Rate,  Throughput,  Concurrent,    OKAY,   Failed
-2015-09-06 11:37:18,      0,       6.02,           0,        nan,        0.00,        0.00,        0.00,       0,    1123
-2015-09-06 11:39:48,   9318,      65.51,           0,       0.01,      142.24,        0.00,        1.60,       0,    1123
-2015-09-06 11:44:01,      0,      11.02,           0,        nan,        0.00,        0.00,        0.00,       0,    1073

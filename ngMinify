@@ -1,0 +1,9 @@
+ng-annotate -a -o "ng-app/annotated/1.js" "ng-app/controllers/mainCtrl.js"
+ng-annotate -a -o "ng-app/annotated/2.js" "ng-app/services/authService.js"
+ng-annotate -a -o "ng-app/annotated/3.js" "ng-app/controllers/ticketCtrl.js"
+ng-annotate -a -o "ng-app/annotated/4.js" "ng-app/services/ticketService.js"
+ng-annotate -a -o "ng-app/annotated/5.js" "ng-app/controllers/userCtrl.js"
+ng-annotate -a -o "ng-app/annotated/6.js" "ng-app/services/userService.js"
+ng-annotate -a -o "ng-app/annotated/7.js" "ng-app/app.js"
+ng-annotate -a -o "ng-app/annotated/8.js" "ng-app/app.routes.js"
+gulp
