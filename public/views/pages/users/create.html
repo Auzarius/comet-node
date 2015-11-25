@@ -1,4 +1,4 @@
-<div ng-show="main.user.role === 'mod' || main.user.role === 'admin'">
+<div ng-show="main.user.role == 'mod' || main.user.role == 'admin'">
 	<div class="show-hide-message fixed" ng-show="user.message">
 		<div class="row alert alert-info alert-dismissable">
 			<div class='col-xs-11'>{{ user.message }}</div>
@@ -94,4 +94,4 @@
 
 	</form>
 </div>
-<div ng-if="main.user.role !== 'mod' && main.user.role !== 'admin'" ng-include="'app/views/pages/403.html'"></div>
+<div ng-if="main.user.role != 'mod' && main.user.role != 'admin'" ng-include="'views/pages/403.html'"></div>
