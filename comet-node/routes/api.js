@@ -59,12 +59,12 @@ module.exports = function (app, express, mySql) {
 							} else {
 								var token = jwt.sign(
 			                    	{
-			                    		firstName	: user.data.firstName,
-			                    		lastName	: user.data.lastName,
-			                    		username	: user.data.username,
+			                    		//firstName	: user.data.firstName,
+			                    		//lastName	: user.data.lastName,
+			                    		//username	: user.data.username,
 			                    		id 			: user.data.id,
-			                    		email		: user.data.email,
-			                    		role   		: user.data.role
+			                    		//email		: user.data.email,
+			                    		//role   		: user.data.role
 			                    	},
 			                    	secret, {
 			                    		expiresInMinutes: 1700
@@ -135,8 +135,20 @@ module.exports = function (app, express, mySql) {
 					});
 				} else {
 					// if everything is good, save to request for use in other routes
-					req.decoded = decoded;
-					next();
+					
+					mySql.users.findOne({ id: decoded.id }, function (err, result) {
+						if (err) {
+							throw new Error(err);
+							res.status(403).send({
+								success: false,
+								message: 'Could not locate you in the databse, please try again.'
+							});
+						} else {
+							console.log(result.data);
+							req.decoded = result.data;
+							next();
+						}
+					});
 				}
 			});
 		} else {
@@ -150,7 +162,8 @@ module.exports = function (app, express, mySql) {
 	});
 		
 	apiRouter.get('/me', function (req, res) {
-		res.send(req.decoded);
+		console.log("DECODED: \n" + req.decoded + "\nEND DECODED\n\n");
+		res.json(req.decoded);
 	});
 	
 	apiRouter.use('/feedback', apiFeedback);

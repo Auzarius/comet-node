@@ -1,4 +1,4 @@
-<div ng-if="event.eventData.created_by == main.user.id || main.user.role === 'mod' || main.user.role === 'admin'">
+<div ng-if="event.eventData.created_by == main.user.id || main.user.role === 'admin'">
 	<div class="show-hide-message fixed" ng-show="event.message">
 		<div class="row alert alert-info alert-dismissable">
 			<div class='col-xs-11'>{{ event.message }}</div>

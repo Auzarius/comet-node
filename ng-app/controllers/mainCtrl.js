@@ -15,8 +15,8 @@ angular.module('mainCtrl', ['angularMoment'])
 		if (vm.loggedIn) {
 			vm.location = $location.path();
 			Auth.getUser()
-			.then(function(data) {
-				vm.user = data.data;
+			.then(function(node) {
+				vm.user = node.data
 			});	
 		} else if ( $location.path() == '/' || $location.path() == '/signin' ) {
 			// do nothing;

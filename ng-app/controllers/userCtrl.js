@@ -108,10 +108,7 @@ angular.module('userCtrl', ['userService'])
 	// $routeParams is the way we grab data from the URL
 	User.self()
 		.success(function (user) {
-			User.get(user.id)
-				.success(function (node) {
-					vm.userData = node.data;
-				});
+			vm.userData = user;
 		});
 
 	// function to save the user
