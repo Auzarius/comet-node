@@ -35,14 +35,11 @@
 	
 	<div class="form-group has-feedback" ng-class="[ userform.username.$invalid && userform.username.$dirty ? 'has-error' : '', userform.username.$valid && userform.username.$dirty ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Username</label>
-		<div class="col-sm-6" ng-if="main.user.role === 'admin'">
+		<div class="col-sm-6">
 			<input type="text" name='username' class="form-control" ng-class="[ userform.username.$invalid && userform.username.$dirty ? 'has-error' : '', userform.username.$valid && userform.username.$dirty ? 'has-success' : '' ]" ng-model="user.userData.username" required pattern='^[A-Za-z][A-Za-z0-9]+'>
 			<p ng-show="userform.username.$invalid && userform.username.$dirty" class="help-block alert alert-info">Enter a valid username that begins with a letter and contains only letters and numbers.</p>
 			<span ng-show="userform.username.$invalid && userform.username.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
 			<span ng-show="userform.username.$valid && userform.username.$dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-		</div>
-		<div class="col-sm-6" ng-if="main.user.role !== 'admin'">
-			<input type="text" name='username' class="form-control" ng-model="user.userData.username" disabled>
 		</div>
 	</div>
 	
