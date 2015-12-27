@@ -11,11 +11,21 @@ angular.module('userCtrl', ['userService'])
 	User.all()
 		.success(function (node) {
 
-			// when all the users come back, remove the processing variable
+			if ( node.success == false || node.data == null ) {
+				vm.users = null;
+			} else {
+				vm.users = node.data;
+			}
+			
 			vm.processing = false;
-
-			// bind the users that come back to vm.users
-			vm.users = node.data;
+		})
+		.error(function (node) {
+			if (node) {
+				vm.message = node;
+			}
+			
+			vm.users = null;
+			vm.processing = false;
 		});
 
 	// function to delete a user

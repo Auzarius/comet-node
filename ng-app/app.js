@@ -1,4 +1,4 @@
-angular.module('userApp', 
+angular.module('comet', 
                [
                		'app.routes',
                          'ngAnimate',

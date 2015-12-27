@@ -18,14 +18,13 @@
 
 </div>
 
-<div class="jumbotron text-center" ng-show="user.processing">
+<div class="jumbotron text-center" ng-show="user.processing && !user.users">
 	<span class="glyphicon glyphicon-repeat spinner"></span>
 	<p>Loading Users...</p>
 </div>
 
-<div class="jumbotron text-center" ng-show="!user.processing && !user.users">
-	<span class="glyphicon glyphicon-repeat spinner"></span>
-	<p>There are no users at this time.</p>
+<div class="jumbotron text-center" ng-show="!user.processing && ( user.users.length < 1 || !user.users )">
+	<p>There are no users available at this time or a connection to the server could not be made.</p>
 </div>
 
 <table ng-cloak id="users" class="table table-bordered table-striped" ng-show="user.users">

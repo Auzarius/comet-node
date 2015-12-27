@@ -144,7 +144,6 @@ module.exports = function (app, express, mySql) {
 								message: 'Could not locate you in the databse, please try again.'
 							});
 						} else {
-							console.log(result.data);
 							req.decoded = result.data;
 							next();
 						}
@@ -162,7 +161,6 @@ module.exports = function (app, express, mySql) {
 	});
 		
 	apiRouter.get('/me', function (req, res) {
-		console.log("DECODED: \n" + req.decoded + "\nEND DECODED\n\n");
 		res.json(req.decoded);
 	});
 	

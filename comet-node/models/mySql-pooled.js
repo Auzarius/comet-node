@@ -357,6 +357,8 @@ module.exports = function(config) {
 			if ( req.params.id )
 				Ticket.id = req.params.id;
 			
+			Ticket.workorder = req.body.workorder;
+			
 			if ( req.body.customer )
 				Ticket.customer = req.body.customer;
 			

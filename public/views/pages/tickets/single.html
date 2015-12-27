@@ -59,7 +59,7 @@
 			<tr>
 				<th class='col-xs-6 col-md-3'>Zipcode</th>
 				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.zipcode }}</td>
-			</tr>
+			</tr>			
 		</tbody>
 	</table>
 	
@@ -115,15 +115,21 @@
 		</tbody>
 	</table>
 	
-	<h4 ng-if="ticket.ticket.timespent > 0 && ticket.ticket.timespent">Other Information</h4>
-	<table ng-cloak id="ticket" class="table table-bordered table-striped" ng-if="ticket.ticket.timespent > 0 && ticket.ticket.timespent">
-		<tbody>
-			<tr>
-				<th class='col-xs-6 col-md-3'>Total Time Spent</th>
-				<td class='col-xs-6 col-md-3'>{{ ticket.ticket.timespent }} minute<span ng-if="ticket.ticket.timespent > 1">s</span></td>
-			</tr>
-		</tbody>
-	</table>	
+	<div ng-if="(ticket.ticket.timespent > 0 && ticket.ticket.timespent) || (ticket.ticket.workorder && ticket.ticket.workorder != '')">
+		<h4 >Other Information</h4>
+		<table ng-cloak id="ticket" class="table table-bordered table-striped">
+			<tbody>
+				<tr ng-show="ticket.ticket.timespent > 0 && ticket.ticket.timespent">
+					<th class='col-xs-6 col-md-3'>Total Time Spent</th>
+					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.timespent }} minute<span ng-if="ticket.ticket.timespent > 1">s</span></td>
+				</tr>
+				<tr ng-show="ticket.ticket.workorder">
+					<th class='col-xs-6 col-md-3'>Work Order</th>
+					<td class='col-xs-6 col-md-3'>{{ ticket.ticket.workorder }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 	<form class="form-horizontal no-print" ng-submit="ticket.addEvent()" id='eventform' name='eventform' novalidate>
 		<div>

@@ -45,7 +45,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 }
 
 /*! END Animate.css 
-	Edit: Changed the translateX value from 20px to 65px*/
+	Edit: Changed the translateX value from 20px to 40px*/
 
 .background {
 	background-image: '/assets/img/comet-earth-blur.jpg';
@@ -252,6 +252,7 @@ label {
 		padding-top: 3em;
 		padding-bottom: 4em;
 		min-height: 100rem !important;
+		height: auto;
 	}
 }
 
@@ -264,9 +265,9 @@ footer {
 	color: #aaa;
 	padding-top: 3rem;
 	padding-bottom: 3rem;
-	display: flex;
-	position: relative !important;
-	bottom: 0 !important;
+
+	position: absolute !important;
+	bottom: auto !important;
 	width: 100%;
 }
 

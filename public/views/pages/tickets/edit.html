@@ -134,7 +134,7 @@
 	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_serial.$invalid && !ticketform.indicator_serial.$pristine ? 'has-error' : '', ticketform.indicator_serial.$valid && !ticketform.indicator_serial.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Serial</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" name="indicator_serial" ng-minlength="3" ng-maxlength="24" pattern="[A-Za-z0-9\,\.\-\& ]+" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" name="indicator_serial" ng-minlength="3" ng-maxlength="24" pattern="[A-Za-z0-9\,\.\-\&\/ ]+" required>
 			<span ng-show="ticketform.indicator_serial.$invalid && !ticketform.indicator_serial.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
 			<p ng-if="ticketform.indicator_serial.$error.required && !ticketform.indicator_serial.$pristine" class="help-block alert alert-info">This is a required field, it cannot be left blank.</p>
 			<p ng-if="ticketform.indicator_serial.$error.pattern && !ticketform.indicator_serial.$pristine" class="help-block alert alert-info">Please enter a valid serial number.</p>
@@ -215,6 +215,22 @@
 			<span ng-show="ticketform.scale_serial.$invalid && !ticketform.scale_serial.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
 			<p ng-if="ticketform.scale_serial.$error.maxlength && !ticketform.scale_serial.$pristine" class="help-block alert alert-info">The value you have entered is too long.</p>
 			<span ng-show="!ticketform.scale_serial.$invalid && !ticketform.scale_serial.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+		</div>
+	</div>
+	
+	<div>
+		<br/>
+		<h4>Other Information (Optional)</h4>
+	</div>
+	
+	<div class="form-group has-feedback" ng-class="[ ticketform.workorder.$invalid && !ticketform.workorder.$pristine ? 'has-error' : '', !ticketform.workorder.$invalid && !ticketform.workorder.$pristine ? 'has-success' : '' ]" ng-show="main.role != 'user'">
+		<label class="col-sm-2 control-label" for="workorder">Work Order</label>
+		<div class="col-sm-6">
+			<input type="text" name="workorder" class="form-control" ng-model="ticket.ticketData.workorder" ng-minlength="2" ng-maxlength="40" />
+			<span ng-show="ticketform.workorder.$invalid && !ticketform.workorder.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+			<p ng-if="ticketform.workorder.$error.maxlength && !ticketform.workorder.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too long.</p>
+			<p ng-if="ticketform.workorder.$error.minlength && !ticketform.workorder.$pristine" class="help-block alert alert-info" style="color: white;">The value you have entered is too short.</p>
+			<span ng-show="!ticketform.workorder.$invalid && !ticketform.workorder.$pristine" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 		</div>
 	</div>
 	
