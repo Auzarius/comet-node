@@ -80,9 +80,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	margin-bottom: 0px;
 }
 
-nav, .navbar-nav, .navbar { 
-	width: auto;
-}
+
 
 .tbody-striped tbody:nth-child(even) tr td {
 	background-color: #F9F9F9;
