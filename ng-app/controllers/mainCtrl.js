@@ -18,6 +18,11 @@ angular.module('mainCtrl', ['angularMoment'])
 			.then(function(node) {
 				vm.user = node.data
 			});	
+			
+			if ( $location.path() == '/signin' ) {
+				$location.path('/');
+			}
+			
 		} else if ( $location.path() == '/' || $location.path() == '/signin' ) {
 			// do nothing;
 		} else {
