@@ -241,7 +241,7 @@ label {
 	.comment-container, .comment-container .row {
 		padding: 0em;
 		margin-left: -0.8em;
-		border: 0.1em solid #ddd;
+		border: 0em solid #000;
 	}
 }
 
