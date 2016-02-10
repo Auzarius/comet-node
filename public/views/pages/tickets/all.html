@@ -36,12 +36,20 @@
 	<p>There are no tickets available at this time or a connection to the server could not be made.</p>
 </div>
 
-<div class="form-group has-feedback" ng-show="ticket.tickets && ticket.tickets.length > 0">
+<div class="form-group has-feedback no-print" ng-show="ticket.tickets && ticket.tickets.length > 0">
 	<div class="col-sm-5">
 		<input type="search" class="form-control search-box" name="searchBox" ng-model="searchBox" placeholder="Search for..." />
 		<span class="form-control-feedback" aria-hidden="true"></span>
 	</div>
 </div>
+
+<style>
+	@media print {
+		table thead tr th:first-child, table tr td:first-child {
+			display: none;
+		}
+	}
+</style>
 
 <table ng-cloak id="tickets" class="table table-bordered tbody-striped" ng-show="ticket.tickets && ticket.tickets.length > 0">
 	<thead>
@@ -83,8 +91,8 @@
 						</ul>
 					</div>
 				</td>
-				<td colspan="2"><i ng-if="_ticket.created_at" title="{{_ticket.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Created: {{ _ticket.created_at | amTimeAgo }} by <span ng-if="_ticket.created_by">{{ _ticket.created_by }}</span><span ng-if="!_ticket.created_by">Unknown</span></i></td>
-				<td colspan="3"><i ng-if="_ticket.updated_at" title="{{_ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Last Updated: {{ _ticket.updated_at | amTimeAgo }} by <span ng-if="_ticket.updated_by">{{ _ticket.updated_by }}</span><span ng-if="!_ticket.updated_by">Unknown</span></i></td>
+				<td colspan="2"><i ng-if="_ticket.created_at" title="{{_ticket.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Created: <span class="no-print">Created: {{ _ticket.created_at | amTimeAgo }}</span><span class="print-only">{{_ticket.created_at | amDateFormat:'MM-DD-YYYY h:mm:ss a'}}</span> by <span ng-if="_ticket.created_by">{{ _ticket.created_by }}</span><span ng-if="!_ticket.created_by">Unknown</span></i></td>
+				<td colspan="3"><i ng-if="_ticket.updated_at" title="{{_ticket.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">Last Updated: <span class="no-print">{{ _ticket.updated_at | amTimeAgo }}</span><span class="print-only">{{ _ticket.updated_at | amDateFormat:'MM-DD-YYYY h:mm:ss a'}}</span> by <span ng-if="_ticket.updated_by">{{ _ticket.updated_by }}</span><span ng-if="!_ticket.updated_by">Unknown</span></i></td>
 			</tr>
 	</tbody>
 </table>

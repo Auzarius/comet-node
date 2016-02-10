@@ -216,6 +216,10 @@ label {
 	opacity: 1.0 !important;
 }
 
+.print-only {
+	display: none;
+}
+
 @media only print {
 	* {
 		font-size: 92% !important;
@@ -234,15 +238,36 @@ label {
 		display: none;
 	}
 	
+	.print-only {
+		display: inline;
+	}
+	
 	.btn {
 		display: none;
 	}
 	
-	.comment-container, .comment-container .row {
+	.comment-container {
 		padding: 0em;
 		margin-left: -0.8em;
 		border: 0em solid #000;
 	}
+	
+	.comment-container .row {
+		padding: 0.1em;
+		margin-left: -0.8em;
+		border: 1px solid #ddd;
+	}
+	
+	.comment-remarks {
+		padding-top: 0.1em;
+		padding-bottom: 0px;
+		margin-top: 0px
+	}
+	
+	.comment-header {
+		margin-bottom: -1px;
+	}
+	
 }
 
 @media screen {
