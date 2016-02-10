@@ -65,7 +65,7 @@
 	<tbody ng-repeat="_ticket in ticket.tickets | filter:searchBox">
 			<tr>
 				<td><a class='btn btn-primary btn-block' ng-href='/tickets/{{ _ticket.id }}'>View Ticket</a></td>
-				<td>{{ _ticket.customer }}</td>
+				<td>{{ _ticket.customer }}<span class="print-only" ng-show="_ticket.workorder"> (WO# {{_ticket.workorder}}) </span></td>
 				<td>{{ _ticket.status }}</td>
 				<td>{{ _ticket.indicator_tag }}</td>
 				<td>{{ _ticket.indicator_manu }}</td>
