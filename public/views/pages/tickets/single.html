@@ -159,7 +159,7 @@
 		<div class="form-group has-feedback" ng-if="ticket.eventData.status == 'Diagnosed' || ticket.eventData.status == 'Repaired' || ticket.eventData.status == 'Additional Notes'" ng-class="[ eventform.time.$invalid && !eventform.time.$pristine ? 'has-error' : '', eventform.time.$valid && !eventform.time.$pristine ? 'has-success' : '' ]">
 			<label class="col-sm-2 control-label" title="Time spent in minutes">Time Spent</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control" ng-model="ticket.eventData.timespent" name="time" pattern="[0-9]+" required />
+				<input type="number" class="form-control" ng-model="ticket.eventData.timespent" name="time" pattern="[0-9]+" required />
 				<span ng-show="eventform.time.$invalid && !eventform.time.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
 				<p ng-if="eventform.time.$error.required && !eventform.time.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
 				<p ng-if="eventform.time.$error.pattern && !eventform.time.$pristine" class="help-block alert alert-info" style="color: white;">Enter a value for time spent using only numerical values.</p>

@@ -149,15 +149,19 @@ angular.module('ticketCtrl', ['ticketService'])
 	
 	// get the ticket data for the ticket you want to view
 	// $routeParams is the way we grab data from the URL
-	Ticket.get($routeParams.ticket_id)
-		.success(function(node) {
-			vm.ticket = node.data;
-			vm.processing = false;
-		})
-		.error(function(err) {
-			vm.processing = false;
-			vm.message = err;
-		});
+	vm.getTicket = function(id) {
+		Ticket.get(id)
+			.success(function(node) {
+				vm.ticket = node.data;
+				vm.processing = false;
+			})
+			.error(function(err) {
+				vm.processing = false;
+				vm.message = err;
+			});
+	}
+	
+	vm.getTicket($routeParams.ticket_id);
 	
 	vm.deleteTicket = function(id) {
 		vm.processing = true;
@@ -193,6 +197,7 @@ angular.module('ticketCtrl', ['ticketService'])
 		Ticket.event.create($routeParams.ticket_id, vm.eventData)
 			.success(function(data) {
 				vm.event_processing = false;
+				vm.ticket.timespent += vm.eventData.timespent;
 				vm.eventData = {};
 				$scope.eventform.$setPristine();
 				vm.message = data.message;
@@ -213,6 +218,7 @@ angular.module('ticketCtrl', ['ticketService'])
 					vm.getEvents();
 				}
 				
+				vm.getTicket($routeParams.ticket_id);
 				vm.event_processing = false;
 				vm.message = data.message;
 			})
