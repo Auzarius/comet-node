@@ -135,7 +135,6 @@ module.exports = function(config) {
 					throw new Error(err);
 					next(err);
 				} else if ( mySql.verifyResult(result)) {
-					console.log(result);
 					next(null, {
 						success : true,
 						data 	: result,
