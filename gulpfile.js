@@ -1,34 +1,47 @@
 var gulp 		= require('gulp'),
+	babel 		= require("gulp-babel"),
 	concat  	= require('gulp-concat'),
+	cssnano		= require("gulp-cssnano"),
+	ngAnnotate  = require("gulp-ng-annotate"),
+	plumber		= require("gulp-plumber"),
+	rename		= require("gulp-rename"),
+	sass		= require("gulp-ruby-sass"),
 	sourcemaps  = require('gulp-sourcemaps'),
  	uglify 		= require('gulp-uglify'),
-	minifyCss 	= require('gulp-minify-css'),
-	babel 		= require("gulp-babel");
-
+	watch		= require("gulp-watch");
+	
 gulp.task('annotate', function() {
-	return gulp.src('./ng-app/annotated/*.js')
+	return gulp.src('./ng-app/**/*.js')
 		.pipe(sourcemaps.init())
+		.pipe(plumber())
+		.pipe(ngAnnotate())
+		.pipe(concat('comet.node.js'))
+		.pipe(gulp.dest('./public/dist/js/'))
 		.pipe(uglify())
-		.pipe(concat('app.min.js'))
+		.pipe(rename({ extname: ".min.js" }))
 		.pipe(sourcemaps.write("."))
-		.pipe(gulp.dest('./public/assets/includes/'));
+		.pipe(gulp.dest('./public/dist/js/'));
 });
 
-gulp.task('minify-css', function() {
-	return gulp.src('./public/assets/css/*.css')
-		.pipe(minifyCss())
+gulp.task('sass', function() {
+	return sass(['./public/dev/css/**/*.scss', './public/dev/css/**/*.sass'])
+		.on('error', sass.logError)
+		.pipe(gulp.dest('./public/dev/css'));
+})
+
+gulp.task('mini-css', function() {
+	return gulp.src('./public/dev/css/**/*.css')
+		.pipe(cssnano())
 		.pipe(concat('all.min.css'))
-		.pipe(gulp.dest('./public/assets/includes/'));
+		.pipe(gulp.dest('./public/dist/css'));
+})
+
+gulp.task("babel", function () {
+	return gulp.src(["**/*.es6", '!./{node_modules,node_modules/**}'])
+		.pipe(babel())
+		.pipe(gulp.dest("./public/dist/js/"))
+		.pipe(rename({ extname: ".min.js" }))
+		.pipe(gulp.dest("./public/dist/js/"));
 });
 
-/*
-gulp.task("babel", function () {
-  return gulp.src("comet-node/*.js")
-    .pipe(sourcemaps.init())
-    .pipe(babel())
-    .pipe(concat("all.js"))
-    .pipe(sourcemaps.write("."))
-    .pipe(gulp.dest("./public/assets/includes/"));
-});
-*/
-gulp.task('default', ['annotate', 'minify-css']);
+gulp.task('default', ['annotate', 'babel', 'sass', 'mini-css']);

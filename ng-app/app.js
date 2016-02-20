@@ -1,14 +1,14 @@
 angular.module('comet', 
                [
-               		'app.routes',
-                         'ngAnimate',
-               		'authService',
-               		'mainCtrl',
-               		'userCtrl',
-               		'userService',
-                         'ticketCtrl',
-                         'ticketService'
-               	])
+          		'app.routes',
+                    'ngAnimate',
+          		'authService',
+          		'mainCtrl',
+          		'userCtrl',
+          		'userService',
+                    'ticketCtrl',
+                    'ticketService'
+          	])
 	// application configuration to integrate token into requests
 	.config(function($httpProvider) {
 
