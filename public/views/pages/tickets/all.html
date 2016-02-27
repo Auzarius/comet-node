@@ -37,9 +37,47 @@
 </div>
 
 <div class="form-group has-feedback no-print" ng-show="ticket.tickets && ticket.tickets.length > 0">
-	<div class="col-sm-5">
-		<input type="search" class="form-control search-box" name="searchBox" ng-model="searchBox" placeholder="Search for..." />
-		<span class="form-control-feedback" aria-hidden="true"></span>
+	<div class="row">
+		<div class="col-xs-8">
+			<input type="search" class="form-control search-box" name="searchBox" ng-model="searchBox" placeholder="Search for..." ng-disabled="!ticket.simpleSearch" />
+		</div>
+		<div class="col-xs-4">
+			<a href="#advancedSearch" id="advancedbtn" class="btn btn-default" role="button" data-toggle="collapse" aria-expanded="false" ng-click="ticket.toggleAdvanced()" aria-controls="advancedSearch">Advanced Search</a>
+		</div>
+	</div>
+	<div class="collapse" id="advancedSearch">
+		<form class="form-horizontal" name="advancedSearch" novalidate>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="customer">Customer</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" name="customer" ng-model="searchBox.customer" ng-disabled="ticket.simpleSearch" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="status">Status</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" name="status" ng-model="searchBox.status" ng-disabled="ticket.simpleSearch" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="indicator_tag">Tag #</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" name="indicator_tag" ng-model="searchBox.indicator_tag" ng-disabled="ticket.simpleSearch" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="indicator_manu">Manufacturer</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" name="indicator_manu" ng-model="searchBox.indicator_manu" ng-disabled="ticket.simpleSearch" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="indicator_model">Model</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" name="indicator_model" ng-model="searchBox.indicator_model" ng-disabled="ticket.simpleSearch" />
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
 

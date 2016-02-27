@@ -1,12 +1,18 @@
 angular.module('ticketCtrl', ['ticketService'])
 
-.controller('ticketController', function(Ticket) {
+.controller('ticketController', function($scope, Ticket) {
 
 	var vm = this;
-
+	vm.simpleSearch = true;
 	// set a processing variable to show loading things
 	vm.processing = true;
-
+	
+	vm.toggleAdvanced = function() {
+		$scope.searchBox = null;
+		$scope.advancedSearch.$setPristine();
+		vm.simpleSearch = !vm.simpleSearch;
+	}
+	
 	// grab all the active tickets at page load
 	Ticket.active()
 		.success(function(node) {
@@ -49,13 +55,19 @@ angular.module('ticketCtrl', ['ticketService'])
 })
 
 
-.controller('ticketAllController', function(Ticket) {
+.controller('ticketAllController', function($scope, Ticket) {
 
 	var vm = this;
-
+	vm.simpleSearch = true;
 	// set a processing variable to show loading things
 	vm.processing = true;
-
+	
+	vm.toggleAdvanced = function() {
+		$scope.searchBox = null;
+		$scope.advancedSearch.$setPristine();
+		vm.simpleSearch = !vm.simpleSearch;
+	}
+	
 	// grab all the active tickets at page load
 	Ticket.all()
 		.success(function(node) {

@@ -34,15 +34,15 @@ gulp.task('annotate', function() {
 		.pipe(uglify())
 		.pipe(rename({ extname: ".min.js" }))
 		.pipe(sourcemaps.write("."))
-		.pipe(gulp.dest('./public/dist/js/'))
-		.pipe(connect.reload());
+		.pipe(gulp.dest('./public/dist/js/'));
+		//.pipe(connect.reload());
 });
 
 gulp.task('sass', function() {
 	return sass(['./public/dev/css/**/*.scss', './public/dev/css/**/*.sass'])
 		.pipe(plumber())
-		.pipe(gulp.dest('./public/dev/css'))
-		.pipe(connect.reload());
+		.pipe(gulp.dest('./public/dev/css'));
+		//.pipe(connect.reload());
 });
 
 gulp.task('mini-css', function() {
@@ -50,8 +50,8 @@ gulp.task('mini-css', function() {
 		.pipe(plumber())
 		.pipe(cssnano())
 		.pipe(concat('all.min.css'))
-		.pipe(gulp.dest('./public/dist/css'))
-		.pipe(connect.reload());
+		.pipe(gulp.dest('./public/dist/css'));
+		//.pipe(connect.reload());
 });
 
 gulp.task("babel", function () {
@@ -61,8 +61,8 @@ gulp.task("babel", function () {
 		.pipe(jshint())
 		.pipe(gulp.dest("./public/dist/js/"))
 		.pipe(rename({ extname: ".min.js" }))
-		.pipe(gulp.dest("./public/dist/js/"))
-		.pipe(connect.reload());
+		.pipe(gulp.dest("./public/dist/js/"));
+		//.pipe(connect.reload());
 });
 
 gulp.task("watch", function() {
@@ -73,4 +73,4 @@ gulp.task("watch", function() {
 	gulp.watch(['**/*.es6', '!./{node_modules,node_modules/**}'], ['babel']);
 });
 
-gulp.task('default', ['connect', 'watch']);
+gulp.task('default', ['watch']);

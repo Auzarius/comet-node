@@ -31,7 +31,6 @@
 	<thead>
 		<tr>
 			<th class="col-xs-1" ng-if="main.user.role === 'admin' || main.user.role === 'mod'"></th>
-			<th ng-if="main.user.role === 'admin' || main.user.role === 'mod'">id</th>
 			<th ng-if="main.user.role === 'admin' || main.user.role === 'mod'">Username</th>
 			<th>Name</th>
 			<th>Email</th>
@@ -59,7 +58,6 @@
 					</ul>
 				</div>
 			</td>
-			<td ng-if="main.user.role === 'admin' || main.user.role === 'mod'">{{ person.id }}</td>
 			<td ng-if="main.user.role === 'admin' || main.user.role === 'mod'">{{ person.username }}</td>
 			<td>{{ person.firstName + ' ' + person.lastName }}</td>
 			<td>{{ person.email }}</td>

@@ -309,13 +309,21 @@ input[type=search].form-control.search-box {
 	padding-left: 1em;
 	border: 1px solid #ddd;
 	box-shadow: 1px 0 1em #fff;
-	margin-bottom: 1em;
-	transition: all 1.5s ease-in-out;
+	margin-bottom: 0.2em;
+	transition: box-shadow 1.5s ease-in-out;
 }
 
 input[type=search].form-control.search-box:focus {
 	border: 1px solid #93D6F9;
 	box-shadow: 1px 0 1em #549FCF;
+}
+
+input[type=search].form-control.search-box:disabled {
+	color: white;
+}
+
+#advancedbtn {
+	margin-left: -1.3em;
 }
 
 .spinner {

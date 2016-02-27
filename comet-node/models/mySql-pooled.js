@@ -432,7 +432,7 @@ module.exports = function(config) {
 	mySql.users = {
 		all : function (next) {
 			//console.log('\x1b[33musers.all query\x1b[0m');
-			var query = 'SELECT id, username, firstName, lastName, email, role FROM ' + mySql.config.users_table;
+			var query = 'SELECT id, username, firstName, lastName, email, role FROM ' + mySql.config.users_table + ' ORDER BY firstName, lastName, role ASC';
 			
 			mySql.query(query, null, function (err, result) {
 				if (err) {
