@@ -42,11 +42,11 @@
 			<input type="search" class="form-control search-box" name="searchBox" ng-model="searchBox" placeholder="Search for..." ng-disabled="!ticket.simpleSearch" />
 		</div>
 		<div class="col-xs-4">
-			<a href="#advancedSearch" id="advancedbtn" class="btn btn-default" role="button" data-toggle="collapse" aria-expanded="false" ng-click="ticket.toggleAdvanced()" aria-controls="advancedSearch">Advanced Search</a>
+			<a href="" id="advancedbtn" class="btn btn-default" role="button" data-toggle="collapse" aria-expanded="false" ng-click="ticket.toggleAdvanced()" onclick="$('#advancedSearch').collapse('toggle');" aria-controls="advancedSearch">Advanced Search <span class="glyphicon glyphicon-menu-up" ng-if="!ticket.simpleSearch"></span><span class="glyphicon glyphicon-menu-down" ng-if="ticket.simpleSearch"></span></a>
 		</div>
 	</div>
 	<div class="collapse" id="advancedSearch">
-		<form class="form-horizontal" name="advancedSearch" novalidate>
+		<form class="form-horizontal" name="advancedForm" novalidate>
 			<div class="form-group">
 				<label class="col-sm-2 control-label" for="customer">Customer</label>
 				<div class="col-sm-6">

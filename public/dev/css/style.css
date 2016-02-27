@@ -353,7 +353,7 @@ input[type=search].form-control.search-box:disabled {
 	animation: fadeInRight 1s both ease;
 }
 
-main .ng-enter {
+div[ng-view].ng-enter {
 	-webkit-animation: fadeInRight 1s both ease;
 	-moz-animation: fadeInRight 1s both ease;
 	animation: fadeInRight 1s both ease;

@@ -448,7 +448,7 @@ angular.module('ticketCtrl', ['ticketService'])
 	
 	vm.toggleAdvanced = function() {
 		$scope.searchBox = null;
-		$scope.advancedSearch.$setPristine();
+		$scope.advancedForm.$setPristine();
 		vm.simpleSearch = !vm.simpleSearch;
 	}
 	
@@ -503,7 +503,7 @@ angular.module('ticketCtrl', ['ticketService'])
 	
 	vm.toggleAdvanced = function() {
 		$scope.searchBox = null;
-		$scope.advancedSearch.$setPristine();
+		$scope.advancedForm.$setPristine();
 		vm.simpleSearch = !vm.simpleSearch;
 	}
 	
