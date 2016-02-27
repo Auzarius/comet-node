@@ -252,15 +252,19 @@ input[type=number]::-webkit-outer-spin-button {
 		display: none;
 	}
 	
+	table#ticket td, table#ticket th {
+		padding-left: 2.2em!important;
+	}
+	
 	.comment-container {
-		padding: 0em;
-		margin-left: -0.8em;
+		padding: 0em;	
 		border: 0em solid #000;
+		width: calc(100% - 24px);
 	}
 	
 	.comment-container .row {
 		padding: 0.1em;
-		margin-left: -0.8em;
+		margin-left: -1em;
 		border: 1px solid #ddd;
 	}
 	
