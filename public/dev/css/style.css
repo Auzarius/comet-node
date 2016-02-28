@@ -90,7 +90,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	background-color: rgb(255,255,255);
 }
 
-.table-striped tbody tr:nth-child(even) td {
+.table-striped tbody tr:nth-child(even) td, .table-striped tbody tr:nth-child(even) th {
 	background-color: #FFF;
 	background-color: rgb(255,255,255);
 }
