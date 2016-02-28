@@ -26,4 +26,4 @@ This will also server as my first node.js project and also my first real javascr
 ##Links
 - The live version is almost always running at: http://inshop.auzarius.com/
 - The development version is usually running at: http://dev.auzarius.com/
--- For the dev version you can login using admin for the username and password for the password.
+  - For the dev version you can login using admin for the username and password for the password.
