@@ -24,7 +24,7 @@ angular.module('app.routes', ['ngRoute'])
 		$routeProvider
 
 			.when('/', {
-				templateUrl: './views/pages/home.html'
+				templateUrl : './views/pages/home.html'
 			})
 			
 			.when('/signin', {
@@ -83,6 +83,12 @@ angular.module('app.routes', ['ngRoute'])
 			.when('/tickets/all', {
 				templateUrl : './views/pages/tickets/all.html',
 				controller  : 'ticketAllController',
+				controllerAs: 'ticket'
+			})
+			
+			.when('/tickets/recent', {
+				templateUrl : './views/pages/tickets/recent.html',
+				controller  : 'ticketRecentController',
 				controllerAs: 'ticket'
 			})
 
@@ -203,7 +209,7 @@ angular.module('ticketCtrl', ['ticketService'])
 		$scope.advancedForm.$setPristine();
 		vm.simpleSearch = !vm.simpleSearch;
 	}
-	
+		
 	// grab all the active tickets at page load
 	Ticket.active()
 		.success(function(node) {
@@ -223,7 +229,7 @@ angular.module('ticketCtrl', ['ticketService'])
 			
 			vm.tickets = null;
 			vm.processing = false;
-		})
+		});
 
 	// function to delete a ticket
 	vm.deleteTicket = function(id) {
@@ -245,6 +251,30 @@ angular.module('ticketCtrl', ['ticketService'])
 	};
 }])
 
+.controller('ticketRecentController', ["$scope", "Ticket", function($scope, Ticket) {
+	var vm = this;
+	vm.processing = true;
+	
+	Ticket.recent()
+		.success(function(node) {
+
+			if ( node.success == false || node.data == null ) {
+				vm.tickets = null;
+			} else {
+				vm.tickets = node.data;
+			}
+			
+			vm.processing = false;
+		})
+		.error(function(node) {
+			if (node) {
+				vm.message = node;
+			}
+			
+			vm.tickets = null;
+			vm.processing = false;
+		});
+}])
 
 .controller('ticketAllController', ["$scope", "Ticket", function($scope, Ticket) {
 
@@ -834,6 +864,10 @@ angular.module('ticketService', [])
 	
 	ticketFactory.all = function() {
 		return $http.get('/api/tickets/all');
+	};
+	
+	ticketFactory.recent = function() {
+		return $http.get('/api/tickets/recent');
 	};
 
 	// create a ticket
