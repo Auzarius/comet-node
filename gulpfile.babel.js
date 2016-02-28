@@ -3,6 +3,7 @@
 import gulp from "gulp";
 import babel from "gulp-babel";
 import concat from "gulp-concat";
+import cssbeautify from "gulp-cssbeautify";
 import cssnano from "gulp-cssnano";
 import jshint from "gulp-jshint";
 import ngAnnotate from "gulp-ng-annotate";
@@ -37,8 +38,12 @@ gulp.task('sass', () => {
 gulp.task('mini-css', () => {
 	return gulp.src('./public/dev/css/**/*.css')
 		.pipe(plumber())
+		.pipe(cssbeautify())
+		.pipe(sourcemaps.init())
+		.pipe(gulp.dest('./public/dist/css'))
 		.pipe(cssnano())
-		.pipe(concat('all.min.css'))
+		.pipe(rename({ extname: ".min.css" }))
+		.pipe(sourcemaps.write("."))
 		.pipe(gulp.dest('./public/dist/css'));
 });
 
