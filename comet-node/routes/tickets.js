@@ -55,6 +55,16 @@ module.exports = function (app, express, mySql) {
 			});
 		});
 	
+	apiTickets.get('/recent', function (req, res) {
+		mySql.tickets.recent(function (err, result) {
+			if (err) {
+				res.status(500).send(err);
+			} else {
+				res.status(200).json(result);
+			}
+		});
+	})
+	
 	apiTickets.get('/search', function (req, res) {
 		res.json({
 			success : true,

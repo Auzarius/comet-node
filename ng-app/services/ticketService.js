@@ -18,6 +18,10 @@ angular.module('ticketService', [])
 	ticketFactory.all = function() {
 		return $http.get('/api/tickets/all');
 	};
+	
+	ticketFactory.recent = function() {
+		return $http.get('/api/tickets/recent');
+	};
 
 	// create a ticket
 	ticketFactory.create = function(ticketData) {

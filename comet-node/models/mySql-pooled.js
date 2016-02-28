@@ -217,6 +217,47 @@ module.exports = function(config) {
 			});
 		},
 		
+		recent: function (next) {
+			var query = 'SELECT t.id, t.customer, t.indicator_tag, t.indicator_manu, t.indicator_model, t.created_at, t.workorder, ' +
+				'( SELECT status FROM ' + mySql.config.events_table + ' WHERE ticket_id = t.id AND status != \'Additional Notes\' ORDER BY created_at DESC LIMIT 1) AS status, ' +
+				'( SELECT CONCAT(firstName,\' \', lastName) FROM ' + mySql.config.users_table + ' WHERE id = t.created_by ) AS created_by, ' +
+				'( SELECT created_at FROM ' + mySql.config.events_table + ' ' + 
+				'	WHERE ticket_id = t.id ' +
+				'	ORDER BY created_at DESC ' +
+				'	LIMIT 1 ' +
+				') AS updated_at, ' +
+				'( SELECT CONCAT(u.firstName,\' \', u.lastName) FROM ' + mySql.config.events_table + ' e ' +
+				'	INNER JOIN ' + mySql.config.users_table + ' u ON u.id = e.created_by ' +
+				' 	WHERE e.ticket_id = t.id ' +
+				' 	ORDER BY e.created_at DESC ' +
+				' 	LIMIT 1 ' +
+				') AS updated_by ' +
+				'FROM ' + mySql.config.tickets_table + ' t ' +
+				'HAVING updated_at > DATE(NOW() - INTERVAL 7 DAY) AND ' +
+				'		status != \'Pending\' ' +
+				'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
+				
+				mySql.query(query, null, function (err, result) {
+				if (err) {
+					throw new Error(err);
+					next(err);
+				} else if (mySql.verifyResult(result)) {
+					console.log("result", result);
+					next(null, {
+						success : true,
+						data 	: result || [],
+						status	: 200
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'No tickets were found that matched your query',
+						status	: 404
+					});
+				}
+			});
+		},
+		
 		findOne : function (options, next) {
 			//console.log('\x1b[33mticket.findOne query\x1b[0m');
 			var query = 'SELECT *, ( ' +

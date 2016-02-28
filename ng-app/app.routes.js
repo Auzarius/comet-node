@@ -5,7 +5,7 @@ angular.module('app.routes', ['ngRoute'])
 		$routeProvider
 
 			.when('/', {
-				templateUrl: './views/pages/home.html'
+				templateUrl : './views/pages/home.html'
 			})
 			
 			.when('/signin', {
@@ -64,6 +64,12 @@ angular.module('app.routes', ['ngRoute'])
 			.when('/tickets/all', {
 				templateUrl : './views/pages/tickets/all.html',
 				controller  : 'ticketAllController',
+				controllerAs: 'ticket'
+			})
+			
+			.when('/tickets/recent', {
+				templateUrl : './views/pages/tickets/recent.html',
+				controller  : 'ticketRecentController',
 				controllerAs: 'ticket'
 			})
 
