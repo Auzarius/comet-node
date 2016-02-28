@@ -80,8 +80,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	margin-bottom: 0px;
 }
 
-
-
 .tbody-striped tbody:nth-child(even) tr td {
 	background-color: #F9F9F9;
 	background-color: rgb(240,240,240);
@@ -451,6 +449,10 @@ div[ng-view].ng-enter {
 		width: 1140px;
 		max-width: 1140px;
 	}
+}
+
+#advancedSearch {
+	padding-top: 1em;
 }
 
 .alert-info {

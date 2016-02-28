@@ -465,6 +465,10 @@ div[ng-view].ng-enter {
     }
 }
 
+#advancedSearch {
+    padding-top: 1em;
+}
+
 .alert-info {
     color: white !important;
 }
