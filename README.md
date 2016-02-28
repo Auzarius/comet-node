@@ -20,4 +20,10 @@ This will also server as my first node.js project and also my first real javascr
   
 ##To-do
 - [ ] Write the API Documentation
-- [ ] Add the ability to disabled a user account without deletion (this would be to maintain records)
+- [ ] Add the ability to disable a user account without deletion (this would be to maintain records)
+- [ ] Rewrite node code-base for the project to clean it up.  Likely using a few of the new ES6 features like promises to remove the nested callbacks.
+
+##Links
+- The live version is almost always running at: http://inshop.auzarius.com/
+- The development version is usually running at: http://dev.auzarius.com/
+-- For the dev version you can login using admin for the username and password for the password.
