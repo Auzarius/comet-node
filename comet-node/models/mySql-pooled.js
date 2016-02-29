@@ -234,7 +234,8 @@ module.exports = function(config) {
 				') AS updated_by ' +
 				'FROM ' + mySql.config.tickets_table + ' t ' +
 				'HAVING updated_at > DATE(NOW() - INTERVAL 7 DAY) AND ' +
-				'		(status != \'Pending\' AND status != \'Waiting for Parts\' AND status != \'Waiting for Customer\') ' +
+				'		(status != \'Pending\' AND status != \'Waiting for Parts\' AND ' +
+				'		 status != \'Waiting for Customer\' AND status != \'Complete\') ' +
 				'ORDER BY t.customer ASC, status ASC, t.indicator_tag ASC';
 				
 				mySql.query(query, null, function (err, result) {
@@ -242,7 +243,6 @@ module.exports = function(config) {
 					throw new Error(err);
 					next(err);
 				} else if (mySql.verifyResult(result)) {
-					console.log("result", result);
 					next(null, {
 						success : true,
 						data 	: result || [],
