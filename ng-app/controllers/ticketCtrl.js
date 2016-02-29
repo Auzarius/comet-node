@@ -57,6 +57,13 @@ angular.module('ticketCtrl', ['ticketService'])
 .controller('ticketRecentController', function($scope, Ticket) {
 	var vm = this;
 	vm.processing = true;
+	vm.simpleSearch = true;
+	
+	vm.toggleAdvanced = function() {
+		$scope.searchBox = null;
+		$scope.advancedForm.$setPristine();
+		vm.simpleSearch = !vm.simpleSearch;
+	}
 	
 	Ticket.recent()
 		.success(function(node) {

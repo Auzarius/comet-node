@@ -9,20 +9,20 @@
 
 <div class="page-header">
 	<h1>
-		<span ng-if="main.location == '/tickets/all'">All </span>Tickets 
-		<a href="/tickets" class="btn btn-default" ng-if="main.location == '/tickets/all'">
-			<span class="glyphicon glyphicon-chevron-left"></span> 
-			Back to Active Tickets
-		</a>
+		<span ng-if="main.location == '/tickets/all'">All </span>Tickets
 		<a href="/tickets/create" class="btn btn-default">
 			<span class="glyphicon glyphicon-plus"></span> 
 			New Ticket
+		</a> 
+		<a href="/tickets" class="btn btn-default" ng-if="main.location == '/tickets/all'">
+			<span class="glyphicon glyphicon-chevron-left"></span> 
+			Active Tickets
 		</a>
 		<a href="/tickets/all" class="btn btn-default" ng-if="main.location != '/tickets/all'">
 			<span class="glyphicon glyphicon-edit"></span> 
 			All Tickets
 		</a>
-		<a href="/tickets/recent" class="btn btn-default" ng-if="main.location != '/tickets/all'">
+		<a href="/tickets/recent" class="btn btn-default">
 			<span class="glyphicon glyphicon-edit"></span> 
 			Recent Tickets
 		</a>
