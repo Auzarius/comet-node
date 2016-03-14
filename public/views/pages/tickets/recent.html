@@ -24,7 +24,8 @@
 		</a>
 		
 	</h1>
-	<i>Tickets modified within the last 7 days</i>
+	<i>Tickets modified within the last 7 days</i><br/>
+	<i ng-if="ticket.tickets"><strong ng-if="ticket.tickets.length > 0">{{ ticket.tickets.length }}</strong><span ng-if="ticket.tickets.length <= 0">No</span><span ng-if="ticket.tickets.length > 1 || ticket.tickets.length <= 0"> tickets were found.</span><span ng-if="ticket.tickets.length == 1"> ticket was found.</span></i>
 
 </div>
 
