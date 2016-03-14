@@ -9,9 +9,17 @@ module.exports = function(config) {
 	mySql.config = config;
 	
 	mySql.init = function() {
-		var vm = this;
+		var vm = this,
+			server = {
+				host     		: vm.config.host || 'localhost',
+				user     		: vm.config.user || 'root',
+				password 		: vm.config.password || '',
+				database 		: vm.config.database,
+				port 			: vm.config.port || 3306
+			};
+			
 		console.log('[mySql] The function has been initialized.');
-		Connection = node_mysql.createPool( vm.config );
+		Connection = node_mysql.createPool( server );
 			
 		Connection.on('error', vm.handleError);
 		

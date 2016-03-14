@@ -33,7 +33,7 @@ angular.module('ticketCtrl', ['ticketService'])
 			vm.tickets = null;
 			vm.processing = false;
 		});
-
+	
 	// function to delete a ticket
 	vm.deleteTicket = function(id) {
 		vm.processing = true;
@@ -84,6 +84,25 @@ angular.module('ticketCtrl', ['ticketService'])
 			vm.tickets = null;
 			vm.processing = false;
 		});
+		
+	// function to delete a ticket
+	vm.deleteTicket = function(id) {
+		vm.processing = true;
+		
+		Ticket.delete(id)
+			.success(function(data) {
+				
+				if ( data.success) {
+					Ticket.recent()
+						.success(function(node) {
+							vm.tickets = node.data;
+						});
+				}
+				
+				vm.processing = false;
+				vm.message = data.message;
+			});
+	};
 })
 
 .controller('ticketAllController', function($scope, Ticket) {

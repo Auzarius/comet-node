@@ -27,6 +27,7 @@
 			Recent Tickets
 		</a>
 	</h1>
+	<i ng-if="ticket.tickets"><strong nf-if="ticket.tickets.length > 0">{{ ticket.tickets.length }}</strong><span ng-if="ticket.tickets.length <= 0">No</span><span ng-if="ticket.tickets.length > 1"> tickets were found.</span><span ng-if="ticket.tickets.length == 1"> ticket was found.</span></i>
 
 </div>
 
