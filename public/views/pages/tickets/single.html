@@ -221,7 +221,7 @@
 			<div class='col-xs-6' title="{{_event.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
 				Created: {{ _event.created_at | amTimeAgo }}
 			</div>
-			<div class='col-xs-6' ng-if="_event.updated_at" title="{{_event.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
+			<div class='col-xs-6' ng-if="_event.updated_at" title="{{_event.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
 				Updated: {{ _event.updated_at | amTimeAgo }} by 
 				<span ng-if="_event.updated_by">{{ _event.updated_by }}</span>
 				<span ng-if="!_event.updated_by">Unknown</span>
