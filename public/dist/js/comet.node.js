@@ -7,7 +7,8 @@ angular.module('comet',
                     'userCtrl',
                     'userService',
                     'ticketCtrl',
-                    'ticketService'
+                    'ticketService',
+                    'customerService'
                ])
      // application configuration to integrate token into requests
      .config(["$httpProvider", function($httpProvider) {
@@ -195,7 +196,7 @@ angular.module('mainCtrl', ['angularMoment'])
 	};
 
 }]);
-angular.module('ticketCtrl', ['ticketService'])
+angular.module('ticketCtrl', ['ticketService', 'customerService'])
 
 .controller('ticketController', ["$scope", "Ticket", function($scope, Ticket) {
 
@@ -349,9 +350,10 @@ angular.module('ticketCtrl', ['ticketService'])
 }])
 
 // controller applied to ticket creation page
-.controller('ticketCreateController', ["$scope", "Ticket", function($scope, Ticket) {
+.controller('ticketCreateController', ["$scope", "Ticket", "Customer", function($scope, Ticket, Customer) {
 	
 	var vm = this;
+	vm.ticketData = {};
 
 	// function to create a ticket
 	vm.saveTicket = function() {
@@ -369,6 +371,34 @@ angular.module('ticketCtrl', ['ticketService'])
 			});
 			
 	};
+	
+	vm.getCustomerList = function() {
+		Customer.getList()
+			.success(function(node) {
+				vm.customerList = node.data;
+			})
+			.error(function(node) {
+				console.log("Message", node.message);
+				vm.customerList = ['--'];
+			});
+	};
+	
+	vm.getCustomerById = function(id) {
+		Customer.get(id)
+			.success(function(node) {
+				vm.ticketData.customer = node.data.customer;
+				vm.ticketData.street = node.data.street;
+				vm.ticketData.city = node.data.city;
+				vm.ticketData.state = node.data.state;
+				vm.ticketData.zipcode = node.data.zipcode;
+			})
+			.error(function(node) {
+				console.log("Message", node.message);
+				vm.ticketData.customer = '--';
+			});
+	};
+	
+	vm.getCustomerList();
 }])
 
 // controller applied to ticket edit page
@@ -871,6 +901,28 @@ angular.module('authService', [])
 	return interceptorFactory;
 	
 }]);
+angular.module('customerService', [])
+
+.factory('Customer', ["$http", function($http) {
+
+	// create a new object
+	var customerService = {};
+
+	// get a single customers data
+	customerService.get = function(id) {
+		return $http.get('/api/customers/' + id);
+	};
+
+	// get the customer list
+	customerService.getList = function() {
+		return $http.get('/api/customers');
+	};
+
+	// return our entire customerService object
+	return customerService;
+
+}]);
+
 angular.module('ticketService', [])
 
 .factory('Ticket', ["$http", function($http) {

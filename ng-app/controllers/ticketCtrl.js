@@ -1,4 +1,4 @@
-angular.module('ticketCtrl', ['ticketService'])
+angular.module('ticketCtrl', ['ticketService', 'customerService'])
 
 .controller('ticketController', function($scope, Ticket) {
 
@@ -152,9 +152,10 @@ angular.module('ticketCtrl', ['ticketService'])
 })
 
 // controller applied to ticket creation page
-.controller('ticketCreateController', function($scope, Ticket) {
+.controller('ticketCreateController', function($scope, Ticket, Customer) {
 	
 	var vm = this;
+	vm.ticketData = {};
 
 	// function to create a ticket
 	vm.saveTicket = function() {
@@ -172,6 +173,34 @@ angular.module('ticketCtrl', ['ticketService'])
 			});
 			
 	};
+	
+	vm.getCustomerList = function() {
+		Customer.getList()
+			.success(function(node) {
+				vm.customerList = node.data;
+			})
+			.error(function(node) {
+				console.log("Message", node.message);
+				vm.customerList = ['--'];
+			});
+	};
+	
+	vm.getCustomerById = function(id) {
+		Customer.get(id)
+			.success(function(node) {
+				vm.ticketData.customer = node.data.customer;
+				vm.ticketData.street = node.data.street;
+				vm.ticketData.city = node.data.city;
+				vm.ticketData.state = node.data.state;
+				vm.ticketData.zipcode = node.data.zipcode;
+			})
+			.error(function(node) {
+				console.log("Message", node.message);
+				vm.ticketData.customer = '--';
+			});
+	};
+	
+	vm.getCustomerList();
 })
 
 // controller applied to ticket edit page

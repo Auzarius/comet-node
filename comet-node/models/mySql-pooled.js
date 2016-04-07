@@ -1202,6 +1202,70 @@ module.exports = function(config) {
 		}
 	}
 	
+	mySql.customers = {
+		list : function (next) {
+			var query = 'SELECT id, customer ' +
+						'FROM ' + mySql.config.tickets_table + ' ' +
+						'GROUP BY customer ' +
+						'ORDER BY customer ASC';
+			
+			mySql.query(query, null, function (err, result) {
+				if (err) {
+					throw new Error(err);
+					next(err);
+				} else if ( mySql.verifyResult(result)) {
+					next(null, {
+						success : true,
+						data 	: result || '',
+						message : ''
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'There are no customers available at this time.'
+					});
+				}
+			});
+		},
+		
+		findOne : function (options, next) {
+			var query = 'SELECT id, customer, street, city, state, zipcode ' +
+						'FROM ' + mySql.config.tickets_table + ' ' +
+						'GROUP BY customer ' +
+						'HAVING ? ' +
+						'ORDER BY customer ASC';
+			
+			if ( options ) {
+				mySql.query(query, options, function (err, result) {
+					if (err) {
+						throw new Error(err);
+						next(err);
+					} else if ( mySql.verifyResult(result[0])) {
+						next(null, {
+							success : true,
+							data 	: result[0] || [],
+							message : ''
+						});
+					} else {
+						next(null, {
+							success : false,
+							data    : [],
+							message : 'The customer you were looking for could not be found.'
+						});
+					}
+				});
+			} else {
+				throw new Error('No options were passed for the search query.');
+				next({
+					success : false,
+					message : 'No options were passed for the search query.',
+					value	: options,
+					note	: 'If you received this in error, please notify the admin.'
+				});
+			}
+		}
+	}
+	
 	mySql.bcrypt = bcrypt;
 
 	return mySql;

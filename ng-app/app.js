@@ -7,7 +7,8 @@ angular.module('comet',
                     'userCtrl',
                     'userService',
                     'ticketCtrl',
-                    'ticketService'
+                    'ticketService',
+                    'customerService'
                ])
      // application configuration to integrate token into requests
      .config(function($httpProvider) {
