@@ -1204,10 +1204,19 @@ module.exports = function(config) {
 	
 	mySql.customers = {
 		list : function (next) {
-			var query = 'SELECT id, customer ' +
-						'FROM ' + mySql.config.tickets_table + ' ' +
-						'GROUP BY customer ' +
-						'ORDER BY customer ASC';
+			var query = 'SELECT t.id, t.customer, t.city, t.state ' +
+						'FROM ( SELECT *,max(created_at) as most_recent_date ' +
+						'	FROM tickets ' +
+						'	GROUP BY customer,city,state ) t1 ' +
+						'JOIN tickets t ' +
+						'ON t.id = ' +
+						'	( SELECT t_uniq.id ' +
+						'	FROM tickets t_uniq ' +
+						'	WHERE t_uniq.customer = t1.customer ' +
+						'		AND (t_uniq.city = t1.city) ' +
+						'		AND t_uniq.state = t1.state ' +
+						'		AND t_uniq.created_at = t1.most_recent_date ' +
+						'	LIMIT 1 )';
 			
 			mySql.query(query, null, function (err, result) {
 				if (err) {
@@ -1231,9 +1240,7 @@ module.exports = function(config) {
 		findOne : function (options, next) {
 			var query = 'SELECT id, customer, street, city, state, zipcode ' +
 						'FROM ' + mySql.config.tickets_table + ' ' +
-						'GROUP BY customer ' +
-						'HAVING ? ' +
-						'ORDER BY customer ASC';
+						'HAVING ? ';
 			
 			if ( options ) {
 				mySql.query(query, options, function (err, result) {

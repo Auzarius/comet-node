@@ -19,7 +19,12 @@
 		<label class="col-sm-2 control-label" for="customerList">Customer List</label>
 		<div class="col-sm-6">
 			<select name="customerList" ng-model="customers" class="form-control" ng-change="ticket.getCustomerById(customers)">
-				<option ng-repeat="customer in ticket.customerList" ng-value="{{ customer.id }}">{{ customer.customer }}</option>
+				<option value="" disabled selected>Select a customer...</option>
+				<option ng-repeat="customer in ticket.customerList" value="{{ customer.id }}">{{ customer.customer }} 
+					<span>
+						&nbsp;-- {{ customer.city }} {{ customer.state }}
+					</span>
+				</option>
 			</select>
 		</div>
 	</div>
