@@ -14,6 +14,16 @@ angular.module('customerService', [])
 	customerService.getList = function() {
 		return $http.get('/api/customers');
 	};
+	
+	customerService.filterList = function(source, id) {
+		for(var i = 0, len = source.length; i < len; i++) {
+			if(source[i].id == id) {
+				return source[i];
+			}
+		}
+
+		return false;
+	};
 
 	// return our entire customerService object
 	return customerService;

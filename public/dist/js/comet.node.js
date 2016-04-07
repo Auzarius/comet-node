@@ -383,6 +383,7 @@ angular.module('ticketCtrl', ['ticketService', 'customerService'])
 			});
 	};
 	
+	/*
 	vm.getCustomerById = function(id) {
 		Customer.get(id)
 			.success(function(node) {
@@ -396,6 +397,15 @@ angular.module('ticketCtrl', ['ticketService', 'customerService'])
 				console.log("Message", node.message);
 				vm.ticketData.customer = '--';
 			});
+	};*/
+	
+	vm.getCustomerById = function(id) {
+		var result = Customer.filterList(vm.customerList, id);
+		vm.ticketData.customer = result.customer;
+		vm.ticketData.street = result.street;
+		vm.ticketData.city = result.city;
+		vm.ticketData.state = result.state;
+		vm.ticketData.zipcode = result.zipcode;
 	};
 	
 	vm.getCustomerList();
@@ -916,6 +926,16 @@ angular.module('customerService', [])
 	// get the customer list
 	customerService.getList = function() {
 		return $http.get('/api/customers');
+	};
+	
+	customerService.filterList = function(source, id) {
+		for(var i = 0, len = source.length; i < len; i++) {
+			if(source[i].id == id) {
+				return source[i];
+			}
+		}
+
+		return false;
 	};
 
 	// return our entire customerService object

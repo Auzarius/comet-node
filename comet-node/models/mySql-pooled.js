@@ -1203,8 +1203,10 @@ module.exports = function(config) {
 	}
 	
 	mySql.customers = {
+		// This will return the most recent complete address entry for customers
+		// This will not return customers with a null city or state field
 		list : function (next) {
-			var query = 'SELECT t.id, t.customer, t.city, t.state ' +
+			var query = 'SELECT t.id, t.customer, t.street, t.city, t.state, t.zipcode ' +
 						'FROM ( SELECT *,max(created_at) as most_recent_date ' +
 						'	FROM tickets ' +
 						'	GROUP BY customer,city,state ) t1 ' +
