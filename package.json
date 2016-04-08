@@ -4,11 +4,13 @@
   "description": "Ticket CRM",
   "main": "server.js",
   "scripts": {
+    "build": "gulp",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Auzarius/Ticket.node-CRM.git"
+    "url": "git+ssh://git@github.com/Auzarius/comet-node.git"
   },
   "keywords": [
     "node",
