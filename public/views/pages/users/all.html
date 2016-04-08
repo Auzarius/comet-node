@@ -9,7 +9,7 @@
 
 <div class="page-header">
 	<h1>
-		Users 
+		<span class="font-gradient">Users </span>
 		<a href="/users/create" class="btn btn-default" ng-if="main.user.role === 'admin' || main.user.role === 'mod'">
 			<span class="glyphicon glyphicon-plus"></span> 
 			New User
@@ -50,7 +50,7 @@
 								<i class="glyphicon glyphicon-pencil"></i> Edit
 							</a>
 						</li>
-						<li ng-if="main.user.role === 'admin'">
+						<li ng-if="main.user.role === 'admin' && main.user.username != person.username">
 							<a href="#" ng-click="user.deleteUser(person.id)">
 								<i class="glyphicon glyphicon-trash"></i> Delete
 							</a>

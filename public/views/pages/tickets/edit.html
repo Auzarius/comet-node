@@ -8,19 +8,21 @@
 </div>
 
 <div class="page-header">
-	<h1>
-		Edit Ticket #{{ ticket.ticketData.id }}
-		<a ng-href="/tickets/{{ticket.ticketData.id}}" class="btn btn-default">
+	<h1 class="row">
+		<span class="font-gradient">Edit Ticket #{{ ticket.ticketData.id }}</span>
+	</h1>
+	<div class="row">
+		<a ng-href="/tickets/{{ticket.ticketData.id}}" class="btn btn-default col-xs-10 col-xs-offset-1 col-md-offset-0 col-md-3">
 			<span class="glyphicon glyphicon-edit"></span> 
 			View Ticket
 		</a>
-	</h1>
+	</div>
 </div>
 
 <form class="form-horizontal" ng-submit="ticket.saveTicket()" id='ticketform' name='ticketform' novalidate>
 	<!-- Customer section -->
 	<div>
-		<h4>Customer Information</h4>
+		<h4 class="font-gradient">Customer Information</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.customer.$invalid && !ticketform.customer.$pristine ? 'has-error' : '', ticketform.customer.$valid && !ticketform.customer.$pristine ? 'has-success' : '' ]">
@@ -90,7 +92,7 @@
 	<!-- Indicator Section -->
 	<div>
 		<br/>
-		<h4>Indicator Information</h4>
+		<h4 class="font-gradient">Indicator Information</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_tag.$invalid && !ticketform.indicator_tag.$pristine ? 'has-error' : '', ticketform.indicator_tag.$valid && !ticketform.indicator_tag.$pristine ? 'has-success' : '' ]">
@@ -184,7 +186,7 @@
 	<!-- Scale Base Section -->
 	<div>
 		<br/>
-		<h4>Scale Base Information (Optional)</h4>
+		<h4 class="font-gradient">Scale Base Information (Optional)</h4>
 	</div>
 
 	<div class="form-group has-feedback" ng-class="[ ticketform.scale_manu.$invalid && !ticketform.scale_manu.$pristine ? 'has-error' : '', ticketform.scale_manu.$valid && !ticketform.scale_manu.$pristine ? 'has-success' : '' ]">
@@ -219,7 +221,7 @@
 	
 	<div>
 		<br/>
-		<h4>Other Information (Optional)</h4>
+		<h4 class="font-gradient">Other Information (Optional)</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.workorder.$invalid && !ticketform.workorder.$pristine ? 'has-error' : '', !ticketform.workorder.$invalid && !ticketform.workorder.$pristine ? 'has-success' : '' ]" ng-show="main.role != 'user'">

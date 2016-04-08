@@ -8,11 +8,25 @@
 </div>
 
 <div class="page-header">
-	<h1>Create Ticket</h1>
+	<h1 class="font-gradient row">Create Ticket</h1>
+	<div class="row">
+		<a href="/tickets" class="btn btn-default col-xs-10 col-xs-offset-1 col-md-offset-0 col-md-3">
+			<span class="glyphicon glyphicon-chevron-left"></span> 
+			Active Tickets
+		</a>
+		<a href="/tickets/all" class="btn btn-default col-xs-10 col-xs-offset-1 col-md-offset-0 col-md-3">
+			<span class="glyphicon glyphicon-edit"></span> 
+			All Tickets
+		</a>
+		<a href="/tickets/recent" class="btn btn-default col-xs-10 col-xs-offset-1 col-md-offset-0 col-md-3">
+			<span class="glyphicon glyphicon-edit"></span> 
+			Recent Tickets
+		</a>
+	</div>
 </div>
 
 <div>
-	<h4>Customer Information</h4>
+	<h4 class="font-gradient">Customer Information</h4>
 </div>
 <div class="form-horizontal" ng-if="ticket.customerList && ticket.customerList.length > 0">
 	<div class="form-group">
@@ -100,7 +114,7 @@
 	<!-- Indicator Section -->
 	<div>
 		<br/>
-		<h4>Indicator Information</h4>
+		<h4 class="font-gradient">Indicator Information</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_tag.$invalid && !ticketform.indicator_tag.$pristine ? 'has-error' : '', !ticketform.indicator_tag.$invalid && !ticketform.indicator_tag.$pristine ? 'has-success' : '' ]">
@@ -194,7 +208,7 @@
 	<!-- Scale Base Section -->
 	<div>
 		<br/>
-		<h4>Scale Base Information (Optional)</h4>
+		<h4 class="font-gradient">Scale Base Information (Optional)</h4>
 	</div>
 
 	<div class="form-group has-feedback" ng-class="[ ticketform.scale_manu.$invalid && !ticketform.scale_manu.$pristine ? 'has-error' : '', !ticketform.scale_manu.$invalid && !ticketform.scale_manu.$pristine ? 'has-success' : '' ]">
@@ -229,7 +243,7 @@
 	
 	<div>
 		<br/>
-		<h4>Other Information (Optional)</h4>
+		<h4 class="font-gradient">Other Information (Optional)</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.workorder.$invalid && !ticketform.workorder.$pristine ? 'has-error' : '', !ticketform.workorder.$invalid && !ticketform.workorder.$pristine ? 'has-success' : '' ]" ng-show="main.role != 'user'">
@@ -245,7 +259,7 @@
 	
 	<div>
 		<br/>
-		<h4>Reason for Ticket</h4>
+		<h4 class="font-gradient">Reason for Ticket</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.comments.$invalid && !ticketform.comments.$pristine ? 'has-error' : '', !ticketform.comments.$invalid && !ticketform.comments.$pristine ? 'has-success' : '' ]">
