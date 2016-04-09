@@ -19,6 +19,18 @@ h1:after
 	margin-bottom: 10px;
 }
 
+.btn-primary
+{
+	background: linear-gradient(to bottom, #39A3EF, #78A3EF);
+	border: 1px solid #128ce3;
+}
+
+.btn-primary:hover
+{
+	background: linear-gradient(to bottom, #128ce3, #4a84ea);
+	border: 1px solid #0f6fb3;
+}
+
 .background
 {
 	background-image: '/dist/img/comet-earth-blur.jpg';
@@ -426,6 +438,7 @@ thead tr th
 		padding-bottom: 4em;
 		min-height: 100rem !important;
 		height: auto;
+		background: rgba(250, 250, 250, 0.5);
 	}
 }
 
@@ -507,6 +520,23 @@ div[ng-view].ng-enter
 	}
 }
 /* Extra Small Devices, Phones */
+@media only screen and (max-width: 480px)
+{
+	h1
+	{
+		padding-left: inherit;
+		text-align: center;
+	}
+}
+
+@media only screen and (max-width: 767px) and (min-width: 481px)
+{
+	h1
+	{
+		padding-left: 50px;
+	}
+}
+
 @media only screen and (max-width: 767px)
 {
 	.navbar-brand
@@ -531,11 +561,6 @@ div[ng-view].ng-enter
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px)
 {
-	h1
-	{
-		margin-left: -15px;
-	}
-
 	.navbar-brand
 	{
 		padding-top: 23px;
@@ -548,22 +573,20 @@ div[ng-view].ng-enter
 		max-width: 720px;
 		top: 6rem;
 	}
-}
 
-@media only screen and (max-width: 767px)
-{
-	h1
+	.page-header
 	{
-		padding-left: 50px;
+		padding-left: 12px;
 	}
 }
-
-@media only screen and (max-width: 480px)
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1200px)
 {
-	h1
+	.fixed
 	{
-		padding-left: inherit;
-		text-align: center;
+		min-width: 1140px;
+		width: 1140px;
+		max-width: 1140px;
 	}
 }
 /* Medium Devices, Desktops */
@@ -575,16 +598,6 @@ div[ng-view].ng-enter
 		width: 940px;
 		max-width: 940px;
 		top: 6rem !important;
-	}
-}
-/* Large Devices, Wide Screens */
-@media only screen and (min-width: 1200px)
-{
-	.fixed
-	{
-		min-width: 1140px;
-		width: 1140px;
-		max-width: 1140px;
 	}
 }
 

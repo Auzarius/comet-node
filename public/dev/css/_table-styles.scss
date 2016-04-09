@@ -7,11 +7,11 @@ $ts_border-color: #282828;
 $ts_font-color: white;
 
 @mixin bg-transition($time: 0.2s) {
-	-o-transition:color $time ease-out, background 0.5s ease-in, border .3s ease-in;
-	-ms-transition:color $time ease-out, background 0.5s ease-in, border .3s ease-in;
-	-moz-transition:color $time ease-out, background 0.5s ease-in, border .3s ease-in;
-	-webkit-transition:color $time ease-out, background 0.5s ease-in, border .3s ease-in;
-	transition:color $time ease-out, background 0.5s ease-in, border .3s ease-in;
+	-o-transition:color $time ease-out, background  $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+	-ms-transition:color $time ease-out, background  $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+	-moz-transition:color $time ease-out, background  $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+	-webkit-transition:color $time ease-out, background  $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+	transition:color $time ease-out, background $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
 }
 
 @mixin bg-styles() {
