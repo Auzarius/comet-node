@@ -13,15 +13,15 @@
 		<span class="font-gradient">Ticket #{{ ticket.ticket.id }}</span>
 	</h1>
 	<div class="row">
-		<a href="/tickets" class="btn btn-default col-xs-10 col-xs-offset-1 col-md-offset-0 col-md-3">
+		<a href="/tickets" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3">
 			<span class="glyphicon glyphicon-chevron-left"></span> 
 			Back to Tickets
 		</a>
-		<a href="/tickets/{{ ticket.ticket.id }}/edit" class="btn btn-default col-xs-10 col-xs-offset-1 col-md-offset-0 col-md-3">
+		<a href="/tickets/{{ ticket.ticket.id }}/edit" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3">
 			<span class="glyphicon glyphicon-plus"></span> 
 			Edit Ticket
 		</a>
-		<a href="#" class="btn btn-default col-xs-10 col-xs-offset-1 col-md-offset-0 col-md-3" ng-click="ticket.deleteTicket(ticket.ticket.id)" ng-if="main.user.role === 'admin'">
+		<a href="#" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3" ng-click="ticket.deleteTicket(ticket.ticket.id)" ng-if="main.user.role === 'admin'">
 			<span class="glyphicon glyphicon-trash"></span> 
 			Delete Ticket
 		</a>

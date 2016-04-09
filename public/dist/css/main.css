@@ -9,7 +9,7 @@ h1:after
 	clear: both;
 }
 
-.page-header .btn[class*="col-md-"]
+.page-header .btn[class*="col-sm-"]
 {
 	margin-right: 7px;
 }
@@ -531,6 +531,11 @@ div[ng-view].ng-enter
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px)
 {
+	h1
+	{
+		margin-left: -15px;
+	}
+
 	.navbar-brand
 	{
 		padding-top: 23px;
@@ -542,6 +547,23 @@ div[ng-view].ng-enter
 		width: 720px;
 		max-width: 720px;
 		top: 6rem;
+	}
+}
+
+@media only screen and (max-width: 767px)
+{
+	h1
+	{
+		padding-left: 50px;
+	}
+}
+
+@media only screen and (max-width: 480px)
+{
+	h1
+	{
+		padding-left: inherit;
+		text-align: center;
 	}
 }
 /* Medium Devices, Desktops */
