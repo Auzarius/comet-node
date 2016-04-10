@@ -125,6 +125,290 @@ angular.module('app.routes', ['ngRoute'])
 			$locationProvider.html5Mode(true);
 	}]);
 	
+// Courtesy of Scotch.io Chris Sevilleja & Holly Lloyd
+// http://leanpub.com/mean-machine
+
+angular.module('authService', [])
+
+// ===================================================
+// auth factory to login and get information
+// inject $http for communicating with the API
+// inject $q to return promise objects
+// inject AuthToken to manage tokens
+// ===================================================
+.factory('Auth', ["$http", "$q", "AuthToken", function($http, $q, AuthToken) {
+
+	// create auth factory object
+	var authFactory = {};
+
+	// log a user in
+	authFactory.login = function(username, password) {
+
+		// return the promise object and its data
+		return $http.post('/api/authenticate', {
+			username: username,
+			password: password
+		})
+			.success(function(data) {
+				AuthToken.setToken(data.token);
+       			return data;
+			});
+	};
+
+	// log a user out by clearing the token
+	authFactory.logout = function() {
+		// clear the token
+		AuthToken.setToken();
+	};
+
+	// check if a user is logged in
+	// checks if there is a local token
+	authFactory.isLoggedIn = function() {
+		if (AuthToken.getToken()) 
+			return true;
+		else
+			return false;	
+	};
+
+	// get the logged in user
+	authFactory.getUser = function() {
+		if (AuthToken.getToken())
+			return $http.get('/api/me', { cache: false });
+		else
+			return $q.reject({ message: 'User has no token.' });		
+	};
+
+	// return auth factory object
+	return authFactory;
+
+}])
+
+// ===================================================
+// factory for handling tokens
+// inject $window to store token client-side
+// ===================================================
+.factory('AuthToken', ["$window", function($window) {
+
+	var authTokenFactory = {};
+
+	// get the token out of local storage
+	authTokenFactory.getToken = function() {
+		return $window.localStorage.getItem('token');
+	};
+
+	// function to set token or clear token
+	// if a token is passed, set the token
+	// if there is no token, clear it from local storage
+	authTokenFactory.setToken = function(token) {
+		if (token)
+			$window.localStorage.setItem('token', token);
+	 	else
+			$window.localStorage.removeItem('token');
+	};
+
+	return authTokenFactory;
+
+}])
+
+// ===================================================
+// application configuration to integrate token into requests
+// ===================================================
+.factory('AuthInterceptor', ["$q", "$location", "AuthToken", function($q, $location, AuthToken) {
+
+	var interceptorFactory = {};
+
+	// this will happen on all HTTP requests
+	interceptorFactory.request = function(config) {
+
+		// grab the token
+		var token = AuthToken.getToken();
+
+		// if the token exists, add it to the header as x-access-token
+		if (token) 
+			config.headers['x-access-token'] = token;
+		
+		return config;
+	};
+
+	// happens on response errors
+	interceptorFactory.responseError = function(response) {
+
+		// if our server returns a 403 forbidden response
+		if (response.status == 401) {
+			AuthToken.setToken();
+			$location.path('/signin');
+		} else if (response.status == 403) {
+			$location.path('/forbidden');
+		}
+
+		// return the errors from the server as a promise
+		return $q.reject(response);
+	};
+
+	return interceptorFactory;
+	
+}]);
+angular.module('customerService', [])
+
+.factory('Customer', ["$http", function($http) {
+
+	// create a new object
+	var customerService = {};
+
+	// get a single customers data
+	customerService.get = function(id) {
+		return $http.get('/api/customers/' + id);
+	};
+
+	// get the customer list
+	customerService.getList = function() {
+		return $http.get('/api/customers');
+	};
+	
+	customerService.filterList = function(source, id) {
+		for(var i = 0, len = source.length; i < len; i++) {
+			if(source[i].id == id) {
+				return source[i];
+			}
+		}
+
+		return false;
+	};
+
+	// return our entire customerService object
+	return customerService;
+
+}]);
+
+angular.module('ticketService', [])
+
+.factory('Ticket', ["$http", function($http) {
+
+	// create a new object
+	var ticketFactory = {};
+
+	// get a single ticket
+	ticketFactory.get = function(id) {
+		return $http.get('/api/tickets/' + id);
+	};
+
+	// get all ticket
+	ticketFactory.active = function() {
+		return $http.get('/api/tickets');
+	};
+	
+	ticketFactory.all = function() {
+		return $http.get('/api/tickets/all');
+	};
+	
+	ticketFactory.recent = function() {
+		return $http.get('/api/tickets/recent');
+	};
+
+	// create a ticket
+	ticketFactory.create = function(ticketData) {
+		return $http.post('/api/tickets/', ticketData);
+	};
+
+	// update a ticket
+	ticketFactory.update = function(id, ticketData) {
+		return $http.put('/api/tickets/' + id, ticketData);
+	};
+
+	// delete a ticket
+	ticketFactory.delete = function(id) {
+		return $http.delete('/api/tickets/' + id);
+	};
+	
+	ticketFactory.event = {
+		get : function(ticketId) {
+			return $http.get('/api/tickets/' + ticketId + '/events');
+		},
+		
+		getOne : function (eventId) {
+			return $http.get('/api/events/' + eventId);
+		},
+		
+		create : function(ticketId, eventData) {
+			return $http.post('/api/tickets/' + ticketId + '/events', eventData);
+		},
+		
+		update : function(eventId, eventData) {
+			return $http.put('/api/events/' + eventId, eventData);
+		},
+		
+		delete : function(eventId) {
+			return $http.delete('/api/events/' + eventId)
+		}
+	};
+	
+	ticketFactory.feedback = {
+		get : function () {
+			return $http.get('/api/feedback/');
+		},
+		
+		getOne : function (feedbackId) {
+			return $http.get('/api/feedback/' + feedbackId);
+		},
+		
+		create : function (feedbackData) {
+			return $http.post('/api/feedback/', feedbackData);
+		},
+		
+		update : function (feedbackId, feedbackData) {
+			return $http.put('/api/feedback/' + feedbackId, feedbackData);
+		},
+		
+		delete : function (feedbackId) {
+			return $http.delete('/api/feedback/' + feedbackId)
+		}
+	};
+
+	// return our entire ticketFactory object
+	return ticketFactory;
+
+}]);
+angular.module('userService', [])
+
+.factory('User', ["$http", function($http) {
+
+	// create a new object
+	var userFactory = {};
+
+	// get a single user
+	userFactory.get = function(id) {
+		return $http.get('/api/users/' + id);
+	};
+	
+	// get self
+	userFactory.self = function() {
+		return $http.get('/api/me');
+	};
+
+	// get all users
+	userFactory.all = function() {
+		return $http.get('/api/users/');
+	};
+
+	// create a user
+	userFactory.create = function(userData) {
+		return $http.post('/api/users/', userData);
+	};
+
+	// update a user
+	userFactory.update = function(id, userData) {
+		return $http.put('/api/users/' + id, userData);
+	};
+
+	// delete a user
+	userFactory.delete = function(id) {
+		return $http.delete('/api/users/' + id);
+	};
+
+	// return our entire userFactory object
+	return userFactory;
+
+}]);
 angular.module('mainCtrl', ['angularMoment'])
 
 .controller('mainController', ["$rootScope", "$location", "Auth", function($rootScope, $location, Auth) {
@@ -787,288 +1071,3 @@ angular.module('userCtrl', ['userService'])
 
 }]);
 
-
-// Courtesy of Scotch.io Chris Sevilleja & Holly Lloyd
-// http://leanpub.com/mean-machine
-
-angular.module('authService', [])
-
-// ===================================================
-// auth factory to login and get information
-// inject $http for communicating with the API
-// inject $q to return promise objects
-// inject AuthToken to manage tokens
-// ===================================================
-.factory('Auth', ["$http", "$q", "AuthToken", function($http, $q, AuthToken) {
-
-	// create auth factory object
-	var authFactory = {};
-
-	// log a user in
-	authFactory.login = function(username, password) {
-
-		// return the promise object and its data
-		return $http.post('/api/authenticate', {
-			username: username,
-			password: password
-		})
-			.success(function(data) {
-				AuthToken.setToken(data.token);
-       			return data;
-			});
-	};
-
-	// log a user out by clearing the token
-	authFactory.logout = function() {
-		// clear the token
-		AuthToken.setToken();
-	};
-
-	// check if a user is logged in
-	// checks if there is a local token
-	authFactory.isLoggedIn = function() {
-		if (AuthToken.getToken()) 
-			return true;
-		else
-			return false;	
-	};
-
-	// get the logged in user
-	authFactory.getUser = function() {
-		if (AuthToken.getToken())
-			return $http.get('/api/me', { cache: false });
-		else
-			return $q.reject({ message: 'User has no token.' });		
-	};
-
-	// return auth factory object
-	return authFactory;
-
-}])
-
-// ===================================================
-// factory for handling tokens
-// inject $window to store token client-side
-// ===================================================
-.factory('AuthToken', ["$window", function($window) {
-
-	var authTokenFactory = {};
-
-	// get the token out of local storage
-	authTokenFactory.getToken = function() {
-		return $window.localStorage.getItem('token');
-	};
-
-	// function to set token or clear token
-	// if a token is passed, set the token
-	// if there is no token, clear it from local storage
-	authTokenFactory.setToken = function(token) {
-		if (token)
-			$window.localStorage.setItem('token', token);
-	 	else
-			$window.localStorage.removeItem('token');
-	};
-
-	return authTokenFactory;
-
-}])
-
-// ===================================================
-// application configuration to integrate token into requests
-// ===================================================
-.factory('AuthInterceptor', ["$q", "$location", "AuthToken", function($q, $location, AuthToken) {
-
-	var interceptorFactory = {};
-
-	// this will happen on all HTTP requests
-	interceptorFactory.request = function(config) {
-
-		// grab the token
-		var token = AuthToken.getToken();
-
-		// if the token exists, add it to the header as x-access-token
-		if (token) 
-			config.headers['x-access-token'] = token;
-		
-		return config;
-	};
-
-	// happens on response errors
-	interceptorFactory.responseError = function(response) {
-
-		// if our server returns a 403 forbidden response
-		if (response.status == 401) {
-			AuthToken.setToken();
-			$location.path('/signin');
-		} else if (response.status == 403) {
-			$location.path('/forbidden');
-		}
-
-		// return the errors from the server as a promise
-		return $q.reject(response);
-	};
-
-	return interceptorFactory;
-	
-}]);
-angular.module('customerService', [])
-
-.factory('Customer', ["$http", function($http) {
-
-	// create a new object
-	var customerService = {};
-
-	// get a single customers data
-	customerService.get = function(id) {
-		return $http.get('/api/customers/' + id);
-	};
-
-	// get the customer list
-	customerService.getList = function() {
-		return $http.get('/api/customers');
-	};
-	
-	customerService.filterList = function(source, id) {
-		for(var i = 0, len = source.length; i < len; i++) {
-			if(source[i].id == id) {
-				return source[i];
-			}
-		}
-
-		return false;
-	};
-
-	// return our entire customerService object
-	return customerService;
-
-}]);
-
-angular.module('ticketService', [])
-
-.factory('Ticket', ["$http", function($http) {
-
-	// create a new object
-	var ticketFactory = {};
-
-	// get a single ticket
-	ticketFactory.get = function(id) {
-		return $http.get('/api/tickets/' + id);
-	};
-
-	// get all ticket
-	ticketFactory.active = function() {
-		return $http.get('/api/tickets');
-	};
-	
-	ticketFactory.all = function() {
-		return $http.get('/api/tickets/all');
-	};
-	
-	ticketFactory.recent = function() {
-		return $http.get('/api/tickets/recent');
-	};
-
-	// create a ticket
-	ticketFactory.create = function(ticketData) {
-		return $http.post('/api/tickets/', ticketData);
-	};
-
-	// update a ticket
-	ticketFactory.update = function(id, ticketData) {
-		return $http.put('/api/tickets/' + id, ticketData);
-	};
-
-	// delete a ticket
-	ticketFactory.delete = function(id) {
-		return $http.delete('/api/tickets/' + id);
-	};
-	
-	ticketFactory.event = {
-		get : function(ticketId) {
-			return $http.get('/api/tickets/' + ticketId + '/events');
-		},
-		
-		getOne : function (eventId) {
-			return $http.get('/api/events/' + eventId);
-		},
-		
-		create : function(ticketId, eventData) {
-			return $http.post('/api/tickets/' + ticketId + '/events', eventData);
-		},
-		
-		update : function(eventId, eventData) {
-			return $http.put('/api/events/' + eventId, eventData);
-		},
-		
-		delete : function(eventId) {
-			return $http.delete('/api/events/' + eventId)
-		}
-	};
-	
-	ticketFactory.feedback = {
-		get : function () {
-			return $http.get('/api/feedback/');
-		},
-		
-		getOne : function (feedbackId) {
-			return $http.get('/api/feedback/' + feedbackId);
-		},
-		
-		create : function (feedbackData) {
-			return $http.post('/api/feedback/', feedbackData);
-		},
-		
-		update : function (feedbackId, feedbackData) {
-			return $http.put('/api/feedback/' + feedbackId, feedbackData);
-		},
-		
-		delete : function (feedbackId) {
-			return $http.delete('/api/feedback/' + feedbackId)
-		}
-	};
-
-	// return our entire ticketFactory object
-	return ticketFactory;
-
-}]);
-angular.module('userService', [])
-
-.factory('User', ["$http", function($http) {
-
-	// create a new object
-	var userFactory = {};
-
-	// get a single user
-	userFactory.get = function(id) {
-		return $http.get('/api/users/' + id);
-	};
-	
-	// get self
-	userFactory.self = function() {
-		return $http.get('/api/me');
-	};
-
-	// get all users
-	userFactory.all = function() {
-		return $http.get('/api/users/');
-	};
-
-	// create a user
-	userFactory.create = function(userData) {
-		return $http.post('/api/users/', userData);
-	};
-
-	// update a user
-	userFactory.update = function(id, userData) {
-		return $http.put('/api/users/' + id, userData);
-	};
-
-	// delete a user
-	userFactory.delete = function(id) {
-		return $http.delete('/api/users/' + id);
-	};
-
-	// return our entire userFactory object
-	return userFactory;
-
-}]);

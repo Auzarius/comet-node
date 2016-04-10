@@ -26,10 +26,17 @@ h1:after {
 .btn-primary {
 	background: linear-gradient(to bottom, #39A3EF, #78A3EF);
 	border: 1px solid darken(#39A3EF, 10%);
+	-webkit-transform: translate3d(0,0,0);
+	transition: all 0.2s ease-in-out;
 	
 	&:hover {
 		background: linear-gradient(to bottom, darken(#39A3EF, 10%), darken(#78A3EF, 10%));
 		border: 1px solid darken(#39A3EF, 20%);
+	}
+	
+	&:active {
+		opacity: 0.7;
+		background: linear-gradient(to bottom, complement(#39A3EF), complement(#78A3EF));
 	}
 }
 
@@ -68,7 +75,7 @@ h1:after {
 }
 
 ul {
-	.visible-xs {
+	&.visible-xs {
 		li {
 			a.dropdown-toggle {
 				opacity: 0.7;

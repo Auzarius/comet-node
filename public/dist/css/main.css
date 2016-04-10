@@ -23,12 +23,20 @@ h1:after
 {
 	background: linear-gradient(to bottom, #39A3EF, #78A3EF);
 	border: 1px solid #128ce3;
+	-webkit-transform: translate3d(0, 0, 0);
+	transition: all 0.2s ease-in-out;
 }
 
 .btn-primary:hover
 {
 	background: linear-gradient(to bottom, #128ce3, #4a84ea);
 	border: 1px solid #0f6fb3;
+}
+
+.btn-primary:active
+{
+	opacity: 0.7;
+	background: linear-gradient(to bottom, #ef8539, #efc478);
 }
 
 .background
@@ -70,13 +78,13 @@ h1:after
 	margin-bottom: 0px;
 }
 
-ul .visible-xs li a.dropdown-toggle
+ul.visible-xs li a.dropdown-toggle
 {
 	opacity: 0.7;
 	color: #CDC;
 }
 
-ul .visible-xs li a.dropdown-toggle:hover
+ul.visible-xs li a.dropdown-toggle:hover
 {
 	color: #CDC;
 	opacity: 1.0;
