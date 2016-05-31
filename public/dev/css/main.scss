@@ -1,0 +1,449 @@
+@charset "UTF-8";
+
+@import 'vars';
+
+body {
+	background: white;
+	background: repeating-linear-gradient(45deg, #F8F8F8, #F8F8F8 10px, #FDFDFD 10px, #FDFDFD 20px);
+}
+
+h1:after {
+	clear: both;
+}
+
+.page-header {
+	.btn {
+		&[class*="col-sm-"] {
+			margin-right: 7px;
+		}
+		
+		&[class*="col-xs-"] {
+			margin-bottom: 10px;
+		}
+	}
+}
+
+.btn-primary {
+	background: linear-gradient(to bottom, #39A3EF, #78A3EF);
+	border: 1px solid darken(#39A3EF, 10%);
+	-webkit-transform: translate3d(0,0,0);
+	transition: all 0.2s ease-in-out;
+	
+	&:hover {
+		background: linear-gradient(to bottom, darken(#39A3EF, 10%), darken(#78A3EF, 10%));
+		border: 1px solid darken(#39A3EF, 20%);
+	}
+	
+	&:active {
+		opacity: 0.7;
+		background: linear-gradient(to bottom, complement(#39A3EF), complement(#78A3EF));
+	}
+}
+
+.background {
+	background-image: '/dist/img/comet-earth-blur.jpg';
+}
+
+.node-header {
+	color: #0CBE9B;
+	color: rgb(12,190,155);
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.node-header {
+	text-shadow: 2px 0px 2px #333;
+	text-shadow: 2px 0px 2px rgb(40,40,40);
+}
+
+.node-comet {
+	@extend .node-header;
+	color: $purple;
+	color: rgb(93,66,252);
+	margin-right: -4px;
+}
+
+.navbar-nav li {
+	font-size: 1.2em;
+	-webkit-font-smoothing: antialiased;
+	text-shadow: rgba(0,0,0,.01) 0 0 1px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+ul {
+	&.visible-xs {
+		li {
+			a.dropdown-toggle {
+				opacity: 0.7;
+				color: $font-color;
+			}
+			
+			a.dropdown-toggle:hover {
+				color: $font-color;
+				opacity: 1.0;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+label {
+	font-weight: bold;
+	-webkit-font-smoothing: antialiased;
+	text-shadow: rgba(0,0,0,.2) 2px 2px 2px;
+}
+
+@import 'comment-container';
+
+.opaque {
+	opacity: 0.7 !important;
+	-webkit-transition: opacity 0.8s ease-in;
+	-moz-transition: opacity 0.8s ease-in;
+	transition: opacity 0.8s ease-in;
+	
+	&:hover {
+		opacity: 1.0 !important;
+	}
+}
+
+header .navbar {
+	border-radius: 0;
+}
+
+footer {
+	background-color: $dark-grey;
+	color: #aaa;
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+	position: absolute !important;
+	bottom: auto !important;
+	width: 100%;
+	margin-top: -1px;
+	
+	h4 {
+		color: #ddd;
+	}
+}
+
+input {
+	&[type=number] {
+		&::-webkit-inner-spin-button,
+		::-webkit-outer-spin-button {
+			-webkit-appearance: none; 
+			margin: 0;
+		}
+	}
+	
+	&[type=search] {
+		&.search-box {
+			border-radius: 3px;
+			padding-left: 1em;
+			border: 1px solid #ddd;
+			box-shadow: 1px 0 1em white;
+			margin-bottom: 0.2em;
+			background-color: rgba(#FFF, 0.6);
+			transition: box-shadow 1.5s ease-in-out;
+			
+			&:focus {
+				border: 1px solid #93D6F9;
+				box-shadow: 1px 0 1em #549FCF;
+			}
+			
+			&:disabled {
+				color: white;
+			}
+		}
+	}
+}
+
+@import 'table-styles';
+
+.fixed-ucp {
+	display: absolute!important;
+	top: -6.8rem;
+	right: 1rem;
+	z-index: 1;
+	float: right;
+	list-style: none;
+	font-size: 1.1em;
+}
+
+.margin-fix {
+	margin-left: 1em;
+	margin-right: 1em;
+	min-width: auto !important;
+}
+
+.bg-fill {
+	background-color: $background-color;
+	padding: 2em;
+	border-radius: .2em;
+}
+
+.print-only {
+	display: none;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+ 	display: none !important;
+}
+
+@media only print {
+	* {
+		font-size: 92% !important;
+	}
+	
+	body, html, main, * {
+		padding-top: 0px !important;
+		margin-top: 0px !important;
+	}
+	
+	.no-print {
+		display: none;
+	}
+	
+	.print-only {
+		display: inline;
+	}
+	
+	.btn {
+		display: none;
+	}
+}
+
+@media screen {
+	main {
+		padding-top: 3em;
+		padding-bottom: 4em;
+		min-height: 100rem !important;
+		height: auto;
+		background: rgba(#FAFAFA, 0.5);
+	}
+}
+
+#advancedbtn {
+	margin-left: -1.3em;
+}
+
+.spinner {
+	animation: spin 1s infinite;
+	-webkit-animation: spin 1s infinite;
+	-moz-animation: spin 1s infinite;
+}
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+@-webkit-keyframes spin {
+	from { -webkit-transform: rotate(0deg); }
+	to { -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes spin {
+	from { -moz-transform: rotate(0deg); }
+	to { -moz-transform: rotate(360deg); }
+}
+
+.ng-hide-remove {
+	-webkit-animation: fadeInRight 1s both ease;
+	-moz-animation: fadeInRight 1s both ease;
+	animation: fadeInRight 1s both ease;
+}
+
+div[ng-view].ng-enter {
+	-webkit-animation: fadeInRight 1s both ease;
+	-moz-animation: fadeInRight 1s both ease;
+	animation: fadeInRight 1s both ease;
+}
+
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+  }
+
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 480px) {
+	h1 {
+		padding-left: inherit;
+		text-align: center;
+	}
+}
+
+@media only screen and (max-width : 767px) and (min-width : 481px) {
+	h1 {
+		padding-left: 50px;
+	}
+}
+
+@media only screen and (max-width : 767px) {
+	.navbar-brand {
+		padding-top: 24px;
+	}
+	
+	.container {
+		overflow: auto;
+	}
+	
+	.fixed {
+		padding: 0px !important;
+		min-width: 96%;
+		width: 96%;
+		overflow: none !important;
+		top: 0.5rem;
+	}
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {
+	.navbar-brand {
+		padding-top: 23px;
+	}
+	
+	.fixed {
+		min-width: 720px;
+		width: 720px;
+		max-width: 720px;
+		top: 6rem;
+	}
+	
+	.page-header {
+		padding-left: 12px;
+	}
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {
+	.fixed {
+		min-width: 1140px;
+		width: 1140px;
+		max-width: 1140px;
+	}
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {	
+	.fixed {
+		min-width: 940px;
+		width: 940px;
+		max-width: 940px;
+		top: 6rem !important;
+	}
+}
+
+#advancedSearch {
+	padding-top: 1em;
+}
+
+.alert-info {
+	color: white !important;
+}
+
+.fixed {
+	padding: 15px;
+	position: fixed !important;
+	z-index: 1 !important;
+}
+
+.close {
+	margin-right: 0.4rem;
+}
+
+.font-gradient {
+	
+	color: black;
+	
+	@supports (-webkit-background-clip: text) and (-webkit-text-fill-color: transparent) {
+		background: linear-gradient(to bottom, #39A3EF, #78A3EF);
+		-webkit-background-clip: text;
+    	-webkit-text-fill-color: transparent;
+    	-webkit-font-smoothing: antialiased;
+    	//-webkit-text-stroke: 0.5px #DDD;
+    	
+	}
+	
+	@media only print {
+		background: inherit;
+		-webkit-background-clip: inherit;
+	    -webkit-text-fill-color: inherit;
+    }
+}
+
+.gi-1x {
+	font-size: 1em;
+}
+
+.gi-2x {
+	font-size: 2em;
+}
+
+.gi-3x {
+	font-size: 3em;
+}
+
+.gi-4x {
+	font-size: 4em;
+}
+
+.gi-5x {
+	font-size: 5em;
+}
+
+/*!
+Animate.css - http://daneden.me/animate
+Licensed under the MIT license
+
+Copyright (c) 2013 Daniel Eden
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
+
+@-webkit-keyframes fadeInRight {
+	0% {
+		opacity: 0;
+		-webkit-transform: translateX(40px);
+		transform: translateX(40px)
+	}
+	100% {
+		opacity:1;
+		-webkit-transform: translateX(0);
+		transform: translateX(0)
+	}
+}
+
+@keyframes fadeInRight {
+	0% {
+		opacity:0;
+		-webkit-transform: translateX(40px);
+		-ms-transform: translateX(40px);
+		transform: translateX(40px)
+	}
+	
+	100% {
+		opacity:1;
+		-webkit-transform: translateX(0);
+		-ms-transform: translateX(0);
+		transform: translateX(0)
+	}
+}
+
+.fadeInRight {
+	-webkit-animation-name: fadeInRight;
+	animation-name: fadeInRight
+}
+
+/*! END Animate.css 
+	Edit: Changed the translateX value from 20px to 40px*/

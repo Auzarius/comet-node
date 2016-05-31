@@ -1,0 +1,145 @@
+// _table-styles.scss
+
+$ts_table-header-color: #333;
+$ts_table-stripe-light: white;
+$ts_table-stripe-dark: #F0F0F0;
+$ts_border-color: #282828;
+$ts_font-color: white;
+
+@mixin bg-transition($time: 0.2s) {
+	-o-transition:color $time ease-out, background  $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+	-ms-transition:color $time ease-out, background  $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+	-moz-transition:color $time ease-out, background  $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+	-webkit-transition:color $time ease-out, background  $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+	transition:color $time ease-out, background $time * 2.5 ease-in, border ($time / 2) + $time ease-in;
+}
+
+@mixin bg-styles() {
+	background-color: #3C3C3C;
+	color: white;
+	border-color: #505050;
+}
+
+table {
+	&#tickets {
+		tr td:first-child {
+			width: 20rem;
+		}
+		
+		tr:first-child td {
+			font-size: 1.1em;
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+		
+		tbody {
+			tr td {
+				@media only screen and (min-width : 992px) {
+					@include bg-transition(0.2s);
+				}
+			}
+			
+			&:hover tr td {
+				@media only screen and (min-width : 992px) {
+					@include bg-styles();
+				}
+			}
+		}		
+	}
+	
+	&#ticket {
+		tbody {
+			tr td {
+				text-transform: uppercase;
+				
+				&:first-child {
+					@media only screen and (max-width : 767px) {
+						width: 10rem;
+					}
+				}
+			}
+		}
+		
+		td, th {
+			@media only print {
+				padding-left: 2.2em!important;
+			}
+		}
+	}
+	
+	&#events {
+		tbody {
+			tr:nth-child(2) td:nth-child(2) {
+				background-color: $ts_table-stripe-light;
+			}
+		}
+	}
+	
+	&#users {
+		tbody tr td:nth-child(2), thead tr th:nth-child(2) {
+			@media only screen and (max-width : 767px) {
+				display: none;
+			}
+			
+			@media only screen and (min-width : 768px) {
+				display: table-cell;
+			}
+		}
+		
+		tr {
+			td {
+				@media only screen and (min-width : 992px) {
+					@include bg-transition(0.2s);
+				}
+			}
+			
+			&:hover td {
+				@media only screen and (min-width : 992px) {
+					@include bg-styles();
+				}
+			}
+		}
+	}
+}
+
+thead {
+	tr {
+		background-color: white;
+		
+		th {
+			background-color: $ts_table-header-color;
+			color: $ts_font-color;
+			font-weight: bolder;
+			border-color: $ts_border-color !important;
+			border-top: 2px solid !important;
+		}
+	}
+}
+
+td, th {
+	@media only print {
+		padding: 2px !important;
+	}
+}	
+
+.table-striped tbody tr:nth-child(even) td, .table-striped tbody tr:nth-child(even) th {
+	background-color: $ts_table-stripe-light;
+}
+
+.tbody-striped {
+	tbody {
+		&:nth-child(even) {
+			tr td {
+				background-color: $ts_table-stripe-dark;
+			}
+		}
+		
+		&:nth-child(odd) {
+			tr td {
+				background-color: $ts_table-stripe-light;
+			}
+		}
+	}
+}
+
+// END _table-styles.scss
