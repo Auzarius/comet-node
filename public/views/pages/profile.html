@@ -9,7 +9,7 @@
 </div>
 
 <div class="page-header">
-	<h1>User Profile</h1>
+	<h1 class="font-gradient">User Profile</h1>
 </div>
 
 <div class='container'>
@@ -56,18 +56,30 @@
 		</div>
 
 		<div class="form-group has-feedback" ng-class="[ userform.password.$invalid && userform.password.$dirty ? 'has-error' : '', userform.password.$valid && userform.password.$dirty ? 'has-success' : '' ]">
-				<label class="col-sm-2 control-label">Password</label>
-				<div class="col-sm-6">
-					<input type="password" name='password' class="form-control" ng-model="user.userData.password" ng-minlength="6">
-					<p ng-show="userform.password.$error.minlength && userform.password.$dirty" class="help-block alert alert-info">Please enter a password that is at least six characters long.</p>
-					<span ng-show="userform.password.$invalid && userform.password.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-					<span ng-show="userform.password.$valid && userform.password.$dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-				</div>
+			<label class="col-sm-2 control-label">Password</label>
+			<div class="col-sm-6">
+				<input type="password" name='password' class="form-control" ng-model="user.userData.password" ng-minlength="6">
+				<p ng-show="userform.password.$error.minlength && userform.password.$dirty" class="help-block alert alert-info">Please enter a password that is at least six characters long.</p>
+				<span ng-show="userform.password.$invalid && userform.password.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<span ng-show="userform.password.$valid && userform.password.$dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
 			</div>
+		</div>
+		
+		<div class="form-group has-feedback" ng-class="[ userform.confirmPass.$invalid && userform.confirmPass.$dirty ? 'has-error' : '', userform.confirmPass.$valid && userform.confirmPass.$dirty ? 'has-success' : '' ]" ng-if="userform.password.$valid && userform.password.$dirty">
+			<label class="col-sm-2 control-label">Confirm Password</label>
+			<div class="col-sm-6">
+				<input type="password" name='confirmPass' class="form-control" ng-model="user.userData.confirmPass" ng-minlength="6">
+				<p ng-show="userform.confirmPass.$error.minlength && userform.password.$dirty" class="help-block alert alert-info">Please enter a password that is at least six characters long.</p>
+				<span ng-show="userform.confirmPass.$invalid && userform.password.$dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<span ng-show="userform.confirmPass.$valid && userform.password.$dirty && (user.userData.password === user.userData.confirmPass)" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+				<span ng-show="user.userData.password !== user.userData.confirmPass" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+				<span ng-show="user.userData.password !== user.userData.confirmPass" class="help-block alert alert-info">The passwords do not match.</span>
+			</div>
+		</div>
 		
 		<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-6">
-			<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='userform.$invalid'>Update Profile</button>
+			<button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled='userform.$invalid || (user.userData.password !== user.userData.confirmPass)'>Update Profile</button>
 		</div>
 		</div>
 

@@ -10,6 +10,7 @@ module.exports = function (app, express, mySql) {
 		apiTickets	= require('./tickets')(app, express, mySql),
 		apiEvents  	= require('./events')(app, express, mySql),
 		apiFeedback = require('./feedback')(app, express, mySql);
+		apiCustomer = require('./customer')(app, express, mySql);
 	
 	// test route to make sure everything is working
 	// accessed at GET http://localhost:8080/api
@@ -165,6 +166,7 @@ module.exports = function (app, express, mySql) {
 	});
 	
 	apiRouter.use('/feedback', apiFeedback);
+	apiRouter.use('/customers', apiCustomer);
 	apiRouter.use('/tickets', apiTickets);
 	apiRouter.use('/events', apiEvents);
 	apiRouter.use('/users', apiUsers);

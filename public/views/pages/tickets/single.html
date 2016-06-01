@@ -9,21 +9,23 @@
 </div>
 
 <div class="page-header" ng-hide="!ticket.ticket && !ticket.processing">
-	<h1 ng-cloak>
-		Ticket #{{ ticket.ticket.id }}
-		<a href="/tickets" class="btn btn-default">
+	<h1 ng-cloak class="row">
+		<span class="font-gradient">Ticket #{{ ticket.ticket.id }}</span>
+	</h1>
+	<div class="row">
+		<a href="/tickets" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3">
 			<span class="glyphicon glyphicon-chevron-left"></span> 
 			Back to Tickets
 		</a>
-		<a href="/tickets/{{ ticket.ticket.id }}/edit" class="btn btn-default">
+		<a href="/tickets/{{ ticket.ticket.id }}/edit" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3">
 			<span class="glyphicon glyphicon-plus"></span> 
 			Edit Ticket
 		</a>
-		<a href="#" class="btn btn-default" ng-click="ticket.deleteTicket(ticket.ticket.id)" ng-if="main.user.role === 'admin'">
+		<a href="#" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3" ng-click="confirm(ticket.deleteTicket(ticket.ticket.id))" ng-if="main.user.role === 'admin'">
 			<span class="glyphicon glyphicon-trash"></span> 
 			Delete Ticket
 		</a>
-	</h1>
+	</div>
 
 </div>
 
@@ -37,7 +39,7 @@
 </div>
 
 <div class='col-xs-12 col-md-6' ng-show="ticket.ticket">
-	<h4>Customer Information</h4>
+	<h4 class="font-gradient">Customer Information</h4>
 	<table ng-cloak id="ticket" class="table table-bordered table-striped">
 		<tbody>
 			<tr>
@@ -63,7 +65,7 @@
 		</tbody>
 	</table>
 	
-	<h4>Indicator Information</h4>
+	<h4 class="font-gradient">Indicator Information</h4>
 	<table ng-cloak id="ticket" class="table table-bordered table-striped">
 		<tbody>
 			<tr>
@@ -97,7 +99,7 @@
 		</tbody>
 	</table>
 	
-	<h4 ng-if="ticket.ticket.scale_manu">Scale Information</h4>
+	<h4 ng-if="ticket.ticket.scale_manu" class="font-gradient">Scale Information</h4>
 	<table ng-cloak id="ticket" class="table table-bordered table-striped" ng-if="ticket.ticket.scale_manu">
 		<tbody>
 			<tr>
@@ -116,7 +118,7 @@
 	</table>
 	
 	<div ng-if="(ticket.ticket.timespent > 0 && ticket.ticket.timespent) || (ticket.ticket.workorder && ticket.ticket.workorder != '')">
-		<h4 >Other Information</h4>
+		<h4 class="font-gradient">Other Information</h4>
 		<table ng-cloak id="ticket" class="table table-bordered table-striped">
 			<tbody>
 				<tr ng-show="ticket.ticket.timespent > 0 && ticket.ticket.timespent">
@@ -191,7 +193,7 @@
 </div>
 
 <div class='col-xs-12 col-sm-12 col-md-6' ng-show="!ticket.event_processing && ticket.events && ticket.events.length > 0">
-	<h4>Comments</h4>
+	<h4 class="font-gradient">Comments</h4>
 	<div class='comment-container margin-fix' ng-repeat="_event in ticket.events">
 		<div class='row comment-header'>
 			<div class='col-xs-3 col-md-4'><strong>{{ _event.created_by }}</strong></div>
@@ -221,7 +223,7 @@
 			<div class='col-xs-6' title="{{_event.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
 				Created: {{ _event.created_at | amTimeAgo }}
 			</div>
-			<div class='col-xs-6' ng-if="_event.updated_at" title="{{_event.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
+			<div class='col-xs-6' ng-if="_event.updated_at" title="{{_event.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
 				Updated: {{ _event.updated_at | amTimeAgo }} by 
 				<span ng-if="_event.updated_by">{{ _event.updated_by }}</span>
 				<span ng-if="!_event.updated_by">Unknown</span>

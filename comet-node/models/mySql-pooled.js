@@ -9,9 +9,17 @@ module.exports = function(config) {
 	mySql.config = config;
 	
 	mySql.init = function() {
-		var vm = this;
+		var vm = this,
+			server = {
+				host     		: vm.config.host || 'localhost',
+				user     		: vm.config.user || 'root',
+				password 		: vm.config.password || '',
+				database 		: vm.config.database,
+				port 			: vm.config.port || 3306
+			};
+			
 		console.log('[mySql] The function has been initialized.');
-		Connection = node_mysql.createPool( vm.config );
+		Connection = node_mysql.createPool( server );
 			
 		Connection.on('error', vm.handleError);
 		
@@ -1190,6 +1198,79 @@ module.exports = function(config) {
 			} else {
 				throw new Error('The methods \'create\' or \'save\' must be passed when using this function');
 				return false;
+			}
+		}
+	}
+	
+	mySql.customers = {
+		// This will return the most recent complete address entry for customers
+		// This will not return customers with a null city or state field
+		list : function (next) {
+			var query = 'SELECT t.id, t.customer, t.street, t.city, t.state, t.zipcode ' +
+						'FROM ( SELECT *,max(created_at) as most_recent_date ' +
+						'	FROM tickets ' +
+						'	GROUP BY customer,city,state ) t1 ' +
+						'JOIN tickets t ' +
+						'ON t.id = ' +
+						'	( SELECT t_uniq.id ' +
+						'	FROM tickets t_uniq ' +
+						'	WHERE t_uniq.customer = t1.customer ' +
+						'		AND (t_uniq.city = t1.city) ' +
+						'		AND t_uniq.state = t1.state ' +
+						'		AND t_uniq.created_at = t1.most_recent_date ' +
+						'	LIMIT 1 )';
+			
+			mySql.query(query, null, function (err, result) {
+				if (err) {
+					throw new Error(err);
+					next(err);
+				} else if ( mySql.verifyResult(result)) {
+					next(null, {
+						success : true,
+						data 	: result || '',
+						message : ''
+					});
+				} else {
+					next(null, {
+						success : false,
+						message : 'There are no customers available at this time.'
+					});
+				}
+			});
+		},
+		
+		findOne : function (options, next) {
+			var query = 'SELECT id, customer, street, city, state, zipcode ' +
+						'FROM ' + mySql.config.tickets_table + ' ' +
+						'HAVING ? ';
+			
+			if ( options ) {
+				mySql.query(query, options, function (err, result) {
+					if (err) {
+						throw new Error(err);
+						next(err);
+					} else if ( mySql.verifyResult(result[0])) {
+						next(null, {
+							success : true,
+							data 	: result[0] || [],
+							message : ''
+						});
+					} else {
+						next(null, {
+							success : false,
+							data    : [],
+							message : 'The customer you were looking for could not be found.'
+						});
+					}
+				});
+			} else {
+				throw new Error('No options were passed for the search query.');
+				next({
+					success : false,
+					message : 'No options were passed for the search query.',
+					value	: options,
+					note	: 'If you received this in error, please notify the admin.'
+				});
 			}
 		}
 	}

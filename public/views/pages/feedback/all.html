@@ -14,6 +14,7 @@
 	
 	</p>
 </div>
+
 <div class='bg-fill opaque'>
 	<h4 class='page-header'>Comments</h4>
 	<form class="form-horizontal no-print opaque" ng-submit="feedback.addComment()" id='commentform' name='commentform' novalidate>
@@ -85,7 +86,7 @@
 			<div class='col-xs-6' title="{{_comment.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
 				Created: {{ _comment.created_at | amTimeAgo }}
 			</div>
-			<div class='col-xs-6' ng-if="_comment.updated_at" title="{{_comment.created_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
+			<div class='col-xs-6' ng-if="_comment.updated_at" title="{{_comment.updated_at | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}">
 				Updated: {{ _comment.updated_at | amTimeAgo }} by 
 				<span ng-if="_comment.updated_by">{{ _comment.updated_by }}</span>
 				<span ng-if="!_comment.updated_by">Unknown</span>
@@ -95,10 +96,15 @@
 </div>
 
 <style>
+	@media screen {
+		main {
+			background: none;
+		}
+	}
 	/* Extra Small Devices, Phones */ 
 	@media only screen and (min-width : 480px) {
 		body {
-			background: #000;
+			background-color: #000;
 			background: linear-gradient(to left, #21abc7, #616db3);
 			background-image: url('/dist/img/comet-earth-blur.jpg');
 			background-repeat: no-repeat;

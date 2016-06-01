@@ -8,14 +8,44 @@
 </div>
 
 <div class="page-header">
-	<h1>Create Ticket</h1>
+	<h1 class="font-gradient row">Create Ticket</h1>
+	<div class="row">
+		<a href="/tickets" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3">
+			<span class="glyphicon glyphicon-chevron-left"></span> 
+			Active Tickets
+		</a>
+		<a href="/tickets/all" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3">
+			<span class="glyphicon glyphicon-edit"></span> 
+			All Tickets
+		</a>
+		<a href="/tickets/recent" class="btn btn-default col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-3">
+			<span class="glyphicon glyphicon-edit"></span> 
+			Recent Tickets
+		</a>
+	</div>
+</div>
+
+<div>
+	<h4 class="font-gradient">Customer Information</h4>
+</div>
+<div class="form-horizontal" ng-if="ticket.customerList && ticket.customerList.length > 0">
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="customerList">Customer List</label>
+		<div class="col-sm-6">
+			<select name="customerList" ng-model="customers" class="form-control" ng-change="ticket.getCustomerById(customers)">
+				<option value="" disabled selected>Select a customer...</option>
+				<option ng-repeat="customer in ticket.customerList" value="{{ customer.id }}">{{ customer.customer }} 
+					<span>
+						&nbsp;-- {{ customer.city }} {{ customer.state }}
+					</span>
+				</option>
+			</select>
+		</div>
+	</div>
 </div>
 
 <form class="form-horizontal" ng-submit="ticket.saveTicket()" name='ticketform' novalidate>
 	<!-- Customer section -->
-	<div>
-		<h4>Customer Information</h4>
-	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.customer.$invalid && !ticketform.customer.$pristine ? 'has-error' : '', !ticketform.customer.$invalid && !ticketform.customer.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label" for="customer">Company</label>
@@ -84,7 +114,7 @@
 	<!-- Indicator Section -->
 	<div>
 		<br/>
-		<h4>Indicator Information</h4>
+		<h4 class="font-gradient">Indicator Information</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_tag.$invalid && !ticketform.indicator_tag.$pristine ? 'has-error' : '', !ticketform.indicator_tag.$invalid && !ticketform.indicator_tag.$pristine ? 'has-success' : '' ]">
@@ -127,7 +157,7 @@
 	<div class="form-group has-feedback" ng-class="[ ticketform.indicator_serial.$invalid && !ticketform.indicator_serial.$pristine ? 'has-error' : '', !ticketform.indicator_serial.$invalid && !ticketform.indicator_serial.$pristine ? 'has-success' : '' ]">
 		<label class="col-sm-2 control-label">Serial</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" name="indicator_serial" ng-minlength="3" ng-maxlength="24" pattern="[A-Za-z0-9\,\.\-\&\/ ]+" required>
+			<input type="text" class="form-control" ng-model="ticket.ticketData.indicator_serial" name="indicator_serial" ng-minlength="2" ng-maxlength="24" pattern="[A-Za-z0-9\,\.\-\&\/ ]+" required>
 			<span ng-show="ticketform.indicator_serial.$invalid && !ticketform.indicator_serial.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
 			<p ng-if="ticketform.indicator_serial.$error.required && !ticketform.indicator_serial.$pristine" class="help-block alert alert-info" style="color: white;">This is a required field, it cannot be left blank.</p>
 			<p ng-if="ticketform.indicator_serial.$error.pattern && !ticketform.indicator_serial.$pristine" class="help-block alert alert-info" style="color: white;">Please enter a valid serial number.</p>
@@ -178,7 +208,7 @@
 	<!-- Scale Base Section -->
 	<div>
 		<br/>
-		<h4>Scale Base Information (Optional)</h4>
+		<h4 class="font-gradient">Scale Base Information (Optional)</h4>
 	</div>
 
 	<div class="form-group has-feedback" ng-class="[ ticketform.scale_manu.$invalid && !ticketform.scale_manu.$pristine ? 'has-error' : '', !ticketform.scale_manu.$invalid && !ticketform.scale_manu.$pristine ? 'has-success' : '' ]">
@@ -213,7 +243,7 @@
 	
 	<div>
 		<br/>
-		<h4>Other Information (Optional)</h4>
+		<h4 class="font-gradient">Other Information (Optional)</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.workorder.$invalid && !ticketform.workorder.$pristine ? 'has-error' : '', !ticketform.workorder.$invalid && !ticketform.workorder.$pristine ? 'has-success' : '' ]" ng-show="main.role != 'user'">
@@ -229,7 +259,7 @@
 	
 	<div>
 		<br/>
-		<h4>Reason for Ticket</h4>
+		<h4 class="font-gradient">Reason for Ticket</h4>
 	</div>
 	
 	<div class="form-group has-feedback" ng-class="[ ticketform.comments.$invalid && !ticketform.comments.$pristine ? 'has-error' : '', !ticketform.comments.$invalid && !ticketform.comments.$pristine ? 'has-success' : '' ]">

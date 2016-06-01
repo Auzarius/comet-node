@@ -1,4 +1,4 @@
-angular.module('ticketCtrl', ['ticketService'])
+angular.module('ticketCtrl', ['ticketService', 'customerService'])
 
 .controller('ticketController', function($scope, Ticket) {
 
@@ -33,7 +33,7 @@ angular.module('ticketCtrl', ['ticketService'])
 			vm.tickets = null;
 			vm.processing = false;
 		});
-
+	
 	// function to delete a ticket
 	vm.deleteTicket = function(id) {
 		vm.processing = true;
@@ -84,6 +84,25 @@ angular.module('ticketCtrl', ['ticketService'])
 			vm.tickets = null;
 			vm.processing = false;
 		});
+		
+	// function to delete a ticket
+	vm.deleteTicket = function(id) {
+		vm.processing = true;
+		
+		Ticket.delete(id)
+			.success(function(data) {
+				
+				if ( data.success) {
+					Ticket.recent()
+						.success(function(node) {
+							vm.tickets = node.data;
+						});
+				}
+				
+				vm.processing = false;
+				vm.message = data.message;
+			});
+	};
 })
 
 .controller('ticketAllController', function($scope, Ticket) {
@@ -133,9 +152,10 @@ angular.module('ticketCtrl', ['ticketService'])
 })
 
 // controller applied to ticket creation page
-.controller('ticketCreateController', function($scope, Ticket) {
+.controller('ticketCreateController', function($scope, Ticket, Customer) {
 	
 	var vm = this;
+	vm.ticketData = {};
 
 	// function to create a ticket
 	vm.saveTicket = function() {
@@ -153,6 +173,44 @@ angular.module('ticketCtrl', ['ticketService'])
 			});
 			
 	};
+	
+	vm.getCustomerList = function() {
+		Customer.getList()
+			.success(function(node) {
+				vm.customerList = node.data;
+			})
+			.error(function(node) {
+				console.log("Message", node.message);
+				vm.customerList = ['--'];
+			});
+	};
+	
+	/*
+	vm.getCustomerById = function(id) {
+		Customer.get(id)
+			.success(function(node) {
+				vm.ticketData.customer = node.data.customer;
+				vm.ticketData.street = node.data.street;
+				vm.ticketData.city = node.data.city;
+				vm.ticketData.state = node.data.state;
+				vm.ticketData.zipcode = node.data.zipcode;
+			})
+			.error(function(node) {
+				console.log("Message", node.message);
+				vm.ticketData.customer = '--';
+			});
+	};*/
+	
+	vm.getCustomerById = function(id) {
+		var result = Customer.filterList(vm.customerList, id);
+		vm.ticketData.customer = result.customer;
+		vm.ticketData.street = result.street;
+		vm.ticketData.city = result.city;
+		vm.ticketData.state = result.state;
+		vm.ticketData.zipcode = result.zipcode;
+	};
+	
+	vm.getCustomerList();
 })
 
 // controller applied to ticket edit page
