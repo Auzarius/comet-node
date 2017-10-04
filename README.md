@@ -20,8 +20,3 @@ This will also serve as my first node.js project and also my first real javascri
 - [ ] Add the ability to disable a user account without deletion (this would be to maintain records)
 - [ ] Rewrite node code-base for the project to clean it up.  Likely using a few of the new ES6 features like promises to remove the nested callbacks.
 - [ ] Commit default MySQL database structure and data.
-
-##Links
-- The live version is almost always running at: http://inshop.auzarius.com/
-- The development version is usually running at: http://dev.auzarius.com/
-  - For the dev version you can login using admin for the username and password for the password.
