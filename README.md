@@ -5,7 +5,7 @@ I am open to feedback to help along the development.
 This is just a small project I am working on in my spare time.
 This will also serve as my first node.js project and also my first real javascript project.
 
-##Completed
+## Completed
 - [X] API Routes and JSON responses
 - [X] MySQL database interface
 - [X] Front-end Angular Website
@@ -15,7 +15,7 @@ This will also serve as my first node.js project and also my first real javascri
 - [X] Website bug testing and some code cleanup
 - [X] Database migration from the old system to this one
   
-##To-do
+## To-do
 - [ ] Write the API Documentation
 - [ ] Add the ability to disable a user account without deletion (this would be to maintain records)
 - [ ] Rewrite node code-base for the project to clean it up.  Likely using a few of the new ES6 features like promises to remove the nested callbacks.
